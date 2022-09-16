@@ -1,13 +1,13 @@
 # ds-image-analysis
 
-**Description of the application goes here**
+This service provides image analysis capabilities.
 
 Developed and maintained by the Royal Danish Library.
 
 ## Requirements
 
 * Maven 3                                  
-* Java 17
+* Java 11
 
 ## Setup
 
