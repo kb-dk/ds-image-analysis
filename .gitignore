@@ -1,0 +1,13 @@
+target/
+.classpath
+.project
+.settings/
+
+# We use pom.xml as the source of truth and don't rely on a specific IDE
+.idea
+*.iml
+
+README_OLD.md
+.openapi-generator/
+conf/ds-image-analysis-environment.yaml
+conf/ds-image-analysis-local.yaml
