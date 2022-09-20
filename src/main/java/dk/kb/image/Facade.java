@@ -27,19 +27,18 @@ public class Facade {
                 int r = (pixel >> 16) & 0xff;
                 int g = (pixel >> 8) & 0xff;
                 int b = pixel & 0xff;
-  
                 // calculate average
                 int avg = (r + g + b) / 3;
-  
                 // replace RGB value with avg
                 pixel = (a << 24) | (avg << 16) | (avg << 8)
                     | avg;
-  
+                // set pixel to grayscale colors
                 img.setRGB(x, y, pixel);
             }
         }
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-    
+        // Write img to ByteArrayOutputStream as jpg
         ImageIO.write(img, "jpg", baos);
         return baos.toByteArray();
 
