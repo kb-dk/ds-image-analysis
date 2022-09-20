@@ -6,7 +6,7 @@ import java.util.Set;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import com.fasterxml.jackson.jaxrs.xml.JacksonXMLProvider;
-import dk.kb.image.api.v1.impl.DsImageAnalysisApiServiceImpl;
+import dk.kb.image.api.v1.impl.ImageAnalysisApiServiceImpl;
 import dk.kb.image.api.v1.impl.ServiceApiServiceImpl;
 
 
@@ -17,7 +17,7 @@ public class Application_v1 extends javax.ws.rs.core.Application {
         return new HashSet<>(Arrays.asList(
                 JacksonJsonProvider.class,
                 JacksonXMLProvider.class,
-                DsImageAnalysisApiServiceImpl.class,
+                ImageAnalysisApiServiceImpl.class,
                 ServiceApiServiceImpl.class,
                 dk.kb.util.webservice.exception.ServiceExceptionMapper.class
         ));
