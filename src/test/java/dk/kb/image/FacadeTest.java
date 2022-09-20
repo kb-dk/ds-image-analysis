@@ -1,6 +1,8 @@
 package dk.kb.image;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 import java.awt.image.BufferedImage;
@@ -37,14 +39,24 @@ public class FacadeTest {
         return true;
     }
 
-    BufferedImage img;
+
 
     @Test
-    public void testGreyscale(){
-        try {
-            img = ImageIO.read(Resolver.resolveStream("grey_flower.jpeg"));
-        } catch (IOException e) {}
-        assertEquals(true, FacadeTest.isGreyscale(img));
+    public void testGreyscalePositive() throws IOException {
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("grey_flower.jpeg"));
+        assertTrue(FacadeTest.isGreyscale(img));
         System.out.println("Image is greyscale");
     }
+
+    @Test
+    public void testGreyscaleNegative() throws IOException {
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
+        assertFalse(FacadeTest.isGreyscale(img));
+        System.out.println("Image is not greyscale");
+    }
+
+    
+  
 }
