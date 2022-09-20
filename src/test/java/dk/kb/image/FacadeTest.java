@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import dk.kb.util.Resolver;
@@ -39,6 +41,25 @@ public class FacadeTest {
         return true;
     }
 
+    public static boolean canCountColors(BufferedImage image){
+        // Hashset is a collection that only has one of each value
+        Set<Integer> colors = new HashSet<Integer>();
+        // get image's width and height
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        // Nested for loop that adds unique colors to the hashset colors
+        for(int y = 0; y < height; y++) {
+            for(int x = 0; x < width; x++) {
+                int pixel = image.getRGB(x, y);     
+                colors.add(pixel);
+            }
+        }
+        // Check if HashSet is empty
+        if (colors.isEmpty()) return false;
+        return true;
+    }
+
 
 
     @Test
@@ -57,6 +78,12 @@ public class FacadeTest {
         System.out.println("Image is not greyscale");
     }
 
-    
+    @Test
+    public void testColorCount() throws IOException {
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
+        assertTrue(canCountColors(img));
+        System.out.println("Colors get counted"); 
+    }
   
 }
