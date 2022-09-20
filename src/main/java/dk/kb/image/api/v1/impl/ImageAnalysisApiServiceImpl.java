@@ -43,7 +43,6 @@ import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Providers;
 import javax.ws.rs.core.MediaType;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorModel;
 import org.apache.cxf.jaxrs.model.wadl.Description;
 import org.apache.cxf.jaxrs.model.wadl.DocTarget;
 import org.apache.cxf.jaxrs.ext.MessageContext;
@@ -146,15 +145,9 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
         } catch (Exception e){
             throw handleException(e);
         }
-
-        ColorModel model = img.getColorModel();
-
         // TODO: Implement color buckets following this comment: https://stackoverflow.com/a/5050601
 
         // TODO: Devide pixels of picture into color buckets.
-
-        // TODO: 
-
 
         try {
             // Show download link in Swagger UI, inline when opened directly in browser
