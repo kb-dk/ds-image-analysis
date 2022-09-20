@@ -15,11 +15,7 @@ servers:
     description: 'Version 1'
 
 paths:
-  # TODO: Sample endpoint. Remove when building a concrete application
-  # This definition uses multi-part POST to allow for uploading of an image with arguments
-  # https://swagger.io/docs/specification/describing-request-body/file-upload/
-  
-  # This endpoint has been created from the colorizer endpoint-template
+  # These endpoints has been created from the colorizer endpoint-template
   /maincolors:
     post:
       tags:
@@ -53,6 +49,63 @@ paths:
                 color-one: '#6b33ff'
                 color-two: '#6ab044'
                 color-three: '#a56c13'
+  /colorcount:
+    post:
+      tags: 
+        - 'Image Analysis'
+      summary: 'Count the colors in the given image.'
+      operationId: getColorCount
+      requestBody:
+        content:
+          multipart/form-data:
+              schema:
+                type: object
+                required:
+                  - image
+                properties:
+                  # The POSTed image can be retrieved using imageDetail.getDataHandler().getInputStream()
+                  image:
+                    description: 'The image to analyse'
+                    type: string
+                    format: binary
+      responses:
+          '200':
+            description: 'Number of colors in image:'
+            content:
+              text/plain:
+                schema:
+                  type: string
+    
+  /greyscale:
+    post:
+      tags:
+        - 'Image Analysis'
+      summary: 'Return image in grayscale'
+      operationId: getGreyscale
+      requestBody:
+        content:
+          multipart/form-data:
+              schema:
+                type: object
+                required:
+                  - image
+                properties:
+                  # The POSTed image can be retrieved using imageDetail.getDataHandler().getInputStream()
+                  image:
+                    description: 'The image to analyse'
+                    type: string
+                    format: binary
+      x-streamingOutput: true
+
+      responses:
+        '200':
+          description: 'Greyscale version of image.'
+          content:
+            image/jpeg:
+              schema: 
+                type: string
+                format: binary
+
 
   # The ping service should be in all projects, should not do any advanced processing
   # and should respond quickly with a simple message, e.g. "pong".
