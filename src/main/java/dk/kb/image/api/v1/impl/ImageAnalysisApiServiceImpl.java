@@ -85,27 +85,13 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
         } catch (Exception e){
             throw handleException(e);
         }
-        
-        Set<Integer> colors = new HashSet<Integer>();
-        // get image's width and height
-        int w = img.getWidth();
-        int h = img.getHeight();
-
-        for(int y = 0; y < h; y++) {
-            for(int x = 0; x < w; x++) {
-                int pixel = img.getRGB(x, y);     
-                colors.add(pixel);
-            }
-        }
-
-        String result = "There are " + Integer.toString(colors.size()) + " colors in this picture.";
-
         try { 
-            String response = result;
+            String response = Facade.getColorCount(img);
             return response;
-        } catch (Exception e){
-            throw handleException(e);
-        }
+        } catch (Exception f){
+            throw handleException(f);
+            }
+        
     }
 
     /**
