@@ -2,6 +2,8 @@ package dk.kb.image;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -41,5 +43,25 @@ public class Facade {
         ImageIO.write(img, "jpg", baos);
         return baos.toByteArray();
 
+    }
+
+    public static String getColorCount(BufferedImage img) throws IOException{
+        // Hashset is a collection that only has one of each value
+        Set<Integer> colors = new HashSet<Integer>();
+        // get image's width and height
+        int w = img.getWidth();
+        int h = img.getHeight();
+
+        // Nested for loop that adds unique colors to the hashset colors
+        for(int y = 0; y < h; y++) {
+            for(int x = 0; x < w; x++) {
+                int pixel = img.getRGB(x, y);     
+                colors.add(pixel);
+            }
+        }
+
+        String result = "There are " + Integer.toString(colors.size()) + " colors in this picture.";
+
+        return result;
     }
 }
