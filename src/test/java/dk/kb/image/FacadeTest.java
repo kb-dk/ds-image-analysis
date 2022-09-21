@@ -14,7 +14,12 @@ import java.util.Set;
 import javax.imageio.ImageIO;
 import dk.kb.util.Resolver;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class FacadeTest {
+    private Logger log = LoggerFactory.getLogger(this.toString());
+
 
     // method to validate that image is greyscale
     public static boolean isGreyscale(BufferedImage image){
@@ -67,7 +72,7 @@ public class FacadeTest {
         BufferedImage img;
         img = ImageIO.read(Resolver.resolveStream("grey_flower.jpeg"));
         assertTrue(FacadeTest.isGreyscale(img));
-        System.out.println("Image is greyscale");
+        log.info("Image is greyscale");
     }
 
     @Test
@@ -75,7 +80,7 @@ public class FacadeTest {
         BufferedImage img;
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
         assertFalse(FacadeTest.isGreyscale(img));
-        System.out.println("Image is not greyscale");
+        log.info("Image is not greyscale");
     }
 
     @Test
@@ -83,7 +88,14 @@ public class FacadeTest {
         BufferedImage img;
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
         assertTrue(canCountColors(img));
-        System.out.println("Colors get counted"); 
+        log.info("Colors get counted"); 
+    }
+
+    @Test
+    public void testDominantColor() throws IOException {
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
+        Facade.getDominantColor(img);
     }
   
 }
