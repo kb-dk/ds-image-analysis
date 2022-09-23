@@ -87,6 +87,7 @@ public class FacadeTest {
     public void testColorCount() throws IOException {
         BufferedImage img;
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
+        log.info(Facade.getColorCount(img));
         assertTrue(canCountColors(img));
         log.info("Colors get counted"); 
     }
@@ -97,5 +98,18 @@ public class FacadeTest {
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
         Facade.getDominantColor(img);
     }
+
+    @Test
+    public void testColorDistance() throws IOException{
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
+        Facade.colorDistance(img);
+    }
   
+    @Test
+    public void testPixelCount() throws IOException{
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
+        Facade.getPixelCount(img);
+    }
 }
