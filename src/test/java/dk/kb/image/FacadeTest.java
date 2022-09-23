@@ -93,13 +93,6 @@ public class FacadeTest {
     }
 
     @Test
-    public void testDominantColor() throws IOException {
-        BufferedImage img;
-        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        Facade.getDominantColor(img);
-    }
-
-    @Test
     public void testColorDistance() throws IOException{
         BufferedImage img;
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
