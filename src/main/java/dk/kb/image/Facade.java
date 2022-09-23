@@ -12,10 +12,12 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
+import javax.swing.plaf.ColorUIResource;
 
 import com.ctc.wstx.cfg.OutputConfigFlags;
 
 import java.awt.image.BufferedImage;
+import java.awt.Color;
 
 public class Facade {
     public static byte[] getGreyscale(BufferedImage img) throws IOException{
@@ -50,7 +52,6 @@ public class Facade {
         // Write img to ByteArrayOutputStream as jpg
         ImageIO.write(img, "jpg", baos);
         return baos.toByteArray();
-
     }
 
     public static String getColorCount(BufferedImage img) throws IOException{
@@ -67,9 +68,7 @@ public class Facade {
                 colors.add(pixel);
             }
         }
-
         String result = "There are " + Integer.toString(colors.size()) + " colors in this picture.";
-
         return result;
     }
 
@@ -77,9 +76,6 @@ public class Facade {
     public static void getDominantColor(BufferedImage img){
         // Create array long enough to hold all RGB colors
         int[] allPixelsArray = new int[16777216];
-
-
-        // ArrayList is an array that can be added to.
         // get image's width and height
         int width = img.getWidth();
         int height = img.getHeight();
@@ -92,10 +88,9 @@ public class Facade {
                 allPixelsArray[pixel & 0x00FFFFFF] += 1;
             }
         }
-
+        // Values for checking max
         int maxRGB = 0;
         int maxCount = 0;
-
         // Checks all posible RGB colors in array
         for (int rgb = 0; rgb < 16777215; rgb++){
             if (allPixelsArray[rgb] != 0) {
@@ -105,8 +100,166 @@ public class Facade {
                 }
             }
         }
-
-        System.out.println(Integer.toString(maxRGB, 16));
+        System.out.println("#"+Integer.toString(maxRGB, 16));
         System.out.println(maxCount);
     }
+
+    public static void getPixelCount(BufferedImage img){
+        int width = img.getWidth();
+        int height = img.getHeight();
+        
+        int pixelCount = 0;
+        for(int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                pixelCount ++;
+            }
+        }
+        System.out.println(pixelCount);
+    }
+
+    public static String colorDistance(BufferedImage img){
+        // Define simple buckets
+        int[] buckets = defineSimpleBuckets();
+
+        int[] bucketCount = countBucketsForImg(img, buckets);
+
+        // Get best bucket
+        int bestBucket = getBestBucket(bucketCount);
+
+        // Returns result as HEX value
+        String result = printResult(buckets, bestBucket); 
+        System.out.println(result);
+        return result;
+
+    }
+
+    public static int[] defineSimpleBuckets(){
+         // Define colors as integers in array
+        return new int[]{
+            Color.RED.getRGB(),
+            Color.GREEN.getRGB(),
+            Color.BLUE.getRGB(),
+            Color.YELLOW.getRGB(),
+            Color.CYAN.getRGB(),
+            Color.MAGENTA.getRGB()
+            };
+    }
+
+    public static int[] countBucketsForImg(BufferedImage img, int[] buckets){
+        int[] bucketCounter = new int[buckets.length];
+        // get image's width and height
+        int width = img.getWidth();
+        int height = img.getHeight();
+
+        // Loop over all pixels in image and get RGB color
+        for(int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int pixelRGB = img.getRGB(x, y);
+                    updateBucketCounter(pixelRGB, buckets, bucketCounter);
+            }
+        }
+        return bucketCounter;
+    }
+    
+    public static void updateBucketCounter(int pixel, int[] buckets, int[] bucketCounter){
+        // Values for checking max
+        int bestColor = 0;
+        int minDistance = 2147483647;
+        for (int i = 0; i < buckets.length; i ++){
+            int totalDistance = getEuclidianColorDistance(pixel, buckets[i]);
+
+            // Evaluates total distance against minimum distance for given bucket
+            if (totalDistance < minDistance) {
+                minDistance = totalDistance;
+                bestColor = i;
+            }
+        }
+         // Add 1 to the bucket closest to pixel color
+         bucketCounter[bestColor] ++;
+    }
+
+    public static int getEuclidianColorDistance(int pixel1, int pixel2){
+        // Divide pixel RGB into Red, Green and Blue integers.
+        int pixelRed = (pixel2 >> 16) & 0xFF;
+        int pixelGreen = (pixel2 >> 8 ) & 0xFF;
+        int pixelBlue = (pixel2) & 0xFF;
+
+        int bucketRed = (pixel1 >> 16) & 0xFF;
+        int bucketGreen = (pixel1 >> 8 ) & 0xFF;
+        int bucketBlue = (pixel1) & 0xFF;
+
+        // Calculate the difference between current pixels Red, Green and Blue values and current bucket colors values
+        int distanceRed = (pixelRed - bucketRed)*(pixelRed - bucketRed);
+        int distanceGreen = (pixelGreen - bucketGreen)*(pixelGreen - bucketGreen);
+        int distanceBlue = (pixelBlue - bucketBlue)*(pixelBlue - bucketBlue);
+
+        // Add distances together to a total distance as RGB distance
+        // int totalDistance = distanceRed + distanceGreen + distanceBlue;
+        int totalDistance = (distanceRed + distanceGreen + distanceBlue);
+        return totalDistance;
+    }
+
+    public static int getBestBucket(int[] bucketCount){ 
+        // Values for getting most used Bucket
+        int bestBucket = 0;
+        int maxCount = 0;
+        // Finds the most used bucket
+        for (int i = 0; i < bucketCount.length; i++){
+            if (bucketCount[i] > maxCount){
+                maxCount = bucketCount[i];
+                bestBucket = i;
+            }
+        } 
+        return bestBucket;
+    }
+
+    public static String printResult(int[] buckets, int bestBucket){
+        String hexColor = String.format("#%06X", (0xFFFFFF & buckets[bestBucket]));
+        return hexColor;
+    }
+    /*
+    public static void evaluateBestBucketForPixel(BufferedImage img){
+        // get image's width and height
+        int width = img.getWidth();
+        int height = img.getHeight();
+
+        // Loop over all pixels in image and get RGB color
+        for(int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                int pixelRGB = img.getRGB(x, y);
+
+                // Values for checking max
+                int bestColor = 0;
+                int minDistance = 2147483647;
+
+                // Divide pixel RGB into Red, Green and Blue integers.
+                int pixelRed = (pixelRGB >> 16) & 0xFF;
+                int pixelGreen = (pixelRGB >> 8 ) & 0xFF;
+                int pixelBlue = (pixelRGB) & 0xFF;
+                for (int i = 0; i < buckets.length; i ++){
+                    int bucketRed = (buckets[i] >> 16) & 0xFF;
+                    int bucketGreen = (buckets[i] >> 8 ) & 0xFF;
+                    int bucketBlue = (buckets[i]) & 0xFF;
+
+                    // Calculate the difference between current pixels Red, Green and Blue values and current bucket colors values
+                    int distanceRed = (pixelRed - bucketRed)*(pixelRed - bucketRed);
+                    int distanceGreen = (pixelGreen - bucketGreen)*(pixelGreen - bucketGreen);
+                    int distanceBlue = (pixelBlue - bucketBlue)*(pixelBlue - bucketBlue);
+
+                    // Add distances together to a total distance as RGB distance
+                    // int totalDistance = distanceRed + distanceGreen + distanceBlue;
+                    int totalDistance = (distanceRed + distanceGreen + distanceBlue);
+
+                    // Evaluates total distance against minimum distance for given bucket
+                    if (totalDistance < minDistance) {
+                        minDistance = totalDistance;
+                        bestColor = i;
+                    }
+                }
+                 // Add 1 to the bucket closest to pixel color
+                 bucketCounter[bestColor] ++;
+            }
+        }
+    }
+    */
 }
