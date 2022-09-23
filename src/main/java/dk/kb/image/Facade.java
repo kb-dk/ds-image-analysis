@@ -170,7 +170,7 @@ public class Facade {
     }
 
     public static String printResult(int[] buckets, int bestBucket){
-        String hexColor = String.format("#%06X", (0xFFFFFF & buckets[bestBucket]));
+        String hexColor = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & buckets[bestBucket]));
         return hexColor;
     }
 }
