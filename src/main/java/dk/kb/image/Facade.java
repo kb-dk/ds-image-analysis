@@ -76,17 +76,14 @@ public class Facade {
     public static String colorDistance(BufferedImage img){
         // Define simple buckets
         int[] buckets = defineSimpleBuckets();
-
+        // Count pixels and add to closest bucket
         int[] bucketCount = countBucketsForImg(img, buckets);
-
         // Get best bucket
         int bestBucket = getBestBucket(bucketCount);
-
         // Returns result as HEX value
         String result = printResult(buckets, bestBucket); 
         System.out.println(result);
         return result;
-
     }
 
     public static int[] defineSimpleBuckets(){
@@ -102,6 +99,7 @@ public class Facade {
     }
 
     public static int[] countBucketsForImg(BufferedImage img, int[] buckets){
+        // Create bucket counter array
         int[] bucketCounter = new int[buckets.length];
         // get image's width and height
         int width = img.getWidth();
@@ -110,6 +108,7 @@ public class Facade {
         // Loop over all pixels in image and get RGB color
         for(int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
+                // Get RGB for each pixel
                 int pixelRGB = img.getRGB(x, y);
                     updateBucketCounter(pixelRGB, buckets, bucketCounter);
             }
@@ -135,14 +134,14 @@ public class Facade {
     }
 
     public static int getEuclidianColorDistance(int pixel1, int pixel2){
-        // Divide pixel RGB into Red, Green and Blue integers.
-        int pixelRed = (pixel2 >> 16) & 0xFF;
-        int pixelGreen = (pixel2 >> 8 ) & 0xFF;
-        int pixelBlue = (pixel2) & 0xFF;
-
+        // Divide pixel1 and pixel2 RGB into Red, Green and Blue integers
         int bucketRed = (pixel1 >> 16) & 0xFF;
         int bucketGreen = (pixel1 >> 8 ) & 0xFF;
         int bucketBlue = (pixel1) & 0xFF;
+
+        int pixelRed = (pixel2 >> 16) & 0xFF;
+        int pixelGreen = (pixel2 >> 8 ) & 0xFF;
+        int pixelBlue = (pixel2) & 0xFF;
 
         // Calculate the difference between current pixels Red, Green and Blue values and current bucket colors values
         int distanceRed = (pixelRed - bucketRed)*(pixelRed - bucketRed);
@@ -150,7 +149,6 @@ public class Facade {
         int distanceBlue = (pixelBlue - bucketBlue)*(pixelBlue - bucketBlue);
 
         // Add distances together to a total distance as RGB distance
-        // int totalDistance = distanceRed + distanceGreen + distanceBlue;
         int totalDistance = (distanceRed + distanceGreen + distanceBlue);
         return totalDistance;
     }
