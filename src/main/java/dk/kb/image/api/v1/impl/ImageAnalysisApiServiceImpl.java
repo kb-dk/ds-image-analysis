@@ -89,8 +89,7 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
             return response;
         } catch (Exception f){
             throw handleException(f);
-            }
-        
+        }    
     }
 
     /**
@@ -114,7 +113,6 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
         } catch (Exception e){
             throw handleException(e);
         }
-        
         try { 
             // Show download link in Swagger UI, inline when opened directly in browser
             setFilename("output", false, false);
@@ -137,7 +135,7 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
       * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
      */
     @Override
-    public javax.ws.rs.core.StreamingOutput getMainColors( Attachment imageDetail) throws ServiceException {
+    public String getMainColor( Attachment imageDetail) throws ServiceException {
         // read image
         try {
             in = imageDetail.getDataHandler().getInputStream();;
@@ -145,16 +143,11 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
         } catch (Exception e){
             throw handleException(e);
         }
-        // TODO: Implement color buckets following this comment: https://stackoverflow.com/a/5050601
-
-        // TODO: Devide pixels of picture into color buckets.
-
-        try {
-            // Show download link in Swagger UI, inline when opened directly in browser
-            setFilename("output", true, false);
-             return output -> output.write("Magic".getBytes(java.nio.charset.StandardCharsets.UTF_8));
-        } catch (Exception e){
-            throw handleException(e);
+        try { 
+            String response = Facade.colorDistance(img);
+            return response;
+        } catch (Exception f){
+            throw handleException(f);
         }
     }
 }

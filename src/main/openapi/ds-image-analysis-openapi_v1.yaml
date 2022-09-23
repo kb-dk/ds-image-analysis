@@ -16,13 +16,12 @@ servers:
 
 paths:
   # These endpoints has been created from the colorizer endpoint-template
-  /maincolors:
+  /maincolor:
     post:
       tags:
         - 'Image Analysis'
       summary: 'Get the most dominant colors from an image.'
-      operationId: getMainColors
-      x-streamingOutput: true
+      operationId: getMainColor
 
       requestBody:
         content:
@@ -42,13 +41,11 @@ paths:
         '200':
           description: 'The dominant colors'
           content:
-            application/json:
+            text/plain:
               schema:
                 type: string
-              example:
-                color-one: '#6b33ff'
-                color-two: '#6ab044'
-                color-three: '#a56c13'
+                example: "#000000"
+
   /colorcount:
     post:
       tags: 
