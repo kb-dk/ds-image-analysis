@@ -98,11 +98,4 @@ public class FacadeTest {
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
         Facade.colorDistance(img);
     }
-  
-    @Test
-    public void testPixelCount() throws IOException{
-        BufferedImage img;
-        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        Facade.getPixelCount(img);
-    }
 }

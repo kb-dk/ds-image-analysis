@@ -72,7 +72,7 @@ paths:
               text/plain:
                 schema:
                   type: string
-    
+                  
   /greyscale:
     post:
       tags:

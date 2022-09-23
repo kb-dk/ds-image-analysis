@@ -73,19 +73,6 @@ public class Facade {
         return result;
     }
 
-    public static void getPixelCount(BufferedImage img){
-        int width = img.getWidth();
-        int height = img.getHeight();
-        
-        int pixelCount = 0;
-        for(int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                pixelCount ++;
-            }
-        }
-        System.out.println(pixelCount);
-    }
-
     public static String colorDistance(BufferedImage img){
         // Define simple buckets
         int[] buckets = defineSimpleBuckets();
