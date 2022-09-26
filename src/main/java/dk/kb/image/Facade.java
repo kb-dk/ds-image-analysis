@@ -116,7 +116,7 @@ public class Facade {
 
     /**
      * Loop through pixels of input image, get RGB color for pixel and +1 to bucket closest to pixel color.
-     * @param buckets: Integer array of bucket colors.
+     * @param buckets Integer array of bucket colors.
      * @return the integer array bucketCounter, which contains the count for each bucket for the input image,
      */
     public static int[] countBucketsForImg(BufferedImage img, int[] buckets){
@@ -139,9 +139,9 @@ public class Facade {
     
     /**
      * Method to update bucketCounter in countBucketsForImg(). 
-     * @param pixel: The current pixels RGB value as integer.
-     * @param buckets: Integer array of color buckets.
-     * @param bucketCounter: Integer array to store count of buckets.
+     * @param pixel The current pixels RGB value as integer.
+     * @param buckets Integer array of color buckets.
+     * @param bucketCounter Integer array to store count of buckets.
      */
     public static void updateBucketCounter(int pixel, int[] buckets, int[] bucketCounter){
         // Values for checking max
@@ -162,8 +162,8 @@ public class Facade {
 
     /**
      * Calculate Euclidian color distance between two RGB colors. 
-     * @param pixel1: RGB color of pixel1 as integer.
-     * @param pixel2: RGB color of pixel2 as integer.
+     * @param pixel1 RGB color of pixel1 as integer.
+     * @param pixel2 RGB color of pixel2 as integer.
      * @return the total distance between pixel 1 and 2. Higher number = Bigger distance.""
      */
     public static int getEuclidianColorDistance(int pixel1, int pixel2){
@@ -188,7 +188,7 @@ public class Facade {
 
     /**
      * Gets the most used bucket from the input bucketCount.
-     * @param bucketCount: integer array containing the count of each bucket.
+     * @param bucketCount integer array containing the count of each bucket.
      * @return the index of the most used bucket.
      */
     public static int getlargestBucket(int[] bucketCount){ 
@@ -207,8 +207,8 @@ public class Facade {
 
     /**
      * Get the hex color of the most used bucket.
-     * @param buckets: Integer array of color buckets.
-     * @param largestBucket: integer containing the index of the most used bucket.
+     * @param buckets Integer array of color buckets.
+     * @param largestBucket integer containing the index of the most used bucket.
      * @return the most used hex color as a string.
      */
     public static String printResult(int[] buckets, int largestBucket){
