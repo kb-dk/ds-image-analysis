@@ -72,6 +72,7 @@ paths:
               text/plain:
                 schema:
                   type: integer
+                  format: int32
                   
   /greyscale:
     post:
