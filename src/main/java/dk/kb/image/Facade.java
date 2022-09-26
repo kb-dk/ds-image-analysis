@@ -63,7 +63,7 @@ public class Facade {
      * Get the amount of unique colors from input image.
      * @return a string with the count of unique colors form the input image.
      */
-    public static String getColorCount(BufferedImage img) throws IOException{
+    public static int getColorCount(BufferedImage img) throws IOException{
         // Hashset is a collection that only has one of each value
         Set<Integer> colors = new HashSet<Integer>();
         // get image's width and height
@@ -77,7 +77,7 @@ public class Facade {
                 colors.add(pixel);
             }
         }
-        String result = "There are " + Integer.toString(colors.size()) + " unique colors in this picture.";
+        int result = colors.size();
         return result;
     }
 
