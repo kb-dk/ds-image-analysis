@@ -2,9 +2,13 @@ package dk.kb.image;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
+
+import java.awt.Color;
+import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -38,10 +42,11 @@ public class FacadeTest {
 
     @Test
     public void testColorCount() throws IOException {
-        BufferedImage img;
-        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        log.info(Facade.getColorCount(img));
-        assertTrue(canCountColors(img));
+        BufferedImage img = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics = img.createGraphics();
+        graphics.setPaint (new Color(255, 0, 0));
+        graphics.fillRect ( 0, 0, img.getWidth(), img.getHeight() );
+        assertEquals(1, Facade.getColorCount(img));
         log.info("Colors get counted"); 
     }
 
@@ -75,25 +80,6 @@ public class FacadeTest {
                 if (red != green || green != blue ) return false;
             }
         }
-        return true;
-    }
-
-    public static boolean canCountColors(BufferedImage image){
-        // Hashset is a collection that only has one of each value
-        Set<Integer> colors = new HashSet<Integer>();
-        // get image's width and height
-        int width = image.getWidth();
-        int height = image.getHeight();
-
-        // Nested for loop that adds unique colors to the hashset colors
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++) {
-                int pixel = image.getRGB(x, y);     
-                colors.add(pixel);
-            }
-        }
-        // Check if HashSet is empty
-        if (colors.isEmpty()) return false;
         return true;
     }
 }
