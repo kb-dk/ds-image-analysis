@@ -71,7 +71,7 @@ paths:
             content:
               text/plain:
                 schema:
-                  type: string
+                  type: integer
                   
   /greyscale:
     post:

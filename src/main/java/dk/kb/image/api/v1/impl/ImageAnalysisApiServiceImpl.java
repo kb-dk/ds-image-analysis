@@ -76,14 +76,14 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
       * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
      */
     @Override
-    public String getColorCount( Attachment imageDetail) throws ServiceException {
+    public Integer getColorCount( Attachment imageDetail) throws ServiceException {
         // read image
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
             int result = Facade.getColorCount(img);
             String response = "There are " + Integer.toString(result) + " unique colors in this picture.";
-            return response;
+            return result;
         } catch (Exception f){
             throw handleException(f);
         }    
