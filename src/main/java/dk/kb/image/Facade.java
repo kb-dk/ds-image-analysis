@@ -21,6 +21,12 @@ import java.awt.image.BufferedImage;
 import java.awt.Color;
 
 public class Facade {
+    /**
+     * Get the input image as greyscale.
+     * @param img
+     * @return: Returns a JPG file as bytes.
+     * @throws IOException
+     */
     public static byte[] getGreyscale(BufferedImage img) throws IOException{
         // get image's width and height
         int width = img.getWidth();
@@ -55,6 +61,12 @@ public class Facade {
         return baos.toByteArray();
     }
 
+    /**
+     * Get the amount of unique colors from input image.
+     * @param img
+     * @return: Returns a string with the count of unique colors form the input image.
+     * @throws IOException
+     */
     public static String getColorCount(BufferedImage img) throws IOException{
         // Hashset is a collection that only has one of each value
         Set<Integer> colors = new HashSet<Integer>();
@@ -69,10 +81,15 @@ public class Facade {
                 colors.add(pixel);
             }
         }
-        String result = "There are " + Integer.toString(colors.size()) + " colors in this picture.";
+        String result = "There are " + Integer.toString(colors.size()) + " unique colors in this picture.";
         return result;
     }
 
+    /**
+     * Get primary color from input image.
+     * @param img
+     * @return: Returns the primary color from input image as HEX value.
+     */
     public static String colorDistance(BufferedImage img){
         // Define simple buckets
         int[] buckets = defineSimpleBuckets();
@@ -86,6 +103,11 @@ public class Facade {
         return result;
     }
 
+    /**
+     * Defines simple color buckets. 
+     * Used in colorDistance() to extract primary color.
+     * @return: returns an integer array of RGB colors.
+     */
     public static int[] defineSimpleBuckets(){
          // Define colors as integers in array
         return new int[]{
@@ -98,6 +120,12 @@ public class Facade {
             };
     }
 
+    /**
+     * Loop through pixels of input image, get RGB color for pixel and +1 to bucket closest to pixel color.
+     * @param img
+     * @param buckets: Integer array of bucket colors.
+     * @return: Returns the integer array bucketCounter, which contains the count for each bucket for the input image,
+     */
     public static int[] countBucketsForImg(BufferedImage img, int[] buckets){
         // Create bucket counter array
         int[] bucketCounter = new int[buckets.length];
@@ -116,6 +144,12 @@ public class Facade {
         return bucketCounter;
     }
     
+    /**
+     * Method to update bucketCounter in countBucketsForImg(). 
+     * @param pixel: The current pixels RGB value as integer.
+     * @param buckets: Integer array of color buckets.
+     * @param bucketCounter: Integer array to store count of buckets.
+     */
     public static void updateBucketCounter(int pixel, int[] buckets, int[] bucketCounter){
         // Values for checking max
         int bestColor = 0;
@@ -133,6 +167,12 @@ public class Facade {
          bucketCounter[bestColor] ++;
     }
 
+    /**
+     * Calculate Euclidian color distance between two RGB colors. 
+     * @param pixel1: RGB color of pixel1 as integer.
+     * @param pixel2: RGB color of pixel2 as integer.
+     * @return: Returns the total distance between pixel 1 and 2. Higher number = Bigger distance.""
+     */
     public static int getEuclidianColorDistance(int pixel1, int pixel2){
         // Divide pixel1 and pixel2 RGB into Red, Green and Blue integers
         int bucketRed = (pixel1 >> 16) & 0xFF;
@@ -153,6 +193,11 @@ public class Facade {
         return totalDistance;
     }
 
+    /**
+     * Gets the most used bucket from the input bucketCount.
+     * @param bucketCount: integer array containing the count of each bucket.
+     * @return: Returns the index of the most used bucket.
+     */
     public static int getBestBucket(int[] bucketCount){ 
         // Values for getting most used Bucket
         int bestBucket = 0;
@@ -167,8 +212,16 @@ public class Facade {
         return bestBucket;
     }
 
+    /**
+     * Get the hex color of the most used bucket.
+     * @param buckets: Integer array of color buckets.
+     * @param bestBucket: integer containing the index of the most used bucket.
+     * @return: Return the most used hex color as a string.
+     */
     public static String printResult(int[] buckets, int bestBucket){
         String hexColor = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & buckets[bestBucket]));
         return hexColor;
     }
+
+    // Check this link: https://stackoverflow.com/questions/470690/how-to-automatically-generate-n-distinct-colors
 }
