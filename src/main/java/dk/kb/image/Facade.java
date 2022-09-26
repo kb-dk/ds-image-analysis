@@ -93,12 +93,12 @@ public class Facade {
     public static String colorDistance(BufferedImage img){
         // Define simple buckets
         int[] buckets = defineSimpleBuckets();
-        // Count pixels and add to closest bucket
+        // Count pixels and add 1 to closest bucket
         int[] bucketCount = countBucketsForImg(img, buckets);
         // Get best bucket
-        int bestBucket = getBestBucket(bucketCount);
+        int largestBucket = getlargestBucket(bucketCount);
         // Returns result as HEX value
-        String result = printResult(buckets, bestBucket); 
+        String result = printResult(buckets, largestBucket); 
         System.out.println(result);
         return result;
     }
@@ -198,28 +198,28 @@ public class Facade {
      * @param bucketCount: integer array containing the count of each bucket.
      * @return: Returns the index of the most used bucket.
      */
-    public static int getBestBucket(int[] bucketCount){ 
+    public static int getlargestBucket(int[] bucketCount){ 
         // Values for getting most used Bucket
-        int bestBucket = 0;
+        int largestBucket = 0;
         int maxCount = 0;
         // Finds the most used bucket
         for (int i = 0; i < bucketCount.length; i++){
             if (bucketCount[i] > maxCount){
                 maxCount = bucketCount[i];
-                bestBucket = i;
+                largestBucket = i;
             }
         } 
-        return bestBucket;
+        return largestBucket;
     }
 
     /**
      * Get the hex color of the most used bucket.
      * @param buckets: Integer array of color buckets.
-     * @param bestBucket: integer containing the index of the most used bucket.
+     * @param largestBucket: integer containing the index of the most used bucket.
      * @return: Return the most used hex color as a string.
      */
-    public static String printResult(int[] buckets, int bestBucket){
-        String hexColor = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & buckets[bestBucket]));
+    public static String printResult(int[] buckets, int largestBucket){
+        String hexColor = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & buckets[largestBucket]));
         return hexColor;
     }
 
