@@ -46,10 +46,10 @@ public class FacadeTest {
     }
 
     @Test
-    public void testColorDistance() throws IOException{
+    public void testMostUsedColor() throws IOException{
         BufferedImage img;
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        assertFalse(Facade.colorDistance(img).isEmpty());
+        assertFalse(Facade.getMostUsedColor(img).isEmpty());
         log.info("Result is not empty");
     }
 
