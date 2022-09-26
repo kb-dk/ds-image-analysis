@@ -90,7 +90,7 @@ public class Facade {
      * @param img
      * @return: Returns the primary color from input image as HEX value.
      */
-    public static String colorDistance(BufferedImage img){
+    public static String getMostUsedColor(BufferedImage img){
         // Define simple buckets
         int[] buckets = defineSimpleBuckets();
         // Count pixels and add 1 to closest bucket
@@ -104,7 +104,7 @@ public class Facade {
 
     /**
      * Defines simple color buckets. 
-     * Used in colorDistance() to extract primary color.
+     * Used in getMostUsedColor() to extract primary color.
      * @return: returns an integer array of RGB colors.
      */
     public static int[] defineSimpleBuckets(){
