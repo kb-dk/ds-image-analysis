@@ -23,9 +23,7 @@ import java.awt.Color;
 public class Facade {
     /**
      * Get the input image as greyscale.
-     * @param img
-     * @return: Returns a JPG file as bytes.
-     * @throws IOException
+     * @return a JPG file as bytes.
      */
     public static byte[] getGreyscale(BufferedImage img) throws IOException{
         // get image's width and height
@@ -63,9 +61,7 @@ public class Facade {
 
     /**
      * Get the amount of unique colors from input image.
-     * @param img
-     * @return: Returns a string with the count of unique colors form the input image.
-     * @throws IOException
+     * @return a string with the count of unique colors form the input image.
      */
     public static String getColorCount(BufferedImage img) throws IOException{
         // Hashset is a collection that only has one of each value
@@ -87,8 +83,7 @@ public class Facade {
 
     /**
      * Get primary color from input image.
-     * @param img
-     * @return: Returns the primary color from input image as HEX value.
+     * @return the primary color from input image as HEX value.
      */
     public static String getMostUsedColor(BufferedImage img){
         // Define simple buckets
@@ -105,7 +100,7 @@ public class Facade {
     /**
      * Defines simple color buckets. 
      * Used in getMostUsedColor() to extract primary color.
-     * @return: returns an integer array of RGB colors.
+     * @return an integer array of RGB colors.
      */
     public static int[] defineSimpleBuckets(){
          // Define colors as integers in array
@@ -121,9 +116,8 @@ public class Facade {
 
     /**
      * Loop through pixels of input image, get RGB color for pixel and +1 to bucket closest to pixel color.
-     * @param img
      * @param buckets: Integer array of bucket colors.
-     * @return: Returns the integer array bucketCounter, which contains the count for each bucket for the input image,
+     * @return the integer array bucketCounter, which contains the count for each bucket for the input image,
      */
     public static int[] countBucketsForImg(BufferedImage img, int[] buckets){
         // Create bucket counter array
@@ -170,7 +164,7 @@ public class Facade {
      * Calculate Euclidian color distance between two RGB colors. 
      * @param pixel1: RGB color of pixel1 as integer.
      * @param pixel2: RGB color of pixel2 as integer.
-     * @return: Returns the total distance between pixel 1 and 2. Higher number = Bigger distance.""
+     * @return the total distance between pixel 1 and 2. Higher number = Bigger distance.""
      */
     public static int getEuclidianColorDistance(int pixel1, int pixel2){
         // Divide pixel1 and pixel2 RGB into Red, Green and Blue integers
@@ -195,7 +189,7 @@ public class Facade {
     /**
      * Gets the most used bucket from the input bucketCount.
      * @param bucketCount: integer array containing the count of each bucket.
-     * @return: Returns the index of the most used bucket.
+     * @return the index of the most used bucket.
      */
     public static int getlargestBucket(int[] bucketCount){ 
         // Values for getting most used Bucket
@@ -215,7 +209,7 @@ public class Facade {
      * Get the hex color of the most used bucket.
      * @param buckets: Integer array of color buckets.
      * @param largestBucket: integer containing the index of the most used bucket.
-     * @return: Return the most used hex color as a string.
+     * @return the most used hex color as a string.
      */
     public static String printResult(int[] buckets, int largestBucket){
         String hexColor = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & buckets[largestBucket]));
