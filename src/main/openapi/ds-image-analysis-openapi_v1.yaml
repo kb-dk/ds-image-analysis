@@ -20,7 +20,7 @@ paths:
     post:
       tags:
         - 'Image Analysis'
-      summary: 'Get the most dominant colors from an image.'
+      summary: 'Get the most dominant color from an image.'
       operationId: getMainColor
 
       requestBody:
@@ -39,7 +39,7 @@ paths:
 
       responses:
         '200':
-          description: 'The dominant colors'
+          description: 'The dominant color'
           content:
             text/plain:
               schema:
@@ -50,7 +50,7 @@ paths:
     post:
       tags: 
         - 'Image Analysis'
-      summary: 'Count the colors in the given image.'
+      summary: 'Count the unique colors in the given image.'
       operationId: getColorCount
       requestBody:
         content:
@@ -67,7 +67,7 @@ paths:
                     format: binary
       responses:
           '200':
-            description: 'Number of colors in image:'
+            description: 'Number of unique colors in image:'
             content:
               text/plain:
                 schema:
