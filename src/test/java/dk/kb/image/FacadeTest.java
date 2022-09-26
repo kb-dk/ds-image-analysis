@@ -42,11 +42,8 @@ public class FacadeTest {
 
     @Test
     public void testColorCount() throws IOException {
-        BufferedImage img = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
-        Graphics2D graphics = img.createGraphics();
-        graphics.setPaint (new Color(255, 0, 0));
-        graphics.fillRect ( 0, 0, img.getWidth(), img.getHeight() );
-        assertEquals(1, Facade.getColorCount(img));
+        BufferedImage testImg = createTestImg();
+        assertEquals(1, Facade.getColorCount(testImg));
         log.info("Colors get counted"); 
     }
 
@@ -81,5 +78,14 @@ public class FacadeTest {
             }
         }
         return true;
+    }
+
+    // Create simple testImage with 1 color
+    public static BufferedImage createTestImg(){
+        BufferedImage img = new BufferedImage(256, 256, BufferedImage.TYPE_INT_RGB);
+        Graphics2D graphics = img.createGraphics();
+        graphics.setPaint (new Color(255, 0, 0));
+        graphics.fillRect ( 0, 0, img.getWidth(), img.getHeight() );
+        return img;
     }
 }
