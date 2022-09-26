@@ -188,7 +188,7 @@ public class Facade {
 
     /**
      * Gets the most used bucket from the input bucketCount.
-     * @param bucketCount integer array containing the count of each bucket.
+     * @param bucketCount integer array containing the count of each color bucket.
      * @return the index of the most used bucket.
      */
     public static int getlargestBucket(int[] bucketCount){ 
