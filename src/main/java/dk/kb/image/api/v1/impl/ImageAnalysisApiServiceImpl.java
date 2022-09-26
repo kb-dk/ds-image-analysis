@@ -81,10 +81,6 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
-        } catch (Exception e){
-            throw handleException(e);
-        }
-        try { 
             String response = Facade.getColorCount(img);
             return response;
         } catch (Exception f){
@@ -110,10 +106,6 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
-        } catch (Exception e){
-            throw handleException(e);
-        }
-        try { 
             // Show download link in Swagger UI, inline when opened directly in browser
             setFilename("output", false, false);
             return output -> output.write(Facade.getGreyscale(img)); 
@@ -140,10 +132,6 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
-        } catch (Exception e){
-            throw handleException(e);
-        }
-        try { 
             String response = Facade.colorDistance(img);
             return response;
         } catch (Exception f){
