@@ -20,6 +20,38 @@ import org.slf4j.LoggerFactory;
 public class FacadeTest {
     private Logger log = LoggerFactory.getLogger(this.toString());
 
+    @Test
+    public void testGreyscalePositive() throws IOException {
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("grey_flower.jpeg"));
+        assertTrue(FacadeTest.isGreyscale(img));
+        log.info("Image is greyscale");
+    }
+
+    @Test
+    public void testGreyscaleNegative() throws IOException {
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
+        assertFalse(FacadeTest.isGreyscale(img));
+        log.info("Image is not greyscale");
+    }
+
+    @Test
+    public void testColorCount() throws IOException {
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
+        log.info(Facade.getColorCount(img));
+        assertTrue(canCountColors(img));
+        log.info("Colors get counted"); 
+    }
+
+    @Test
+    public void testColorDistance() throws IOException{
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
+        assertFalse(Facade.colorDistance(img).isEmpty());
+        log.info("Result is not empty");
+    }
 
     // method to validate that image is greyscale
     public static boolean isGreyscale(BufferedImage image){
@@ -63,39 +95,5 @@ public class FacadeTest {
         // Check if HashSet is empty
         if (colors.isEmpty()) return false;
         return true;
-    }
-
-
-
-    @Test
-    public void testGreyscalePositive() throws IOException {
-        BufferedImage img;
-        img = ImageIO.read(Resolver.resolveStream("grey_flower.jpeg"));
-        assertTrue(FacadeTest.isGreyscale(img));
-        log.info("Image is greyscale");
-    }
-
-    @Test
-    public void testGreyscaleNegative() throws IOException {
-        BufferedImage img;
-        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        assertFalse(FacadeTest.isGreyscale(img));
-        log.info("Image is not greyscale");
-    }
-
-    @Test
-    public void testColorCount() throws IOException {
-        BufferedImage img;
-        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        log.info(Facade.getColorCount(img));
-        assertTrue(canCountColors(img));
-        log.info("Colors get counted"); 
-    }
-
-    @Test
-    public void testColorDistance() throws IOException{
-        BufferedImage img;
-        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        Facade.colorDistance(img);
     }
 }

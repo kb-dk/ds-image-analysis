@@ -99,7 +99,6 @@ public class Facade {
         int largestBucket = getlargestBucket(bucketCount);
         // Returns result as HEX value
         String result = printResult(buckets, largestBucket); 
-        System.out.println(result);
         return result;
     }
 
