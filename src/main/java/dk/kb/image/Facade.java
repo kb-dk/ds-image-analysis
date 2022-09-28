@@ -85,12 +85,15 @@ public class Facade {
      */
     public static String getMostUsedColor(BufferedImage img){
         // Define simple buckets
+        // TODO: Create OKLab test buckets as float[].
         int[] buckets = defineSimpleBuckets();
         // Count pixels and add 1 to closest bucket
         int[] bucketCount = countBucketsForImg(img, buckets);
         // Get best bucket
         int largestBucket = getlargestBucket(bucketCount);
         // Returns result as HEX value
+        // TODO: Make printResult() able to convert from float to string. 
+        // Method convertOKlabToHex() might be useful here.
         String result = printResult(buckets, largestBucket); 
         return result;
     }
@@ -112,6 +115,7 @@ public class Facade {
             };
     }
 
+    // TODO: Make countBucketsForImg() take float[] buckets instead of int[].
     /**
      * Loop through pixels of input image, get RGB color for pixel and +1 to bucket closest to pixel color.
      * @param buckets Integer array of bucket colors.
@@ -129,12 +133,14 @@ public class Facade {
             for (int x = 0; x < width; x++) {
                 // Get RGB for each pixel
                 int pixelRGB = img.getRGB(x, y);
+                // TODO: Convert pixelRGB to OKlab color for use with OKlab. Method has been created. 
                     updateBucketCounter(pixelRGB, buckets, bucketCounter);
             }
         }
         return bucketCounter;
     }
     
+    // TODO: Make updateBucketCounter() take float pixel, and float[] buckets instead of integers to use with OKlab colors.
     /**
      * Method to update bucketCounter in countBucketsForImg(). 
      * @param pixel The current pixels RGB value as integer.
@@ -143,9 +149,12 @@ public class Facade {
      */
     public static void updateBucketCounter(int pixel, int[] buckets, int[] bucketCounter){
         // Values for checking max
+        // TODO: is it posible to compare double and int?
         int bestColor = 0;
         int minDistance = 2147483647;
         for (int i = 0; i < buckets.length; i ++){
+            // TODO: Change method of color distance calculation to CIEDE2000. Method calculateDeltaE() has been created.
+            //int deltaEDistance = calculateDeltaE(pixel, buckets[i]);
             int totalDistance = getEuclidianColorDistance(pixel, buckets[i]);
 
             // Evaluates total distance against minimum distance for given bucket
