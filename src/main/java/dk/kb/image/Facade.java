@@ -2,23 +2,21 @@ package dk.kb.image;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.HashSet;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Set;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
 
 import javax.imageio.ImageIO;
-import javax.swing.plaf.ColorUIResource;
 
-import com.ctc.wstx.cfg.OutputConfigFlags;
+import com.badlogic.gdx.utils.FloatArray;
 
 import java.awt.image.BufferedImage;
 import java.awt.Color;
+import java.awt.color.ColorSpace;
+
+import com.github.tommyettinger.colorful.oklab.Palette;
+import com.github.tommyettinger.colorful.oklab.ColorTools;
+import com.github.tommyettinger.colorful.oklab.*;
 
 public class Facade {
     /**
@@ -217,4 +215,55 @@ public class Facade {
     }
 
     // Check this link: https://stackoverflow.com/questions/470690/how-to-automatically-generate-n-distinct-colors
+
+    // Exploration of okLab ColorSpace 
+    public static FloatArray okLabColorPalette(){
+        // This FloatArray contains 256 colors evenly distributed in the OKLab color space.
+        FloatArray colorPalette =  Palette.LIST; 
+        return colorPalette;
+    }
+
+    /**
+     * Convert input RGB integer to OKlab float.   
+     * @param pixelRGB Input RGB as integer.
+     * @return an OKlab float containing the color from inbut RGB pixel in the OKlab colorspace.
+     */
+    public static float convertRGBtoOKlab(int RGB){
+        float[] RGBfloatArray = new float[4];
+
+        Color conversion = new Color(RGB, true);
+        RGBfloatArray = conversion.getComponents(RGBfloatArray);
+        float oklabFloat = ColorTools.fromRGBA(RGBfloatArray[0],RGBfloatArray[1],RGBfloatArray[2],RGBfloatArray[3]);
+
+        return oklabFloat;
+    }
+
+    /**
+     * Convert OKlab float to RGB color.
+     * @return the RGB value of the input OKlab float.
+     */
+    public static int convertOKlabToRGB(float oklabFloat){
+        // Get R, G and B values as integers
+        int red = ColorTools.redInt(oklabFloat);
+        int green = ColorTools.greenInt(oklabFloat);
+        int blue = ColorTools.blueInt(oklabFloat);
+
+        int rgb = (red << 16 | green << 8 | blue);
+        return rgb;
+    }
+
+
+    /**
+     * Convert OKlab float to HEX color.
+     * @return the hexcolor representation of the input OKlab float.
+     */
+    public static String convertOKlabToHex(float oklabFloat){
+        // Get R, G and B values as integers
+        int red = ColorTools.redInt(oklabFloat);
+        int green = ColorTools.greenInt(oklabFloat);
+        int blue = ColorTools.blueInt(oklabFloat);
+
+        String hex = String.format("#%02X%02X%02X", red, green, blue);
+        return hex; 
+    }
 }
