@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
@@ -50,6 +51,47 @@ public class FacadeTest {
         assertFalse(Facade.getMostUsedColor(img).isEmpty());
         log.info("Result is not empty");
     }
+
+    @Test
+    public void testOKlabtoRGB() throws IOException{
+        int pixelRGB = Color.RED.getRGB();
+        float oklabFloat = Facade.convertRGBtoOKlab(pixelRGB);
+        int RGB = Facade.convertOKlabToRGB(oklabFloat);
+        String hexColor = String.format("#%06X", (0xFFFFFF & RGB));
+        System.out.println(hexColor);
+        System.out.println(RGB);
+    }
+
+    @Test
+    public void testOKlabtoHex() throws IOException{
+        int pixelRGB = Color.RED.getRGB();
+        float oklabFloat = Facade.convertRGBtoOKlab(pixelRGB);
+        String hex = Facade.convertOKlabToHex(oklabFloat);
+        System.out.println(hex);
+    }
+
+    @Test 
+    public void testColorDistance() throws IOException{
+        int pixelRGB1 = Color.lightGray.getRGB();
+        float oklabFloat1 = Facade.convertRGBtoOKlab(pixelRGB1);
+        float[] fa1 = Facade.convertOKlabFloatToFloatArray(oklabFloat1);
+
+        int pixelRGB2 = Color.gray.getRGB();
+        float oklabFloat2 = Facade.convertRGBtoOKlab(pixelRGB2);
+        float[] fa2 = Facade.convertOKlabFloatToFloatArray(oklabFloat2);
+
+        double result = Facade.calculateDeltaE(fa1, fa2);
+        System.out.println(result);
+    }
+
+    @Test
+    public void testMostUsedColor2() throws IOException{
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("blue-bricks.jpg"));
+        assertFalse(Facade.getMostUsedColor2(img).isEmpty());
+        log.info("Result is not empty");
+    }
+
 
     // method to validate that image is greyscale
     public static boolean isGreyscale(BufferedImage image){
