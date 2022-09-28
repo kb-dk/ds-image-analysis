@@ -3,10 +3,13 @@ package dk.kb.image;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.lang3.ArrayUtils;
 
 import com.badlogic.gdx.utils.FloatArray;
 
@@ -85,16 +88,27 @@ public class Facade {
      */
     public static String getMostUsedColor(BufferedImage img){
         // Define simple buckets
-        // TODO: Create OKLab test buckets as float[].
         int[] buckets = defineSimpleBuckets();
         // Count pixels and add 1 to closest bucket
         int[] bucketCount = countBucketsForImg(img, buckets);
         // Get best bucket
         int largestBucket = getlargestBucket(bucketCount);
         // Returns result as HEX value
-        // TODO: Make printResult() able to convert from float to string. 
-        // Method convertOKlabToHex() might be useful here.
         String result = printResult(buckets, largestBucket); 
+        return result;
+    }
+
+    public static String getMostUsedColor2(BufferedImage img){
+        // Define simple buckets
+        float[] buckets = arbitraryOKlabBuckets();
+        // Count pixels and add 1 to closest bucket
+        int[] bucketCount = countBucketsForImg2(img, buckets);
+        // Get best bucket
+        int largestBucket = getlargestBucket(bucketCount);
+        // Returns result as HEX value
+        // Method convertOKlabToHex() might be useful here.
+        String result = printResult2(buckets, largestBucket); 
+        System.out.println(result);
         return result;
     }
 
@@ -115,7 +129,12 @@ public class Facade {
             };
     }
 
-    // TODO: Make countBucketsForImg() take float[] buckets instead of int[].
+    public static float[] arbitraryOKlabBuckets(){
+        FloatArray array = Palette.LIST;
+        float[] buckets = array.toArray();
+        return buckets;
+    }
+
     /**
      * Loop through pixels of input image, get RGB color for pixel and +1 to bucket closest to pixel color.
      * @param buckets Integer array of bucket colors.
@@ -133,14 +152,31 @@ public class Facade {
             for (int x = 0; x < width; x++) {
                 // Get RGB for each pixel
                 int pixelRGB = img.getRGB(x, y);
-                // TODO: Convert pixelRGB to OKlab color for use with OKlab. Method has been created. 
-                    updateBucketCounter(pixelRGB, buckets, bucketCounter);
+                updateBucketCounter(pixelRGB, buckets, bucketCounter);
+            }
+        }
+        return bucketCounter;
+    }
+
+    public static int[] countBucketsForImg2(BufferedImage img, float[] buckets){
+        // Create bucket counter array
+        int[] bucketCounter = new int[buckets.length];
+        // get image's width and height
+        int width = img.getWidth();
+        int height = img.getHeight();
+
+        // Loop over all pixels in image and get RGB color
+        for(int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Get RGB for each pixel
+                int pixelRGB = img.getRGB(x, y);
+                float pixelOKlab = convertRGBtoOKlab(pixelRGB);
+                updateBucketCounter2(pixelOKlab, buckets, bucketCounter);
             }
         }
         return bucketCounter;
     }
     
-    // TODO: Make updateBucketCounter() take float pixel, and float[] buckets instead of integers to use with OKlab colors.
     /**
      * Method to update bucketCounter in countBucketsForImg(). 
      * @param pixel The current pixels RGB value as integer.
@@ -149,13 +185,31 @@ public class Facade {
      */
     public static void updateBucketCounter(int pixel, int[] buckets, int[] bucketCounter){
         // Values for checking max
-        // TODO: is it posible to compare double and int?
         int bestColor = 0;
         int minDistance = 2147483647;
         for (int i = 0; i < buckets.length; i ++){
-            // TODO: Change method of color distance calculation to CIEDE2000. Method calculateDeltaE() has been created.
             //int deltaEDistance = calculateDeltaE(pixel, buckets[i]);
             int totalDistance = getEuclidianColorDistance(pixel, buckets[i]);
+
+            // Evaluates total distance against minimum distance for given bucket
+            if (totalDistance < minDistance) {
+                minDistance = totalDistance;
+                bestColor = i;
+            }
+        }
+         // Add 1 to the bucket closest to pixel color
+         bucketCounter[bestColor] ++;
+    }
+
+    public static void updateBucketCounter2(float pixel, float[] buckets, int[] bucketCounter){
+        // Values for checking max
+        int bestColor = 0;
+        double minDistance = 2147483647;
+        for (int i = 0; i < buckets.length; i ++){
+            float[] pixelFloatArray = convertOKlabFloatToFloatArray(pixel);
+            float[] bucketFloatArray = convertOKlabFloatToFloatArray(buckets[i]);
+            double totalDistance = calculateDeltaE(pixelFloatArray, bucketFloatArray);
+            //int totalDistance = getEuclidianColorDistance(pixel, buckets[i]);
 
             // Evaluates total distance against minimum distance for given bucket
             if (totalDistance < minDistance) {
@@ -223,7 +277,14 @@ public class Facade {
         return hexColor;
     }
 
-    // Check this link: https://stackoverflow.com/questions/470690/how-to-automatically-generate-n-distinct-colors
+    // TODO: Make printResult() able to convert from float to string. 
+    // Method convertOKlabToHex() might be useful here.
+    public static String printResult2(float[] buckets, int largestBucket){
+        String hexColor = convertOKlabToHex(buckets[largestBucket]);
+        //String hexColor = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & buckets[largestBucket]));
+        return hexColor;
+    }
+
 
     // Exploration of okLab ColorSpace 
     public static FloatArray okLabColorPalette(){
@@ -290,7 +351,8 @@ public class Facade {
     }
 
     /**
-     * Calculate the colour difference value between two colours in lab space.
+     * Calculate the colour difference value between two colours in a lab space.
+     * This CIEDE2000 calculation fits the OKlab colorspace. 
      * DeltaE function from: https://stackoverflow.com/a/61343807
      * The function has been proof read against the equation from:
      * M. R. Luo, G. Cui, B. Rigg: The Development of the CIE 2000 Colour-Difference Formula: CIEDE2000 in COLOR research and application Volume 26, Number 5, October 2001
