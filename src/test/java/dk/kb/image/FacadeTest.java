@@ -48,31 +48,16 @@ public class FacadeTest {
     public void testMostUsedColor() throws IOException{
         BufferedImage img;
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        assertFalse(Facade.getMostUsedColor(img).isEmpty());
+        assertFalse(Facade.getMostUsedRGBColor(img).isEmpty());
         log.info("The most used color has been calculated");
     }
 
     @Test
-    public void testMostUsedColor2() throws IOException{
+    public void testMostUsedOKLabColor() throws IOException{
         BufferedImage img;
         img = ImageIO.read(Resolver.resolveStream("concert.jpg"));
-        assertFalse(Facade.getMostUsedColor2(img).isEmpty());
+        assertFalse(Facade.getMostUsedOKLabColor(img).isEmpty());
         log.info("The most used color has been calculated");
-    }
-
-    @Test 
-    public void testDeltaE() throws IOException{
-        int pixelRGB1 = Color.red.getRGB();
-        int pixelRGB2 = Color.green.getRGB();
-        float oklabFloat1 = OkLabColor.convertRGBtoOKlab(pixelRGB1);
-        float oklabFloat2 = OkLabColor.convertRGBtoOKlab(pixelRGB2);
-        float[] fa1 = OkLabColor.convertOKlabFloatToFloatArray(oklabFloat1);
-        float[] fa2 = OkLabColor.convertOKlabFloatToFloatArray(oklabFloat2);
-        log.info("Testing with colors red and green from java.awt.Color");
-        
-        double result = OkLabColor.calculateDeltaE(fa1, fa2);
-        assertTrue(result <= 1 & result >= 0);
-        log.info("DeltaE gets calculated and returns value between 0 and 1.");
     }
 
     // method to validate that image is greyscale
