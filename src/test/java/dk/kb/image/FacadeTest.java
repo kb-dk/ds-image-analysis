@@ -55,11 +55,11 @@ public class FacadeTest {
     @Test
     public void testMostUsedColor2() throws IOException{
         BufferedImage img;
-        img = ImageIO.read(Resolver.resolveStream("blue-bricks.jpg"));
+        img = ImageIO.read(Resolver.resolveStream("concert.jpg"));
         assertFalse(Facade.getMostUsedColor2(img).isEmpty());
         log.info("The most used color has been calculated");
     }
-    
+
     @Test 
     public void testDeltaE() throws IOException{
         int pixelRGB1 = Color.red.getRGB();
