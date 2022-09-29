@@ -10,6 +10,15 @@ import com.github.tommyettinger.colorful.oklab.Palette;
 
 public class OkLabColor {
 
+    //TODO: write javadoc
+    public static float[] arbitraryOKlabBuckets(){
+        FloatArray array = Palette.LIST;
+        float[] buckets = array.toArray();
+        return buckets;
+    }
+
+    //TODO: write javadoc
+    //TODO: rename
     public static int[] countBucketsForImg2(BufferedImage img, float[] buckets){
         // Create bucket counter array
         int[] bucketCounter = new int[buckets.length];
@@ -28,6 +37,8 @@ public class OkLabColor {
         return bucketCounter;
     }
 
+    //TODO: write javadoc
+    //TODO: rename
     public static void updateBucketCounter2(float pixel, float[] buckets, int[] bucketCounter){
         // Values for checking max
         int bestColor = 0;
@@ -46,6 +57,8 @@ public class OkLabColor {
          bucketCounter[bestColor] ++;
     }
 
+    //TODO: write javadoc
+    //TODO: rename
     public static String printResult2(float[] buckets, int largestBucket){
         String hexColor = OkLabColor.convertOKlabToHex(buckets[largestBucket]);
         return hexColor;
@@ -171,10 +184,5 @@ public class OkLabColor {
         return deltaE;
     }
 
-    public static float[] arbitraryOKlabBuckets(){
-        FloatArray array = Palette.LIST;
-        float[] buckets = array.toArray();
-        return buckets;
-    }
     
 }
