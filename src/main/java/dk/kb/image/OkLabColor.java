@@ -18,8 +18,7 @@ public class OkLabColor {
     }
 
     //TODO: write javadoc
-    //TODO: rename
-    public static int[] countBucketsForImg2(BufferedImage img, float[] buckets){
+    public static int[] countBucketsForImg(BufferedImage img, float[] buckets){
         // Create bucket counter array
         int[] bucketCounter = new int[buckets.length];
         // get image's width and height
@@ -31,15 +30,14 @@ public class OkLabColor {
                 // Get RGB for each pixel
                 int pixelRGB = img.getRGB(x, y);
                 float pixelOKlab = OkLabColor.convertRGBtoOKlab(pixelRGB);
-                OkLabColor.updateBucketCounter2(pixelOKlab, buckets, bucketCounter);
+                OkLabColor.updateBucketCounter(pixelOKlab, buckets, bucketCounter);
             }
         }
         return bucketCounter;
     }
 
     //TODO: write javadoc
-    //TODO: rename
-    public static void updateBucketCounter2(float pixel, float[] buckets, int[] bucketCounter){
+    public static void updateBucketCounter(float pixel, float[] buckets, int[] bucketCounter){
         // Values for checking max
         int bestColor = 0;
         double minDistance = 2147483647;
@@ -58,8 +56,7 @@ public class OkLabColor {
     }
 
     //TODO: write javadoc
-    //TODO: rename
-    public static String printResult2(float[] buckets, int largestBucket){
+    public static String printResult(float[] buckets, int largestBucket){
         String hexColor = OkLabColor.convertOKlabToHex(buckets[largestBucket]);
         return hexColor;
     }

@@ -97,12 +97,12 @@ public class Facade {
         // Define simple buckets
         float[] buckets = OkLabColor.arbitraryOKlabBuckets();
         // Count pixels and add 1 to closest bucket
-        int[] bucketCount = OkLabColor.countBucketsForImg2(img, buckets);
+        int[] bucketCount = OkLabColor.countBucketsForImg(img, buckets);
         // Get best bucket
         int largestBucket = getlargestBucket(bucketCount);
         // Returns result as HEX value
         // Method convertOKlabToHex() might be useful here.
-        String result = OkLabColor.printResult2(buckets, largestBucket); 
+        String result = OkLabColor.printResult(buckets, largestBucket); 
         System.out.println(result);
         return result;
     }
