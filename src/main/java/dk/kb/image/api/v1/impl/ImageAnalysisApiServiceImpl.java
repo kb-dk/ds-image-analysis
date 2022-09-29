@@ -133,7 +133,7 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
-            String response = Facade.getMostUsedColor(img);
+            String response = Facade.getMostUsedRGBColor(img);
             return response;
         } catch (Exception f){
             throw handleException(f);

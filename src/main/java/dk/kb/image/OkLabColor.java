@@ -4,7 +4,9 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Locale;
 
+import com.badlogic.gdx.utils.FloatArray;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
+import com.github.tommyettinger.colorful.oklab.Palette;
 
 public class OkLabColor {
 
@@ -167,6 +169,12 @@ public class OkLabColor {
                 );
     
         return deltaE;
+    }
+
+    public static float[] arbitraryOKlabBuckets(){
+        FloatArray array = Palette.LIST;
+        float[] buckets = array.toArray();
+        return buckets;
     }
     
 }
