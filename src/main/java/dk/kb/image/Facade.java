@@ -135,6 +135,11 @@ public class Facade {
         return buckets;
     }
 
+    // TODO: Define which color-palette to use?
+    // Something about a web-safe 256 color palette?
+    // SMK - How have they created their color palette?
+    // DawnBringer Aurora palette is used in the colorful.oklab.palette and is primarily used for game design.
+
     /**
      * Loop through pixels of input image, get RGB color for pixel and +1 to bucket closest to pixel color.
      * @param buckets Integer array of bucket colors.
@@ -164,7 +169,6 @@ public class Facade {
         // get image's width and height
         int width = img.getWidth();
         int height = img.getHeight();
-
         // Loop over all pixels in image and get RGB color
         for(int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
@@ -188,9 +192,7 @@ public class Facade {
         int bestColor = 0;
         int minDistance = 2147483647;
         for (int i = 0; i < buckets.length; i ++){
-            //int deltaEDistance = calculateDeltaE(pixel, buckets[i]);
             int totalDistance = getEuclidianColorDistance(pixel, buckets[i]);
-
             // Evaluates total distance against minimum distance for given bucket
             if (totalDistance < minDistance) {
                 minDistance = totalDistance;
@@ -209,8 +211,6 @@ public class Facade {
             float[] pixelFloatArray = convertOKlabFloatToFloatArray(pixel);
             float[] bucketFloatArray = convertOKlabFloatToFloatArray(buckets[i]);
             double totalDistance = calculateDeltaE(pixelFloatArray, bucketFloatArray);
-            //int totalDistance = getEuclidianColorDistance(pixel, buckets[i]);
-
             // Evaluates total distance against minimum distance for given bucket
             if (totalDistance < minDistance) {
                 minDistance = totalDistance;
@@ -232,16 +232,13 @@ public class Facade {
         int bucketRed = (pixel1 >> 16) & 0xFF;
         int bucketGreen = (pixel1 >> 8 ) & 0xFF;
         int bucketBlue = (pixel1) & 0xFF;
-
         int pixelRed = (pixel2 >> 16) & 0xFF;
         int pixelGreen = (pixel2 >> 8 ) & 0xFF;
         int pixelBlue = (pixel2) & 0xFF;
-
         // Calculate the difference between current pixels Red, Green and Blue values and current bucket colors values
         int distanceRed = (pixelRed - bucketRed)*(pixelRed - bucketRed);
         int distanceGreen = (pixelGreen - bucketGreen)*(pixelGreen - bucketGreen);
         int distanceBlue = (pixelBlue - bucketBlue)*(pixelBlue - bucketBlue);
-
         // Add distances together to a total distance as RGB distance
         int totalDistance = (distanceRed + distanceGreen + distanceBlue);
         return totalDistance;
@@ -279,7 +276,6 @@ public class Facade {
 
     public static String printResult2(float[] buckets, int largestBucket){
         String hexColor = convertOKlabToHex(buckets[largestBucket]);
-        //String hexColor = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & buckets[largestBucket]));
         return hexColor;
     }
 
@@ -290,11 +286,9 @@ public class Facade {
      */
     public static float convertRGBtoOKlab(int RGB){
         float[] RGBfloatArray = new float[4];
-
         Color conversion = new Color(RGB, true);
         RGBfloatArray = conversion.getComponents(RGBfloatArray);
         float oklabFloat = ColorTools.fromRGBA(RGBfloatArray[0],RGBfloatArray[1],RGBfloatArray[2],RGBfloatArray[3]);
-
         return oklabFloat;
     }
 
@@ -307,7 +301,6 @@ public class Facade {
         int red = ColorTools.redInt(oklabFloat);
         int green = ColorTools.greenInt(oklabFloat);
         int blue = ColorTools.blueInt(oklabFloat);
-
         int rgb = (red << 16 | green << 8 | blue);
         return rgb;
     }
@@ -322,7 +315,7 @@ public class Facade {
         int green = ColorTools.greenInt(oklabFloat);
         int blue = ColorTools.blueInt(oklabFloat);
 
-        String hex = String.format("#%02X%02X%02X", red, green, blue);
+        String hex = String.format(Locale.ROOT, "#%02X%02X%02X", red, green, blue);
         return hex; 
     }
 
@@ -332,11 +325,10 @@ public class Facade {
      */
     public static float[] convertOKlabFloatToFloatArray(float oklabFloat){
         float[] oklabFloatArray = new float[3];
-
+        // Get L, A and B values from oklabFloat
         oklabFloatArray[0] = ColorTools.channelL(oklabFloat);
         oklabFloatArray[1] = ColorTools.channelA(oklabFloat);
         oklabFloatArray[2] = ColorTools.channelB(oklabFloat);
-
         return oklabFloatArray;
     }
 
@@ -366,7 +358,7 @@ public class Facade {
         double C2 =  Math.sqrt(a2*a2 + b2*b2);
         double Cmean = (C1 + C2) / 2.0;
 
-        double G =  ( 1 - Math.sqrt( Math.pow(Cmean, 7) / (Math.pow(Cmean, 7) + Math.pow(25, 7)) ) ) / 2; //ok
+        double G =  ( 1 - Math.sqrt( Math.pow(Cmean, 7) / (Math.pow(Cmean, 7) + Math.pow(25, 7)) ) ) / 2;
         double a1prime = a1 * (1 + G);
         double a2prime = a2 * (1 + G);
 
