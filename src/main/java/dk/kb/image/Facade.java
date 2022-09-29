@@ -92,6 +92,7 @@ public class Facade {
         return result;
     }
 
+    // TODO: Write javadoc
     public static String getMostUsedOKLabColor(BufferedImage img){
         // Define simple buckets
         float[] buckets = OkLabColor.arbitraryOKlabBuckets();
