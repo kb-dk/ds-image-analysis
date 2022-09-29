@@ -3,17 +3,9 @@ package dk.kb.image;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-
 import javax.imageio.ImageIO;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.awt.image.BufferedImage;
-import java.awt.color.ColorSpace;
-
-import com.github.tommyettinger.colorful.oklab.*;
 
 public class Facade {
     /**
