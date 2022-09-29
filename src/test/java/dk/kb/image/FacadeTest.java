@@ -64,13 +64,13 @@ public class FacadeTest {
     public void testDeltaE() throws IOException{
         int pixelRGB1 = Color.red.getRGB();
         int pixelRGB2 = Color.green.getRGB();
-        float oklabFloat1 = Facade.convertRGBtoOKlab(pixelRGB1);
-        float oklabFloat2 = Facade.convertRGBtoOKlab(pixelRGB2);
-        float[] fa1 = Facade.convertOKlabFloatToFloatArray(oklabFloat1);
-        float[] fa2 = Facade.convertOKlabFloatToFloatArray(oklabFloat2);
+        float oklabFloat1 = OkLabColor.convertRGBtoOKlab(pixelRGB1);
+        float oklabFloat2 = OkLabColor.convertRGBtoOKlab(pixelRGB2);
+        float[] fa1 = OkLabColor.convertOKlabFloatToFloatArray(oklabFloat1);
+        float[] fa2 = OkLabColor.convertOKlabFloatToFloatArray(oklabFloat2);
         log.info("Testing with colors red and green from java.awt.Color");
         
-        double result = Facade.calculateDeltaE(fa1, fa2);
+        double result = OkLabColor.calculateDeltaE(fa1, fa2);
         assertTrue(result <= 1 & result >= 0);
         log.info("DeltaE gets calculated and returns value between 0 and 1.");
     }
