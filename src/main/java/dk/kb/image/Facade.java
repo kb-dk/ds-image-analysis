@@ -277,20 +277,10 @@ public class Facade {
         return hexColor;
     }
 
-    // TODO: Make printResult() able to convert from float to string. 
-    // Method convertOKlabToHex() might be useful here.
     public static String printResult2(float[] buckets, int largestBucket){
         String hexColor = convertOKlabToHex(buckets[largestBucket]);
         //String hexColor = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & buckets[largestBucket]));
         return hexColor;
-    }
-
-
-    // Exploration of okLab ColorSpace 
-    public static FloatArray okLabColorPalette(){
-        // This FloatArray contains 256 colors evenly distributed in the OKLab color space.
-        FloatArray colorPalette =  Palette.LIST; 
-        return colorPalette;
     }
 
     /**
@@ -309,8 +299,8 @@ public class Facade {
     }
 
     /**
-     * Convert OKlab float to RGB color.
-     * @return the RGB value of the input OKlab float.
+     * Convert OKlab float to RGB color represented as an integer.
+     * @return the integer RGB value of the input OKlab float.
      */
     public static int convertOKlabToRGB(float oklabFloat){
         // Get R, G and B values as integers
@@ -323,7 +313,7 @@ public class Facade {
     }
 
     /**
-     * Convert OKlab float to HEX color.
+     * Convert OKlab float to HEX color string.
      * @return the hexcolor representation of the input OKlab float.
      */
     public static String convertOKlabToHex(float oklabFloat){
