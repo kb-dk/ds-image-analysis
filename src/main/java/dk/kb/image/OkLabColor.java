@@ -10,14 +10,23 @@ import com.github.tommyettinger.colorful.oklab.Palette;
 
 public class OkLabColor {
 
-    //TODO: write javadoc
+    /**
+     * Create a float array of 256 colors in the OKlab colorspace
+     * This color palette is called the Aurora Palette and has originally been created by DawnBringer. 
+     * The palette contains 256 colorsm chosen for game development.
+     * @return a primitive float array with 256 colors in the OKlab colorspace
+     */
     public static float[] arbitraryOKlabBuckets(){
         FloatArray array = Palette.LIST;
         float[] buckets = array.toArray();
         return buckets;
     }
 
-    //TODO: write javadoc
+    /**
+     * Loop through pixels of input image, get OKlab color for pixel and +1 to bucket closest to pixel color.
+     * @param buckets float array of bucket colors.
+     * @return the integer array bucketCounter, which contains the count for each bucket for the input image,
+     */
     public static int[] countBucketsForImg(BufferedImage img, float[] buckets){
         // Create bucket counter array
         int[] bucketCounter = new int[buckets.length];
@@ -36,7 +45,12 @@ public class OkLabColor {
         return bucketCounter;
     }
 
-    //TODO: write javadoc
+    /**
+     * Method to update bucketCounter in countBucketsForImg(). 
+     * @param pixel The current pixels OKlab color value as float.
+     * @param buckets float array of color buckets.
+     * @param bucketCounter Integer array to store count of buckets.
+     */
     public static void updateBucketCounter(float pixel, float[] buckets, int[] bucketCounter){
         // Values for checking max
         int bestColor = 0;
@@ -55,7 +69,12 @@ public class OkLabColor {
          bucketCounter[bestColor] ++;
     }
 
-    //TODO: write javadoc
+    /**
+     * Get the hex color of the most used bucket.
+     * @param buckets float array of color buckets.
+     * @param largestBucket integer containing the index of the most used bucket.
+     * @return the most used hex color as a string.
+     */
     public static String printResult(float[] buckets, int largestBucket){
         String hexColor = OkLabColor.convertOKlabToHex(buckets[largestBucket]);
         return hexColor;
