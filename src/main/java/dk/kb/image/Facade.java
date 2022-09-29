@@ -134,8 +134,16 @@ public class Facade {
         return largestBucket;
     }
 
-    // TODO: Define which color-palette to use?
-    // Something about a web-safe 256 color palette?
-    // SMK - How have they created their color palette?
-    // DawnBringer Aurora palette is used in the colorful.oklab.palette and is primarily used for game design.
+    /* TODO: Define which color-palette to use
+     * Something about a web-safe 256 color palette?
+     * SMK - How have they created their color palette?
+     * DawnBringer Aurora palette is used in the colorful.oklab.palette and is primarily used for game design.
+     */
+
+    // TODO: Add capability of returning top X colors pr image
+     
+    // TODO: Implement OKlab method in the API service
+
+    
+
 }
