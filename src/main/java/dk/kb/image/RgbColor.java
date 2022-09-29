@@ -22,6 +22,9 @@ public class RgbColor {
             Color.MAGENTA.getRGB()
             };
     }
+    // TODO: Add bucket array of more RGB colors 
+    // Maybe go for an array of 216 websafe colors just as a start?
+    // TODO: When another bucket method has been defined, maybe move ALL bucket methods to new class
 
     /**
      * Loop through pixels of input image, get RGB color for pixel and +1 to bucket closest to pixel color.
