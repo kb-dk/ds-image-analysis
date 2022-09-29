@@ -77,8 +77,13 @@ public class Facade {
     }
 
     /**
-     * Get primary color from input image.
-     * @return the primary color from input image as HEX value.
+     * Get primary RGB color from input image.
+     * <p>
+     * This method uses the standard RGB colorspace and a very limited amount of color bins. 
+     * Currently it contains six colors (RED, GREEN, BLUE, YELLOW, CYAN and MAGENTA).
+     * The method calculates the euclidian distance between the colors of the input img pixels and the colors of the buckets. 
+     * </p>
+     * @return the primary RGB color from input image as HEX value.
      */
     public static String getMostUsedRGBColor(BufferedImage img){
         // Define simple buckets
@@ -92,7 +97,18 @@ public class Facade {
         return result;
     }
 
-    // TODO: Write javadoc
+    /**
+     * Get most used color from input image. 
+     * <p>
+     * This method uses the OKlab colorspace, which is a perceptual colorspace created from the CIELAB colorspace. 
+     * Currently this method evaluates colors against 256 colors from DawnBringers Aurora palette. 
+     * The distance between palette colors and image pixel colors is calculated using the delta E function adopted bye CIE in in 2000 known as CIEDE2000.
+     * </p>
+     * <p> Information on the OKlab colorspace can be found <a href="https://bottosson.github.io/posts/oklab/">here</a>.</p>
+     * <p> Information on CIEDE2000 can be found <a href="https://www.researchgate.net/publication/229511830_The_development_of_the_CIE_2000_colour-difference_formula_CIEDE2000">here</a>.</p>
+     * @param img
+     * @return
+     */
     public static String getMostUsedOKLabColor(BufferedImage img){
         // Define simple buckets
         float[] buckets = OkLabColor.arbitraryOKlabBuckets();
