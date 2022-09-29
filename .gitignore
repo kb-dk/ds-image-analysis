@@ -5,6 +5,7 @@ target/
 
 # We use pom.xml as the source of truth and don't rely on a specific IDE
 .idea
+.vscode/
 *.iml
 
 README_OLD.md
