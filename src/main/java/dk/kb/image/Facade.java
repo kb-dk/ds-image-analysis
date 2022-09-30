@@ -79,7 +79,7 @@ public class Facade {
      */
     public static String getMostUsedRGBColor(BufferedImage img){
         // Define simple buckets
-        int[] buckets = RgbColor.defineSimpleBuckets();
+        int[] buckets = PalettePicker.defineSimpleBuckets();
         // Count pixels and add 1 to closest bucket
         int[] bucketCount = RgbColor.countBucketsForImg(img, buckets);
         // Get best bucket
@@ -103,7 +103,7 @@ public class Facade {
      */
     public static String getMostUsedOKLabColor(BufferedImage img){
         // Define simple buckets
-        float[] buckets = OkLabColor.arbitraryOKlabBuckets();
+        float[] buckets = PalettePicker.arbitraryOKlabBuckets();
         // Count pixels and add 1 to closest bucket
         int[] bucketCount = OkLabColor.countBucketsForImg(img, buckets);
         // Get best bucket
@@ -133,12 +133,6 @@ public class Facade {
         } 
         return largestBucket;
     }
-
-    /* TODO: Define which color-palette to use
-     * Something about a web-safe 256 color palette?
-     * SMK - How have they created their color palette?
-     * DawnBringer Aurora palette is used in the colorful.oklab.palette and is primarily used for game design.
-     */
 
     // TODO: Add capability of returning top X colors pr image
      
