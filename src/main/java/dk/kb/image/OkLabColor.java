@@ -4,23 +4,9 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Locale;
 
-import com.badlogic.gdx.utils.FloatArray;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
-import com.github.tommyettinger.colorful.oklab.Palette;
 
 public class OkLabColor {
-
-    /**
-     * Create a float array of 256 colors in the OKlab colorspace
-     * This color palette is called the Aurora Palette and has originally been created by DawnBringer. 
-     * The palette contains 256 colorsm chosen for game development.
-     * @return a primitive float array with 256 colors in the OKlab colorspace
-     */
-    public static float[] arbitraryOKlabBuckets(){
-        FloatArray array = Palette.LIST;
-        float[] buckets = array.toArray();
-        return buckets;
-    }
 
     /**
      * Loop through pixels of input image, get OKlab color for pixel and +1 to bucket closest to pixel color.

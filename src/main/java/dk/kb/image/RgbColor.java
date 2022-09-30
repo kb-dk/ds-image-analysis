@@ -1,30 +1,9 @@
 package dk.kb.image;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.util.Locale;
 
 public class RgbColor {
-
-    /**
-     * Defines simple color buckets. 
-     * Used in getMostUsedRGBColor() to extract primary color.
-     * @return an integer array of RGB colors.
-     */
-    public static int[] defineSimpleBuckets(){
-         // Define colors as integers in array
-        return new int[]{
-            Color.RED.getRGB(),
-            Color.GREEN.getRGB(),
-            Color.BLUE.getRGB(),
-            Color.YELLOW.getRGB(),
-            Color.CYAN.getRGB(),
-            Color.MAGENTA.getRGB()
-            };
-    }
-    // TODO: Add bucket array of more RGB colors 
-    // Maybe go for an array of 216 websafe colors just as a start?
-    // TODO: When another bucket method has been defined, maybe move ALL bucket methods to new class
 
     /**
      * Loop through pixels of input image, get RGB color for pixel and +1 to bucket closest to pixel color.
