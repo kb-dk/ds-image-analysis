@@ -18,10 +18,10 @@ public class OkLabColorTest {
     public void testDeltaE() throws IOException{
         int pixelRGB1 = Color.red.getRGB();
         int pixelRGB2 = Color.green.getRGB();
-        float oklabFloat1 = OkLabColor.convertRGBtoOKlab(pixelRGB1);
-        float oklabFloat2 = OkLabColor.convertRGBtoOKlab(pixelRGB2);
-        float[] fa1 = OkLabColor.convertOKlabFloatToFloatArray(oklabFloat1);
-        float[] fa2 = OkLabColor.convertOKlabFloatToFloatArray(oklabFloat2);
+        float oklabFloat1 = ColorConversion.convertRGBtoOKlab(pixelRGB1);
+        float oklabFloat2 = ColorConversion.convertRGBtoOKlab(pixelRGB2);
+        float[] fa1 = ColorConversion.convertOKlabFloatToFloatArray(oklabFloat1);
+        float[] fa2 = ColorConversion.convertOKlabFloatToFloatArray(oklabFloat2);
         log.info("Testing with colors red and green from java.awt.Color");
         
         double result = OkLabColor.calculateDeltaE(fa1, fa2);

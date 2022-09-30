@@ -36,35 +36,17 @@ public class PalettePicker {
         return buckets;
     }
     
-    /* TODO: Import SMK palette
-     * SMK - How have they created their color palette?
-     */
+    // TODO: write javadoc
     public static float[] smkOkLabBuckets(){
-        float[] smkOkLabBuckets = hexToOKlabPalette(smkHexPalette());
+        float[] smkOkLabBuckets = ColorConversion.convertHexToOKlab(smkHexPalette());
         return smkOkLabBuckets;
     }
 
-    public static float[] hexToOKlabPalette(String[] inputPalette){
-        int length = inputPalette.length;
-        int[] valuesRGB = new int[length];
-        float[] valuesOKlab = new float[length]; 
-        // Hex to RGB 
-        for (int i = 0; i < inputPalette.length; i ++){
-            Color color = Color.decode(inputPalette[i]);
-            valuesRGB[i] = color.getRGB();
-        }
-        // RGB to OKlab
-        for (int i = 0; i < inputPalette.length; i ++){
-            float okLabFloat = OkLabColor.convertRGBtoOKlab(valuesRGB[i]);
-            valuesOKlab[i] = okLabFloat;
-        }
-    
-        return valuesOKlab;
-    }
-
+    // TODO: write javadoc
     public static String[] smkHexPalette(){
         // 256 color palette from SMK Open (National Gallery of Denmark).
         // Used in their image discovery at: https://open.smk.dk/art/advanced/colors?q=*&page=0 
+        // It is unclear how they have come to use this exact colorpalette 
         return new String[]{
             "#FDDCE5", "#FADCEC", "#F6DAED", "#EEDCED", "#E4DAEE", "#DFE1F1", "#DFEEFA", "#E1F5FA",
             "#E1F3F0", "#E2F1DE", "#EAF3D9", "#F8F9DC", "#FEFCDF", "#FFF1DC", "#FEE1DC", "#FCD4D7",

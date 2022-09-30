@@ -1,10 +1,6 @@
 package dk.kb.image;
 
-import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.util.Locale;
-
-import com.github.tommyettinger.colorful.oklab.ColorTools;
 
 public class OkLabColor {
 
@@ -24,7 +20,7 @@ public class OkLabColor {
             for (int x = 0; x < width; x++) {
                 // Get RGB for each pixel
                 int pixelRGB = img.getRGB(x, y);
-                float pixelOKlab = OkLabColor.convertRGBtoOKlab(pixelRGB);
+                float pixelOKlab = ColorConversion.convertRGBtoOKlab(pixelRGB);
                 OkLabColor.updateBucketCounter(pixelOKlab, buckets, bucketCounter);
             }
         }
@@ -42,8 +38,8 @@ public class OkLabColor {
         int bestColor = 0;
         double minDistance = 2147483647;
         for (int i = 0; i < buckets.length; i ++){
-            float[] pixelFloatArray = OkLabColor.convertOKlabFloatToFloatArray(pixel);
-            float[] bucketFloatArray = OkLabColor.convertOKlabFloatToFloatArray(buckets[i]);
+            float[] pixelFloatArray = ColorConversion.convertOKlabFloatToFloatArray(pixel);
+            float[] bucketFloatArray = ColorConversion.convertOKlabFloatToFloatArray(buckets[i]);
             double totalDistance = OkLabColor.calculateDeltaE(pixelFloatArray, bucketFloatArray);
             // Evaluates total distance against minimum distance for given bucket
             if (totalDistance < minDistance) {
@@ -62,61 +58,8 @@ public class OkLabColor {
      * @return the most used hex color as a string.
      */
     public static String printResult(float[] buckets, int largestBucket){
-        String hexColor = OkLabColor.convertOKlabToHex(buckets[largestBucket]);
+        String hexColor = ColorConversion.convertOKlabToHex(buckets[largestBucket]);
         return hexColor;
-    }
-
-    /**
-     * Convert input RGB integer to OKlab float.   
-     * @param pixelRGB Input RGB as integer.
-     * @return an OKlab float containing the color from inbut RGB pixel in the OKlab colorspace.
-     */
-    public static float convertRGBtoOKlab(int RGB){
-        float[] RGBfloatArray = new float[4];
-        Color conversion = new Color(RGB, true);
-        RGBfloatArray = conversion.getComponents(RGBfloatArray);
-        float oklabFloat = ColorTools.fromRGBA(RGBfloatArray[0],RGBfloatArray[1],RGBfloatArray[2],RGBfloatArray[3]);
-        return oklabFloat;
-    }
-
-    /**
-     * Convert OKlab float to RGB color represented as an integer.
-     * @return the integer RGB value of the input OKlab float.
-     */
-    public static int convertOKlabToRGB(float oklabFloat){
-        // Get R, G and B values as integers
-        int red = ColorTools.redInt(oklabFloat);
-        int green = ColorTools.greenInt(oklabFloat);
-        int blue = ColorTools.blueInt(oklabFloat);
-        int rgb = (red << 16 | green << 8 | blue);
-        return rgb;
-    }
-
-    /**
-     * Convert OKlab float to HEX color string.
-     * @return the hexcolor representation of the input OKlab float.
-     */
-    public static String convertOKlabToHex(float oklabFloat){
-        // Get R, G and B values as integers
-        int red = ColorTools.redInt(oklabFloat);
-        int green = ColorTools.greenInt(oklabFloat);
-        int blue = ColorTools.blueInt(oklabFloat);
-    
-        String hex = String.format(Locale.ROOT, "#%02X%02X%02X", red, green, blue);
-        return hex; 
-    }
-
-    /**
-     * Convert OKlab float to float array containing L value at index 0, A value at index 1 and B value at index 2.
-     * @return a float array containing L, A and B values from input OKlab float.
-     */
-    public static float[] convertOKlabFloatToFloatArray(float oklabFloat){
-        float[] oklabFloatArray = new float[3];
-        // Get L, A and B values from oklabFloat
-        oklabFloatArray[0] = ColorTools.channelL(oklabFloat);
-        oklabFloatArray[1] = ColorTools.channelA(oklabFloat);
-        oklabFloatArray[2] = ColorTools.channelB(oklabFloat);
-        return oklabFloatArray;
     }
 
     /**
