@@ -7,11 +7,17 @@ import com.github.tommyettinger.colorful.oklab.ColorTools;
 
 public class ColorConversion {
 
-    // TODO: write javadoc
+    /**
+     * Convert a String[] of hex colors into a float[] of OKlab colors.
+     * @param inputPalette is a String[] of hex colors to be converted.
+     * @return a float[] of colors defined in the OKlab colorspace.
+     */
     public static float[] convertHexToOKlab(String[] inputPalette){
         int length = inputPalette.length;
         int[] valuesRGB = new int[length];
         float[] valuesOKlab = new float[length]; 
+        // TODO: Split into own method
+        // TODO: Make it posible to convert a single hex color into RGB and then into OKlab
         // Hex to RGB 
         for (int i = 0; i < inputPalette.length; i ++){
             Color color = Color.decode(inputPalette[i]);

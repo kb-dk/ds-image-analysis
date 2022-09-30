@@ -36,13 +36,20 @@ public class PalettePicker {
         return buckets;
     }
     
-    // TODO: write javadoc
+    /**
+     * Convert a string[] of hex colors to a float[] of colors in the OKlab Colorspace.
+     * @return a float[] of OKlab colors.
+     */
     public static float[] smkOkLabBuckets(){
         float[] smkOkLabBuckets = ColorConversion.convertHexToOKlab(smkHexPalette());
         return smkOkLabBuckets;
     }
 
-    // TODO: write javadoc
+    /**
+     * Create a string[] of 256 hex colors used by SMK (National Gallery of Denmark).
+     * It is not clear how this palette has been constructed in the first place.
+     * @return a string[] of 256 hex values.
+     */
     public static String[] smkHexPalette(){
         // 256 color palette from SMK Open (National Gallery of Denmark).
         // Used in their image discovery at: https://open.smk.dk/art/advanced/colors?q=*&page=0 
@@ -80,6 +87,4 @@ public class PalettePicker {
             "#777777", "#666666", "#555555", "#444444", "#333333", "#222222", "#111111", "#000000",
         };
     }
-
-    // TODO: Refactor all conversion methods to a ColorConversion class
 }
