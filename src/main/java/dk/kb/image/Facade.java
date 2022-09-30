@@ -93,7 +93,7 @@ public class Facade {
      * Get most used color from input image. 
      * <p>
      * This method uses the OKlab colorspace, which is a perceptual colorspace created from the CIELAB colorspace. 
-     * Currently this method evaluates colors against 256 colors from DawnBringers Aurora palette. 
+     * Currently this method evaluates colors against 256 hex colors from SMK Open (National Gallery of Denmark) converted into OKlab colorspace. 
      * The distance between palette colors and image pixel colors is calculated using the delta E function adopted bye CIE in in 2000 known as CIEDE2000.
      * </p>
      * <p> Information on the OKlab colorspace can be found <a href="https://bottosson.github.io/posts/oklab/">here</a>.</p>
@@ -103,7 +103,7 @@ public class Facade {
      */
     public static String getMostUsedOKLabColor(BufferedImage img){
         // Define simple buckets
-        float[] buckets = PalettePicker.arbitraryOKlabBuckets();
+        float[] buckets = PalettePicker.smkOkLabBuckets();
         // Count pixels and add 1 to closest bucket
         int[] bucketCount = OkLabColor.countBucketsForImg(img, buckets);
         // Get best bucket
