@@ -3,7 +3,11 @@ package dk.kb.image;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
@@ -103,16 +107,19 @@ public class Facade {
      * @return
      */
     public static String getMostUsedOKLabColor(BufferedImage img){
-        // Define simple buckets
+        // Define buckets
         float[] buckets = PalettePicker.smkOkLabBuckets();
         // Count pixels and add 1 to closest bucket
         int[] bucketCount = OkLabColor.countBucketsForImg(img, buckets);
-        // Get best bucket
-        int largestBucket = getlargestBucket(bucketCount);
-        // Returns result as HEX value
-        // Method convertOKlabToHex() might be useful here.
-        String result = OkLabColor.printResult(buckets, largestBucket); 
-        System.out.println(result);
+        // Create map, where buckets and bucketCount has been combined
+        Map<Float, Integer> bucketsWithCount = OkLabColor.bucketsAndBucketCountToMap(buckets, bucketCount);
+        // Sorts and returns the combined map
+        List<Entry<Float, Integer>> sortedList = OkLabColor.sortMap(bucketsWithCount);
+        //  Returns top X from the sorted list
+        List<Entry<String, Float>> topX = OkLabColor.returnTopXAsHex(sortedList, 10);
+
+        String result = topX.toString();
+        System.out.print(topX);
         return result;
     }
 
