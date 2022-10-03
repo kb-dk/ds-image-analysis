@@ -1,5 +1,8 @@
 package dk.kb.image;
 
+// TODO: Maybe change name of class, so that it could be used as a general analysis tool
+// Something like: DeltaECalculator
+// Then expose it in the API as a place where people can check their color palettes if needed?
 public class AnalyseSmkDeltaE {
     public static void AnalyseColorDistance(){
         float[] SmkColors = PalettePicker.smkOkLabBuckets();
