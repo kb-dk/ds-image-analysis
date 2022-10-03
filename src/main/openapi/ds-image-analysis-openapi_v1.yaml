@@ -43,6 +43,7 @@ paths:
               schema:
                 type: string
                 example: "#000000"
+                
   /main-OKlab-color:
     post:
       tags:
