@@ -117,6 +117,7 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
 
     /**
      * Get the most dominant colors from an image.
+     * Calculated as a RGB color using euclidian distance between colors.
      * 
      * @param image: The image to analyse
      * 
@@ -128,12 +129,38 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
       * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
      */
     @Override
-    public String getMainColor( Attachment imageDetail) throws ServiceException {
+    public String getMainRgbColor( Attachment imageDetail) throws ServiceException {
         // read image
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
             String response = Facade.getMostUsedRGBColor(img);
+            return response;
+        } catch (Exception f){
+            throw handleException(f);
+        }
+    }
+
+        /**
+     * Get the most dominant colors from an image.
+     * Calculated as an OKLab color using delta E to calculate distance between colors. 
+     * 
+     * @param image: The image to analyse
+     * 
+     * @return <ul>
+      *   <li>code = 200, message = "The dominant colors", response = String.class</li>
+      *   </ul>
+      * @throws ServiceException when other http codes should be returned
+      *
+      * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
+     */
+    @Override
+    public String getMainOkLabColor( Attachment imageDetail) throws ServiceException {
+        // read image
+        try {
+            in = imageDetail.getDataHandler().getInputStream();;
+            img = ImageIO.read(in);
+            String response = Facade.getMostUsedOKLabColor(img);
             return response;
         } catch (Exception f){
             throw handleException(f);
