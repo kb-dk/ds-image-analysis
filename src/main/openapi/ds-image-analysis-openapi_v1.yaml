@@ -15,6 +15,8 @@ servers:
     description: 'Version 1'
 
 paths:
+  # TODO: Split endpoints into meaningfull tags. One could be color analysis, another could be image info etc.
+  # TODO: Check if it is posible to add description to a tag. Would be nice to show the overall differences between methods.
   # These endpoints has been created from the colorizer endpoint-template
   /main-rgb-color:
     post:
@@ -43,7 +45,7 @@ paths:
               schema:
                 type: string
                 example: "#000000"
-                
+
   /main-OKlab-color:
     post:
       tags:
