@@ -45,8 +45,6 @@ public class PalettePicker {
         return smkOkLabBuckets;
     }
 
-    // TODO: Run DeltaE distance between all SMK colors
-
     /**
      * Create a string[] of 256 hex colors used by SMK (National Gallery of Denmark).
      * It is not clear how this palette has been constructed in the first place.
