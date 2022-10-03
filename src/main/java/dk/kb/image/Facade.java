@@ -116,10 +116,12 @@ public class Facade {
         // Sorts and returns the combined map
         List<Entry<Float, Integer>> sortedList = OkLabColor.sortMap(bucketsWithCount);
         //  Returns top X from the sorted list
+        // Currently set to 10
+        // TODO: API implementation that allows users to set this value
         List<Entry<String, Float>> topX = OkLabColor.returnTopXAsHex(sortedList, 10);
 
         String result = topX.toString();
-        System.out.print(topX);
+        System.out.println(topX);
         return result;
     }
 

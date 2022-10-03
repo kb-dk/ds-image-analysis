@@ -56,7 +56,7 @@ public class FacadeTest {
         BufferedImage img;
         img = ImageIO.read(Resolver.resolveStream("concert.jpg"));
         assertFalse(Facade.getMostUsedOKLabColor(img).isEmpty());
-        log.info("The most used color has been calculated");
+        log.info("The most used colors has been calculated");
     }
 
     // method to validate that image is greyscale
