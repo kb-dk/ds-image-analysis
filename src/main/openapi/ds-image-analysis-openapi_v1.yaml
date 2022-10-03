@@ -16,13 +16,12 @@ servers:
 
 paths:
   # These endpoints has been created from the colorizer endpoint-template
-  /maincolor:
+  /main-rgb-color:
     post:
       tags:
         - 'Image Analysis'
-      summary: 'Get the most dominant color from an image.'
-      operationId: getMainColor
-
+      summary: 'Get the most dominant color from an image. Calculated in RGB space with euclidian distance.'
+      operationId: getMainRgbColor
       requestBody:
         content:
           multipart/form-data:
@@ -36,7 +35,33 @@ paths:
                   description: 'The image to analyse'
                   type: string
                   format: binary
-
+      responses:
+        '200':
+          description: 'The dominant color'
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: "#000000"
+  /main-OKlab-color:
+    post:
+      tags:
+        - 'Image Analysis'
+      summary: 'Get the most dominant color from an image. Calculated in OKlab colorspace and messured with deltaE.'
+      operationId: getMainOkLabColor
+      requestBody:
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - image
+              properties:
+                # The POSTed image can be retrieved using imageDetail.getDataHandler().getInputStream()
+                image:
+                  description: 'The image to analyse'
+                  type: string
+                  format: binary
       responses:
         '200':
           description: 'The dominant color'
