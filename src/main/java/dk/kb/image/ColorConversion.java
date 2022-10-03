@@ -16,8 +16,6 @@ public class ColorConversion {
         int length = inputPalette.length;
         int[] valuesRGB = new int[length];
         float[] valuesOKlab = new float[length]; 
-        // TODO: Split into own method
-        // TODO: Make it posible to convert a single hex color into RGB and then into OKlab
         // Hex to RGB 
         for (int i = 0; i < inputPalette.length; i ++){
             Color color = Color.decode(inputPalette[i]);
