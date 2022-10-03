@@ -1,8 +1,16 @@
 package dk.kb.image;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 public class OkLabColor {
+    static int pixelCount = 0;
 
     /**
      * Loop through pixels of input image, get OKlab color for pixel and +1 to bucket closest to pixel color.
@@ -19,6 +27,7 @@ public class OkLabColor {
         for(int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 // Get RGB for each pixel
+                pixelCount ++;
                 int pixelRGB = img.getRGB(x, y);
                 float pixelOKlab = ColorConversion.convertRGBtoOKlab(pixelRGB);
                 OkLabColor.updateBucketCounter(pixelOKlab, buckets, bucketCounter);
@@ -127,6 +136,44 @@ public class OkLabColor {
                 );
     
         return deltaE;
+    }
+
+    // TODO: Write JavaDoc
+    public static Map<Float, Integer> bucketsAndBucketCountToMap(float[] buckets, int[] bucketCount){
+    
+        Map<Float, Integer> map = new HashMap<>();
+        for (int i=0; i<buckets.length; i++) {
+            map.put(buckets[i], bucketCount[i]);
+        }
+    
+        return map;
+    }
+
+    // TODO: Write JavaDoc
+    public static List<Entry<Float, Integer>> sortMap(Map<Float, Integer> map){
+        List<Entry<Float, Integer>> sortedList = new ArrayList<>(map.entrySet());
+    	sortedList.sort(Entry.comparingByValue());
+        Collections.reverse(sortedList);
+    
+        return sortedList;
+    }
+
+    // TODO: Write JavaDoc
+    public static List<Entry<String, Float>> returnTopXAsHex(List<Entry<Float, Integer>> list, int x){
+        return list.stream().
+                map(entry-> OkLabColor.okEntry2RGBHex(entry)).
+                limit(x).
+                collect(Collectors.toList());
+    }
+
+    // TODO: Write JavaDoc
+    static Entry<String, Float> okEntry2RGBHex(Entry<Float, Integer> okEntry){ 
+        String key = ColorConversion.convertOKlabToHex(okEntry.getKey());
+        float value = okEntry.getValue();
+        float percentage = value/pixelCount*100;
+        Entry<String, Float> result = Map.entry(key, percentage);
+        
+        return result;
     }
 
     
