@@ -44,7 +44,6 @@ paths:
                 type: string
                 example: "#000000"
 
-  # TODO: Update method to make user provide how many colors to return.
   /main-OKlab-color:
     post:
       tags:
@@ -111,6 +110,33 @@ paths:
                 schema:
                   type: integer
                   format: int32
+
+  /calculate-color-distance:
+    get:
+      tags: 
+        - 'Color Analysis'
+      summary: 'Calculate distance between colors with deltaE to find colors that perceptually look the same in the palette.'
+      operationId: calculateColorDistance
+      parameters:
+      - name: colors
+        in: query
+        required: true
+        description: 'The hex values of colors to analyse'
+        schema:
+          type: array
+          items: 
+            type: string
+          minimum: 2
+      responses:
+          '200':
+            description: 'Number of unique colors in image:'
+            content:
+              text/plain:
+                schema:
+                  type: array
+                  items: 
+                    type: string
+
                   
   /greyscale:
     post:

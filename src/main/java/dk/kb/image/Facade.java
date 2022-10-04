@@ -149,9 +149,4 @@ public class Facade {
         } 
         return largestBucket;
     }
-     
-    // TODO: Implement OKlab method in the API service
-
-    
-
 }
