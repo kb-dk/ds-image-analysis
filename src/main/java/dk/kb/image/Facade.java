@@ -9,6 +9,9 @@ import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
+
+import dk.kb.image.api.v1.impl.ColorAnalysisApiServiceImpl;
+
 import java.awt.image.BufferedImage;
 
 public class Facade {
@@ -106,7 +109,7 @@ public class Facade {
      * @param img
      * @return
      */
-    public static String getMostUsedOKLabColor(BufferedImage img){
+    public static String getMostUsedOKLabColor(BufferedImage img, int x){
         // Define buckets
         float[] buckets = PalettePicker.smkOkLabBuckets();
         // Count pixels and add 1 to closest bucket
@@ -118,7 +121,7 @@ public class Facade {
         //  Returns top X from the sorted list
         // Currently set to 10
         // TODO: API implementation that allows users to set this value
-        List<Entry<String, Float>> topX = OkLabColor.returnTopXAsHex(sortedList, 10);
+        List<Entry<String, Float>> topX = OkLabColor.returnTopXAsHex(sortedList, x);
 
         // TODO: Maybe this shouldn't return a string but a list array?
         String result = topX.toString();
