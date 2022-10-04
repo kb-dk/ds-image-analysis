@@ -58,12 +58,18 @@ paths:
               type: object
               required:
                 - image
+                - top-colors
               properties:
                 # The POSTed image can be retrieved using imageDetail.getDataHandler().getInputStream()
                 image:
                   description: 'The image to analyse'
                   type: string
                   format: binary
+                top-colors:
+                  description: 'Number of colors to return'
+                  type: integer
+                  format: int32
+                  default: 10
       responses:
         '200':
           description: 'The dominant color'
