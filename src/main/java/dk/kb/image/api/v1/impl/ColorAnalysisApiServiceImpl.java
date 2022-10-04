@@ -2,12 +2,9 @@ package dk.kb.image.api.v1.impl;
 
 import dk.kb.image.Facade;
 import dk.kb.image.api.v1.*;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import dk.kb.util.webservice.exception.ServiceException;
 import dk.kb.util.webservice.exception.InternalServiceException;
@@ -20,7 +17,6 @@ import java.io.OutputStream;
 import java.util.List;
 import java.util.Map;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.stream.Collectors;
 import java.io.File;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
@@ -42,11 +38,12 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.ext.ContextResolver;
 import javax.ws.rs.ext.Providers;
 import javax.ws.rs.core.MediaType;
-import java.awt.image.BufferedImage;
 import org.apache.cxf.jaxrs.model.wadl.Description;
 import org.apache.cxf.jaxrs.model.wadl.DocTarget;
 import org.apache.cxf.jaxrs.ext.MessageContext;
 import org.apache.cxf.jaxrs.ext.multipart.*;
+import java.awt.image.BufferedImage;
+
 
 import io.swagger.annotations.Api;
 
@@ -56,20 +53,19 @@ import io.swagger.annotations.Api;
  * <p>Image Analysis provides analytical tools for our image collections at KB.  
  *
  */
-public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalysisApi {
+public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalysisApi {
     private Logger log = LoggerFactory.getLogger(this.toString());
-    
+
     InputStream in;
     BufferedImage img;
 
-
     /**
-     * Count the colors in the given image.
+     * Count the unique colors in the given image.
      * 
      * @param image: The image to analyse
      * 
      * @return <ul>
-      *   <li>code = 200, message = "Number of colors in image:", response = String.class</li>
+      *   <li>code = 200, message = "Number of unique colors in image:", response = Integer.class</li>
       *   </ul>
       * @throws ServiceException when other http codes should be returned
       *
@@ -86,43 +82,45 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
             return result;
         } catch (Exception f){
             throw handleException(f);
-        }    
+        }  
+    
     }
 
     /**
-     * Return image in grayscale
+     * Get the most dominant color from an image. Calculated in OKlab colorspace and messured with deltaE.
      * 
      * @param image: The image to analyse
      * 
+     * @param top-colors: Number of colors to return
+     * 
      * @return <ul>
-      *   <li>code = 200, message = "Greyscale version of image.", response = File.class</li>
+      *   <li>code = 200, message = "The dominant color", response = String.class</li>
       *   </ul>
       * @throws ServiceException when other http codes should be returned
       *
       * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
      */
     @Override
-    public javax.ws.rs.core.StreamingOutput getGreyscale( Attachment imageDetail) throws ServiceException {
+    public String getMainOkLabColor( Attachment imageDetail, Integer topColors) throws ServiceException {
         // read image
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
-            // Show download link in Swagger UI, inline when opened directly in browser
-            setFilename("output", false, false);
-            return output -> output.write(Facade.getGreyscale(img)); 
-        } catch (Exception e){
-            throw handleException(e);
+            String response = Facade.getMostUsedOKLabColor(img);
+            return response;
+        } catch (Exception f){
+            throw handleException(f);
         }
+    
     }
 
     /**
-     * Get the most dominant colors from an image.
-     * Calculated as a RGB color using euclidian distance between colors.
+     * Get the most dominant color from an image. Calculated in RGB space with euclidian distance.
      * 
      * @param image: The image to analyse
      * 
      * @return <ul>
-      *   <li>code = 200, message = "The dominant colors", response = String.class</li>
+      *   <li>code = 200, message = "The dominant color", response = String.class</li>
       *   </ul>
       * @throws ServiceException when other http codes should be returned
       *
@@ -139,31 +137,8 @@ public class ImageAnalysisApiServiceImpl extends ImplBase implements ImageAnalys
         } catch (Exception f){
             throw handleException(f);
         }
+    
     }
 
-        /**
-     * Get the most dominant colors from an image.
-     * Calculated as an OKLab color using delta E to calculate distance between colors. 
-     * 
-     * @param image: The image to analyse
-     * 
-     * @return <ul>
-      *   <li>code = 200, message = "The dominant colors", response = String.class</li>
-      *   </ul>
-      * @throws ServiceException when other http codes should be returned
-      *
-      * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
-     */
-    @Override
-    public String getMainOkLabColor( Attachment imageDetail) throws ServiceException {
-        // read image
-        try {
-            in = imageDetail.getDataHandler().getInputStream();;
-            img = ImageIO.read(in);
-            String response = Facade.getMostUsedOKLabColor(img);
-            return response;
-        } catch (Exception f){
-            throw handleException(f);
-        }
-    }
+
 }
