@@ -1,18 +1,20 @@
 package dk.kb.image;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class AnalyseDeltaEOfPalette {
-    // TODO: Write JavaDoc
     /**
      * Analyse distance between colors from input String[] in OKlab colorspace.
      * The method calculates deltaE between all colors on the palette and checks if they perceptually look the same.
      * @param hexPalette the input string[] of hex colors to analyse.
      * @return a string[] with information on colors that perceptually looks the same.
      */
-    public static String[] AnalyseHexPaletteDeltaE(String[] hexPalette){
+    public static List<String> AnalyseHexPaletteDeltaE(String[] hexPalette){
         float[] colorPalette = ColorConversion.convertHexToOKlab(hexPalette);
         float[] colorFloatArrayI;
         float[] colorFloatArrayJ;
-        String[] result = new String[hexPalette.length];
+        String[] deltaEArray = new String[hexPalette.length];
 
         for (int i = 0; i < colorPalette.length; i ++){
             colorFloatArrayI = ColorConversion.convertOKlabFloatToFloatArray(colorPalette[i]);
@@ -25,16 +27,21 @@ public class AnalyseDeltaEOfPalette {
                 // 100 in the article equals 1.00 in the code
                 if (deltaE < 0.01) {
                     System.out.println("There is no perceptual difference between color " + i + " and color " + j + ". Delta E: " + deltaE);
-                    result[j] = "There is no perceptual difference between color " + i + " and color " + j + ". Delta E: " + deltaE;
+                    deltaEArray[j] = "There is no perceptual difference between color " + i + " and color " + j + ". Delta E: " + deltaE;
                 } else {}
             }   
         }
 
-        if (result[0] == null){
-            result[0] = "All colors are distinguisable.";
+        if (deltaEArray[0] == null){
+            deltaEArray[0] = "All colors are distinguisable.";
         }
 
-        // TODO: remove nulls from result
+        List<String> result = new ArrayList<String>();
+        for(String data: deltaEArray) {
+            if(data != null) { 
+                result.add(data);
+            }
+        }
         return result;
     }
 }
