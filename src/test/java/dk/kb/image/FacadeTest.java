@@ -54,8 +54,9 @@ public class FacadeTest {
     @Test
     public void testMostUsedOKLabColor() throws IOException{
         BufferedImage img;
+        int x = 5;
         img = ImageIO.read(Resolver.resolveStream("concert.jpg"));
-        assertFalse(Facade.getMostUsedOKLabColor(img).isEmpty());
+        assertFalse(Facade.getMostUsedOKLabColor(img, x).isEmpty());
         log.info("The most used colors has been calculated");
     }
 
