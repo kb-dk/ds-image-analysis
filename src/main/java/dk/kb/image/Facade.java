@@ -144,8 +144,6 @@ public class Facade {
         } 
         return largestBucket;
     }
-
-    // TODO: Add capability of returning top X colors pr image
      
     // TODO: Implement OKlab method in the API service
 
