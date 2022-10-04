@@ -45,6 +45,16 @@ public class PalettePicker {
         return smkOkLabBuckets;
     }
 
+    public static int[] smkRgbBuckets(){
+        int[] smgRgbBuckets = new int[PalettePicker.smkHexPalette().length];
+        String[] hexPalette = PalettePicker.smkHexPalette();
+        for (int i=0; i<smgRgbBuckets.length; i++){
+            Color color = Color.decode(hexPalette[i]);
+            smgRgbBuckets[i] = color.getRGB();
+        }
+
+        return smgRgbBuckets;
+    }
     /**
      * Create a string[] of 256 hex colors used by SMK (National Gallery of Denmark).
      * It is not clear how this palette has been constructed in the first place.
