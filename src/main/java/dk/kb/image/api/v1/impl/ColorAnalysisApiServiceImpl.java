@@ -2,9 +2,11 @@ package dk.kb.image.api.v1.impl;
 
 import dk.kb.image.Facade;
 import dk.kb.image.api.v1.*;
+
 import java.io.File;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import dk.kb.util.webservice.exception.ServiceException;
 import dk.kb.util.webservice.exception.InternalServiceException;

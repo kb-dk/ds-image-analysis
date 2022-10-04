@@ -10,6 +10,10 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.annotations.SerializedName;
+
 import dk.kb.image.api.v1.impl.ColorAnalysisApiServiceImpl;
 
 import java.awt.image.BufferedImage;
@@ -119,14 +123,12 @@ public class Facade {
         // Sorts and returns the combined map
         List<Entry<Float, Integer>> sortedList = OkLabColor.sortMap(bucketsWithCount);
         //  Returns top X from the sorted list
-        // Currently set to 10
-        // TODO: API implementation that allows users to set this value
         List<Entry<String, Float>> topX = OkLabColor.returnTopXAsHex(sortedList, x);
 
-        // TODO: Maybe this shouldn't return a string but a list array?
-        String result = topX.toString();
-        System.out.println(topX);
-        return result;
+        // TODO: Change keys for JSON - key and value says nothing. Change to Color and percentage or something like that.
+        String json = new Gson().toJson(topX);
+
+        return json;
     }
 
     /**
