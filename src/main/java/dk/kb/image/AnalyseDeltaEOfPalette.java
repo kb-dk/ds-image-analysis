@@ -2,6 +2,12 @@ package dk.kb.image;
 
 public class AnalyseDeltaEOfPalette {
     // TODO: Write JavaDoc
+    /**
+     * Analyse distance between colors from input String[] in OKlab colorspace.
+     * The method calculates deltaE between all colors on the palette and checks if they perceptually look the same.
+     * @param hexPalette the input string[] of hex colors to analyse.
+     * @return a string[] with information on colors that perceptually looks the same.
+     */
     public static String[] AnalyseHexPaletteDeltaE(String[] hexPalette){
         float[] colorPalette = ColorConversion.convertHexToOKlab(hexPalette);
         float[] colorFloatArrayI;
@@ -27,6 +33,8 @@ public class AnalyseDeltaEOfPalette {
         if (result[0] == null){
             result[0] = "All colors are distinguisable.";
         }
+
+        // TODO: remove nulls from result
         return result;
     }
 }
