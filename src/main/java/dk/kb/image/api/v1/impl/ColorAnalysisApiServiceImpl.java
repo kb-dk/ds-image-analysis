@@ -151,9 +151,8 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
         // See this stackoverflow: https://stackoverflow.com/questions/9311396/no-message-body-writer-has-been-found-for-response-class-arraylist
         String[] array = new String[colors.size()];
         colors.toArray(array);
-        String[] response = AnalyseDeltaEOfPalette.AnalyseHexPaletteDeltaE(array);
-        List<String> list = Arrays.asList(response);
-        return list;
+        List<String> response = AnalyseDeltaEOfPalette.AnalyseHexPaletteDeltaE(array);
+        return response;
     }
 
 
