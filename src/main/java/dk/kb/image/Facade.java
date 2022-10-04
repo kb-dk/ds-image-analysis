@@ -90,8 +90,7 @@ public class Facade {
      */
     public static String getMostUsedRGBColor(BufferedImage img){
         // Define simple buckets
-        // TODO: Change buckets - Maybe use SMK buckets for this method as well?
-        int[] buckets = PalettePicker.defineSimpleBuckets();
+        int[] buckets = PalettePicker.smkRgbBuckets();
         // Count pixels and add 1 to closest bucket
         int[] bucketCount = RgbColor.countBucketsForImg(img, buckets);
         // Get best bucket
