@@ -1,5 +1,6 @@
 package dk.kb.image.api.v1.impl;
 
+import dk.kb.image.AnalyseDeltaEOfPalette;
 import dk.kb.image.Facade;
 import dk.kb.image.api.v1.*;
 
@@ -24,6 +25,8 @@ import java.io.File;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dk.kb.util.webservice.ImplBase;
+
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.imageio.ImageIO;
@@ -140,6 +143,17 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
             throw handleException(f);
         }
     
+    }
+
+    @Override
+    public List<String> calculateColorDistance(@NotNull @DecimalMin("2") List<String> colors) {
+        // TODO Make it able to output the list through API. 
+        // See this stackoverflow: https://stackoverflow.com/questions/9311396/no-message-body-writer-has-been-found-for-response-class-arraylist
+        String[] array = new String[colors.size()];
+        colors.toArray(array);
+        String[] response = AnalyseDeltaEOfPalette.AnalyseHexPaletteDeltaE(array);
+        List<String> list = Arrays.asList(response);
+        return list;
     }
 
 
