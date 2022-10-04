@@ -139,7 +139,13 @@ public class OkLabColor {
         return deltaE;
     }
 
-    // TODO: Write JavaDoc
+    /**
+     * Combine colorbuckets float[] and bucketCount int[] into a map. The float[] holds the keys and the int[] holds the values.
+     * The arrays get combined by index number.
+     * @param buckets float[] with keys of the map.
+     * @param bucketCount int[] with the values for the map.
+     * @return a map with key-value pairs from the input float[] and int[].
+     */
     public static Map<Float, Integer> bucketsAndBucketCountToMap(float[] buckets, int[] bucketCount){
     
         Map<Float, Integer> map = new HashMap<>();
@@ -150,7 +156,11 @@ public class OkLabColor {
         return map;
     }
 
-    // TODO: Write JavaDoc
+    /**
+     * Method to sort a map<Float, Integer> and have the key-value pair with the biggest value at index 0.
+     * @param map of type map<Float, Integer> to be sorted
+     * @return a list of entries of the type Entry<Float, Integer> sorted after biggest value.
+     */
     public static List<Entry<Float, Integer>> sortMap(Map<Float, Integer> map){
         List<Entry<Float, Integer>> sortedList = new ArrayList<>(map.entrySet());
     	sortedList.sort(Entry.comparingByValue());
@@ -159,7 +169,12 @@ public class OkLabColor {
         return sortedList;
     }
 
-    // TODO: Write JavaDoc
+    /**
+     * Return a list with top X entries from input list.
+     * @param list input list to extract top x from.
+     * @param x integer to limit size of returned list.
+     * @return a list containing the first x entries from the input list.
+     */
     public static List<Entry<String, Float>> returnTopXAsHex(List<Entry<Float, Integer>> list, int x){
         return list.stream().
                 map(entry-> OkLabColor.okEntry2RGBHex(entry)).
@@ -167,7 +182,12 @@ public class OkLabColor {
                 collect(Collectors.toList());
     }
 
-    // TODO: Write JavaDoc
+    /**
+     * Convert an entry<Float, Integer> containing OKlab float value and number of pixels with that color into an entry<String, Float>
+     * containing the RGB hex value of the OKlab color as key and the pixel value as percentage of the full picture.
+     * @param okEntry input entry containing Oklab float key and an integer value of pixels with the color of the key.
+     * @return an entry containing the String RGB hex value and a float with the percentage of pixels from the image with the key color. 
+     */
     static Entry<String, Float> okEntry2RGBHex(Entry<Float, Integer> okEntry){ 
         String key = ColorConversion.convertOKlabToHex(okEntry.getKey());
         float value = okEntry.getValue();
