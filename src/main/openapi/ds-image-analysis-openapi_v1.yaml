@@ -15,13 +15,11 @@ servers:
     description: 'Version 1'
 
 paths:
-  # TODO: Split endpoints into meaningfull tags. One could be color analysis, another could be image info etc.
-  # TODO: Check if it is posible to add description to a tag. Would be nice to show the overall differences between methods.
   # These endpoints has been created from the colorizer endpoint-template
   /main-rgb-color:
     post:
       tags:
-        - 'Image Analysis'
+        - 'Color Analysis'
       summary: 'Get the most dominant color from an image. Calculated in RGB space with euclidian distance.'
       operationId: getMainRgbColor
       requestBody:
@@ -50,7 +48,7 @@ paths:
   /main-OKlab-color:
     post:
       tags:
-        - 'Image Analysis'
+        - 'Color Analysis'
       summary: 'Get the most dominant color from an image. Calculated in OKlab colorspace and messured with deltaE.'
       operationId: getMainOkLabColor
       requestBody:
@@ -78,7 +76,7 @@ paths:
   /colorcount:
     post:
       tags: 
-        - 'Image Analysis'
+        - 'Color Analysis'
       summary: 'Count the unique colors in the given image.'
       operationId: getColorCount
       requestBody:
@@ -106,7 +104,7 @@ paths:
   /greyscale:
     post:
       tags:
-        - 'Image Analysis'
+        - 'Image Manipulation'
       summary: 'Return image in grayscale'
       operationId: getGreyscale
       requestBody:
@@ -123,7 +121,6 @@ paths:
                     type: string
                     format: binary
       x-streamingOutput: true
-
       responses:
         '200':
           description: 'Greyscale version of image.'
@@ -199,6 +196,11 @@ paths:
               schema:
                 type: string
 
+tags:
+  - name: Color Analysis
+    description: Methods to analyse color in images.
+  - name: Image Manipulation
+    description: Methods to manipulate images.
 
 components:
   schemas:
