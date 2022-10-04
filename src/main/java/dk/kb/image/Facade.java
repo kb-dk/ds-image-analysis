@@ -120,6 +120,7 @@ public class Facade {
         // TODO: API implementation that allows users to set this value
         List<Entry<String, Float>> topX = OkLabColor.returnTopXAsHex(sortedList, 10);
 
+        // TODO: Maybe this shouldn't return a string but a list array?
         String result = topX.toString();
         System.out.println(topX);
         return result;
