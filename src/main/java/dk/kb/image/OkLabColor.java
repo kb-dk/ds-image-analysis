@@ -27,7 +27,6 @@ public class OkLabColor {
         for(int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 // Get RGB for each pixel
-                // TODO: Maybe move pixelCount to own method so it can be called as stand alone endpoint
                 pixelCount ++;
                 int pixelRGB = img.getRGB(x, y);
                 float pixelOKlab = ColorConversion.convertRGBtoOKlab(pixelRGB);

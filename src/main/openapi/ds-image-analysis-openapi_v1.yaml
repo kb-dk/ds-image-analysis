@@ -46,6 +46,7 @@ paths:
                 type: string
                 example: "#000000"
 
+  # TODO: Update method to make user provide how many colors to return.
   /main-OKlab-color:
     post:
       tags:
