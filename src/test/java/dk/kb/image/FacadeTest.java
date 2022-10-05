@@ -60,6 +60,9 @@ public class FacadeTest {
         log.info("The most used colors has been calculated");
     }
 
+    // TODO: Check which tests are missing
+    // TODO: Add mising tests
+
     // method to validate that image is greyscale
     public static boolean isGreyscale(BufferedImage image){
         // get width and height of image 
