@@ -3,7 +3,22 @@ info:
   version: 'v1'
   title: '${project.name}'
   description: |
-    Image Analysis provides analytical tools for our image collections at KB. 
+    Image Analysis provides analytical tools for our image collections at KB. The endpoints of this API are grouped by categories. The primary category is color analysis.
+
+    **Color Analysis**
+    
+    The endpoints in this category all relates to working with colors of images. In this context it is usefull to have an understanding of some color theory. 
+    The first part to consider is how we understand colors. The most common way of understanding colors is as RGB colors where colors are understood as a mixture of red, green and blue colors with values ranging from 0-255.
+    Then by combining different values of red, green and blue it is posible to create more than 16 million different colors. It is also posible to understand colors perceptually. Perceptual colorspaces are based on the human experience of of colors and not on the mixture of different color components.
+
+    This API contains two endpoints that can recognize colors in images. One of these endpoints works in the RGB colorspace while the other works in the perceptual colorspace OKlab.
+    OKlab is a colorspace that understand color in a perceptual manner, but makes it posible to analyse colors computationaly in a fairly easy way.
+
+    When analysing colors of images we are making many analytical choices. One of the most important questions relate to which colors we compare the images to. Our methods use a palette of 256 colors.
+    This palette has been created by the National Gallery of Denmark. 
+    To check which color in the palette the pixels of the image looks like the most, we can use different approches. The endpoint *main-rgb-color* calculates the euclidian distance between pixel color and palette colors,
+    and then categorises the color of each pixel this way. The *main-OKlab-colors* calculates CIEDE2000 deltaE between each pixel and palette colors. This calculation is a more accurate meassurement of percived colors.    
+
   contact:
     email: '${user.name}@kb.dk'
   license:
@@ -45,7 +60,10 @@ paths:
                 type: string
                 example: "#000000"
 
-  # TODO: Add better descriptions for paths working with extracting colors
+  # TODO: Add better descriptions for paths working with extracting colors.
+  # TODO: change language to plural colors
+  # TODO: Add methodological descriptions to methods
+  #       Where does it make most sence to describe color theory and provide links to usefull resources?
   /main-OKlab-color:
     post:
       tags:
