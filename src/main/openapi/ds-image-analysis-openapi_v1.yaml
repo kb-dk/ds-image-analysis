@@ -60,18 +60,19 @@ paths:
                 type: string
                 example: "#000000"
 
-  # TODO: Add better descriptions for paths working with extracting colors.
-  # TODO: change language to plural colors
-  # TODO: Add methodological descriptions to methods
-  #       Where does it make most sence to describe color theory and provide links to usefull resources?
-  /main-OKlab-color:
+  /main-OKlab-colors:
     post:
       tags:
         - 'Color Analysis'
-      summary: 'Get the most dominant color from an image. Calculated in OKlab colorspace and messured with deltaE.'
-      operationId: getMainOkLabColor
-      # TODO: Add documentation that is not summary but is described in description: 
-      # description:
+      summary: 'Get the most dominant colors from an image. Calculated in OKlab colorspace and messured with deltaE.'
+      operationId: getMainOkLabColors
+      description: |
+        This endpoint delivers the top X most used colors in a given image.
+        The result is returned RGB hex values but calculations are made in the perceptual OKlab colorspace. 
+
+        For information on OKlab colorspace: [https://bottosson.github.io/posts/oklab/](https://bottosson.github.io/posts/oklab/)
+
+        For information on calculating deltaE: [http://zschuessler.github.io/DeltaE/learn/#toc-defining-delta-e](http://zschuessler.github.io/DeltaE/learn/#toc-defining-delta-e)
       requestBody:
         content:
           multipart/form-data:
@@ -93,7 +94,7 @@ paths:
                   default: 10
       responses:
         '200':
-          description: 'The dominant color'
+          description: 'The RGB hex value of colors and percentage of image with given color.'
           content:
             application/json:
               schema:
