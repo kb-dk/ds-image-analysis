@@ -28,4 +28,7 @@ public class OkLabColorTest {
         assertTrue(result <= 1 & result >= 0);
         log.info("DeltaE gets calculated and returns value between 0 and 1.");
     }
+
+    // TODO: Check which test are missing
+    // TODO: Add missing tests
 }
