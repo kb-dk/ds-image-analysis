@@ -15,6 +15,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.annotations.SerializedName;
 
 import dk.kb.image.api.v1.impl.ColorAnalysisApiServiceImpl;
+import dk.kb.image.model.v1.InlineResponse200Dto;
 
 import java.awt.image.BufferedImage;
 
@@ -100,6 +101,7 @@ public class Facade {
         return result;
     }
 
+    // TODO: JavaDoc
     /**
      * Get most used color from input image. 
      * <p>
@@ -112,7 +114,7 @@ public class Facade {
      * @param img
      * @return
      */
-    public static String getMostUsedOKLabColor(BufferedImage img, int x){
+    public static List<InlineResponse200Dto> getMostUsedOKLabColor(BufferedImage img, int x){
         // Define buckets
         float[] buckets = PalettePicker.smkOkLabBuckets();
         // Count pixels and add 1 to closest bucket
@@ -122,12 +124,9 @@ public class Facade {
         // Sorts and returns the combined map
         List<Entry<Float, Integer>> sortedList = OkLabColor.sortMap(bucketsWithCount);
         //  Returns top X from the sorted list
-        List<Entry<String, Float>> topX = OkLabColor.returnTopXAsHex(sortedList, x);
+        List<InlineResponse200Dto> topX = OkLabColor.returnTopXAsHex(sortedList, x);
 
-        // TODO: Change keys for JSON - key and value says nothing. Change to Color and percentage or something like that.
-        String json = new Gson().toJson(topX);
-
-        return json;
+        return topX;
     }
 
     /**

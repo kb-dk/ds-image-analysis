@@ -3,6 +3,7 @@ package dk.kb.image.api.v1.impl;
 import dk.kb.image.AnalyseDeltaEOfPalette;
 import dk.kb.image.Facade;
 import dk.kb.image.api.v1.*;
+import dk.kb.image.model.v1.InlineResponse200Dto;
 
 import java.io.File;
 import java.util.List;
@@ -106,12 +107,12 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
       * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
      */
     @Override
-    public String getMainOkLabColor( Attachment imageDetail, Integer topColors) throws ServiceException {
-        // read image
+    public List<InlineResponse200Dto> getMainOkLabColor( @Multipart(value = "image" ) Attachment imageDetail, @Multipart(value = "top-colors")  Integer topColors){
+    // read image
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
-            String response = Facade.getMostUsedOKLabColor(img, topColors);
+            List<InlineResponse200Dto> response = Facade.getMostUsedOKLabColor(img, topColors);
             return response;
         } catch (Exception f){
             throw handleException(f);
