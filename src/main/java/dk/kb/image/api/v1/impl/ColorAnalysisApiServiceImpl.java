@@ -107,7 +107,7 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
       * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
      */
     @Override
-    public List<InlineResponse200Dto> getMainOkLabColor( @Multipart(value = "image" ) Attachment imageDetail, @Multipart(value = "top-colors")  Integer topColors){
+    public List<InlineResponse200Dto> getMainOkLabColors( @Multipart(value = "image" ) Attachment imageDetail, @Multipart(value = "top-colors")  Integer topColors){
     // read image
         try {
             in = imageDetail.getDataHandler().getInputStream();;

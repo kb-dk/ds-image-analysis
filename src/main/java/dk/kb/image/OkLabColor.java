@@ -177,6 +177,7 @@ public class OkLabColor {
         return sortedList;
     }
 
+    // TODO: update javadoc 
     /**
      * Return a list with top X entries from input list.
      * @param list input list to extract top x from.
@@ -190,6 +191,7 @@ public class OkLabColor {
                 collect(Collectors.toList());
     }
 
+    // TODO: Update javadoc
     /**
      * Convert an entry<Float, Integer> containing OKlab float value and number of pixels with that color into an entry<String, Float>
      * containing the RGB hex value of the OKlab color as key and the pixel value as percentage of the full picture.
@@ -205,7 +207,7 @@ public class OkLabColor {
 
         response.hexRGB(key);
         response.percent(percentage);
-        
+
         return response;
     }
     
