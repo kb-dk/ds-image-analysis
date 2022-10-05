@@ -9,7 +9,14 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.annotations.SerializedName;
+
+import dk.kb.image.model.v1.InlineResponse200Dto;
 
 public class OkLabColor {
     static int pixelCount = 0;
@@ -176,7 +183,7 @@ public class OkLabColor {
      * @param x integer to limit size of returned list.
      * @return a list containing the first x entries from the input list.
      */
-    public static List<Entry<String, Float>> returnTopXAsHex(List<Entry<Float, Integer>> list, int x){
+    public static List<InlineResponse200Dto> returnTopXAsHex(List<Entry<Float, Integer>> list, int x){
         return list.stream().
                 map(entry-> OkLabColor.okEntry2RGBHex(entry)).
                 limit(x).
@@ -189,14 +196,17 @@ public class OkLabColor {
      * @param okEntry input entry containing Oklab float key and an integer value of pixels with the color of the key.
      * @return an entry containing the String RGB hex value and a float with the percentage of pixels from the image with the key color. 
      */
-    static Entry<String, Float> okEntry2RGBHex(Entry<Float, Integer> okEntry){ 
+    public static InlineResponse200Dto okEntry2RGBHex(Entry<Float, Integer> okEntry){ 
         String key = ColorConversion.convertOKlabToHex(okEntry.getKey());
         float value = okEntry.getValue();
         float percentage = value/pixelCount*100;
-        Entry<String, Float> result = Map.entry(key, percentage);
-        
-        return result;
-    }
 
+        InlineResponse200Dto response = new InlineResponse200Dto();
+
+        response.hexRGB(key);
+        response.percent(percentage);
+        
+        return response;
+    }
     
 }

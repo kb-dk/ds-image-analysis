@@ -79,11 +79,19 @@ paths:
           content:
             application/json:
               schema:
-                type: string
+                type: array
+                items: 
+                  type: object
+                  properties:
+                    hexRGB:
+                      type: string
+                    percent:
+                      type: number
+                      format: float
                 example:
-                - hex: '#000000'
+                - hexRGB: '#000000'
                   percent: 8.38468
-                - hex: '#FFFFFF'
+                - hexRGB: '#FFFFFF'
                   percent: 5.23782
 
 
