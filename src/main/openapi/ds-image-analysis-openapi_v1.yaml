@@ -16,6 +16,7 @@ servers:
 
 paths:
   # These endpoints has been created from the colorizer endpoint-template
+  # TODO: Add better descriptions for paths working with extracting colors
   /main-rgb-color:
     post:
       tags:
@@ -44,12 +45,15 @@ paths:
                 type: string
                 example: "#000000"
 
+  # TODO: Add better descriptions for paths working with extracting colors
   /main-OKlab-color:
     post:
       tags:
         - 'Color Analysis'
       summary: 'Get the most dominant color from an image. Calculated in OKlab colorspace and messured with deltaE.'
       operationId: getMainOkLabColor
+      # TODO: Add documentation that is not summary but is described in description: 
+      # description:
       requestBody:
         content:
           multipart/form-data:
