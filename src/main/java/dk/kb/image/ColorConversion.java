@@ -30,7 +30,11 @@ public class ColorConversion {
         return valuesOKlab;
     }
 
-    // TODO: Javadoc
+    /**
+     * Convert an RGB hex string to a float value in the OKLab colorspace.
+     * @param hex input RGB hex value.
+     * @return OKlab float value of the input RGB hex color.
+     */
     public static float convertSingleHexToOklab(String hex){
         Color color = Color.decode(hex);
         int rgbValue = color.getRGB();

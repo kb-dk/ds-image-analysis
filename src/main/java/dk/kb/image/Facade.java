@@ -101,18 +101,17 @@ public class Facade {
         return result;
     }
 
-    // TODO: JavaDoc
     /**
-     * Get most used color from input image. 
+     * Get top X most used colors from input image. 
      * <p>
      * This method uses the OKlab colorspace, which is a perceptual colorspace created from the CIELAB colorspace. 
      * Currently this method evaluates colors against 256 hex colors from SMK Open (National Gallery of Denmark) converted into OKlab colorspace. 
-     * The distance between palette colors and image pixel colors is calculated using the delta E function adopted bye CIE in in 2000 known as CIEDE2000.
+     * The distance between palette colors and image pixel colors is calculated using the delta E function adopted bye CIE in 2000 known as CIEDE2000.
      * </p>
      * <p> Information on the OKlab colorspace can be found <a href="https://bottosson.github.io/posts/oklab/">here</a>.</p>
      * <p> Information on CIEDE2000 can be found <a href="https://www.researchgate.net/publication/229511830_The_development_of_the_CIE_2000_colour-difference_formula_CIEDE2000">here</a>.</p>
      * @param img
-     * @return
+     * @return a JSON array of top X colors RGB hex value and percentage of pixels in given color.
      */
     public static List<InlineResponse200Dto> getMostUsedOKLabColor(BufferedImage img, int x){
         // Define buckets
