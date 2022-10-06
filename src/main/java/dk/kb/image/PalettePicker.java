@@ -41,7 +41,7 @@ public class PalettePicker {
      * @return a float[] of OKlab colors.
      */
     public static float[] smkOkLabBuckets(){
-        float[] smkOkLabBuckets = ColorConversion.convertHexToOKlab(smkHexPalette());
+        float[] smkOkLabBuckets = ColorConversion.convertHexArrayToOKlabArray(smkHexPalette());
         return smkOkLabBuckets;
     }
 
