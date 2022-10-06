@@ -112,7 +112,7 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
-            List<InlineResponse200Dto> response = Facade.getMostUsedOKLabColor(img, topColors);
+            List<InlineResponse200Dto> response = Facade.getMostUsedOKLabColors(img, topColors);
             return response;
         } catch (Exception f){
             throw handleException(f);
