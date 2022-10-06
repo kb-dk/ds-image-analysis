@@ -30,6 +30,7 @@ public class ColorConversion {
         return valuesOKlab;
     }
 
+    // TODO: Javadoc
     public static float convertSingleHexToOklab(String hex){
         Color color = Color.decode(hex);
         int rgbValue = color.getRGB();
