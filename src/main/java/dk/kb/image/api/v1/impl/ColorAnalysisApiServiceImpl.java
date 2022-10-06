@@ -145,16 +145,4 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
         }
     
     }
-
-    @Override
-    public List<String> calculateColorDistance(@NotNull @DecimalMin("2") List<String> colors) {
-        // TODO Make it able to output the list through API. 
-        // See this stackoverflow: https://stackoverflow.com/questions/9311396/no-message-body-writer-has-been-found-for-response-class-arraylist
-        String[] array = new String[colors.size()];
-        colors.toArray(array);
-        List<String> response = AnalyseDeltaEOfPalette.AnalyseHexPaletteDeltaE(array);
-        return response;
-    }
-
-
 }

@@ -32,6 +32,8 @@ servers:
 paths:
   # These endpoints has been created from the colorizer endpoint-template
   # TODO: Add better descriptions for paths working with extracting colors
+  # TODO: Is this one still returning single color or array of colors
+  #       If single color than TODO: change to array
   /main-rgb-color:
     post:
       tags:
@@ -141,34 +143,7 @@ paths:
                 schema:
                   type: integer
                   format: int32
-
-  /calculate-color-distance:
-    get:
-      tags: 
-        - 'Color Analysis'
-      summary: 'Calculate distance between colors with deltaE to find colors that perceptually look the same in the palette.'
-      operationId: calculateColorDistance
-      parameters:
-      - name: colors
-        in: query
-        required: true
-        description: 'The hex values of colors to analyse'
-        schema:
-          type: array
-          items: 
-            type: string
-          minimum: 2
-      responses:
-          '200':
-            description: 'Number of unique colors in image:'
-            content:
-              text/plain:
-                schema:
-                  type: array
-                  items: 
-                    type: string
-
-                  
+                                
   /greyscale:
     post:
       tags:

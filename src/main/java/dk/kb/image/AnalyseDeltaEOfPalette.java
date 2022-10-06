@@ -11,7 +11,7 @@ public class AnalyseDeltaEOfPalette {
      * @return a string[] with information on colors that perceptually looks the same.
      */
     public static List<String> AnalyseHexPaletteDeltaE(String[] hexPalette){
-        float[] colorPalette = ColorConversion.convertHexToOKlab(hexPalette);
+        float[] colorPalette = ColorConversion.convertHexArrayToOKlabArray(hexPalette);
         float[] colorFloatArrayI;
         float[] colorFloatArrayJ;
         String[] deltaEArray = new String[hexPalette.length];
