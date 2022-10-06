@@ -12,7 +12,7 @@ public class ColorConversion {
      * @param inputPalette is a String[] of hex colors to be converted.
      * @return a float[] of colors defined in the OKlab colorspace.
      */
-    public static float[] convertHexToOKlab(String[] inputPalette){
+    public static float[] convertHexArrayToOKlabArray(String[] inputPalette){
         int length = inputPalette.length;
         int[] valuesRGB = new int[length];
         float[] valuesOKlab = new float[length]; 
@@ -30,6 +30,12 @@ public class ColorConversion {
         return valuesOKlab;
     }
 
+    public static float convertSingleHexToOklab(String hex){
+        Color color = Color.decode(hex);
+        int rgbValue = color.getRGB();
+        float oklabValue = ColorConversion.convertRGBtoOKlab(rgbValue);
+        return oklabValue;
+    }
     /**
      * Convert OKlab float to float array containing L value at index 0, A value at index 1 and B value at index 2.
      * @return a float array containing L, A and B values from input OKlab float.
