@@ -1,18 +1,22 @@
 package dk.kb.image;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AnalyseDeltaEOfPaletteTest {
+    private Logger log = LoggerFactory.getLogger(this.toString());
 
-    //TODO: Add AnalyseHexPaletteDeltaE test
     @Test
-    public void getHexColors(){
-        String[] hexValues = PalettePicker.smkHexPalette();
-        System.out.println(hexValues[0]);
-        System.out.println(hexValues[2]);
+    public void testAnalyseHexPaletteDeltaE(){
+        String[] testPalette = {"#ff1234", "#4321ff"};
+        List<String> result = AnalyseDeltaEOfPalette.AnalyseHexPaletteDeltaE(testPalette);
+        assertTrue(result.get(0) != null);
+        log.info("Delta E gets calculated");
+
     }
-
-    // TODO: add missing tests
-
 }
 
