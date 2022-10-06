@@ -113,7 +113,7 @@ public class Facade {
      * @param img
      * @return a JSON array of top X colors RGB hex value and percentage of pixels in given color.
      */
-    public static List<InlineResponse200Dto> getMostUsedOKLabColor(BufferedImage img, int x){
+    public static List<InlineResponse200Dto> getMostUsedOKLabColors(BufferedImage img, int x){
         // Define buckets
         float[] buckets = PalettePicker.smkOkLabBuckets();
         // Count pixels and add 1 to closest bucket
