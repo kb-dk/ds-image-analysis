@@ -177,12 +177,11 @@ public class OkLabColor {
         return sortedList;
     }
 
-    // TODO: update javadoc 
     /**
-     * Return a list with top X entries from input list.
+     * Return a JSON array with top X entries from input list.
      * @param list input list to extract top x from.
      * @param x integer to limit size of returned list.
-     * @return a list containing the first x entries from the input list.
+     * @return a JSON array containing the first x entries from the input list.
      */
     public static List<InlineResponse200Dto> returnTopXAsHex(List<Entry<Float, Integer>> list, int x){
         return list.stream().
@@ -191,12 +190,11 @@ public class OkLabColor {
                 collect(Collectors.toList());
     }
 
-    // TODO: Update javadoc
     /**
-     * Convert an entry<Float, Integer> containing OKlab float value and number of pixels with that color into an entry<String, Float>
-     * containing the RGB hex value of the OKlab color as key and the pixel value as percentage of the full picture.
+     * Convert an entry<Float, Integer> containing OKlab float value and number of pixels with that color into JSON object
+     * containing the RGB hex value of the OKlab color  and the pixel value as percentage of the full picture.
      * @param okEntry input entry containing Oklab float key and an integer value of pixels with the color of the key.
-     * @return an entry containing the String RGB hex value and a float with the percentage of pixels from the image with the key color. 
+     * @return a JSON object containing the String RGB hex value and a float with the percentage of pixels from the image with the given color. 
      */
     public static InlineResponse200Dto okEntry2RGBHex(Entry<Float, Integer> okEntry){ 
         String key = ColorConversion.convertOKlabToHex(okEntry.getKey());
