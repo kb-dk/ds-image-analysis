@@ -72,7 +72,7 @@ public class ColorConversion {
      * Convert OKlab float to RGB color represented as an integer.
      * @return the integer RGB value of the input OKlab float.
      */
-    public static int convertOKlabToRGB(float oklabFloat){
+    public static int convertOKlabToRgbInt(float oklabFloat){
         // Get R, G and B values as integers
         int red = ColorTools.redInt(oklabFloat);
         int green = ColorTools.greenInt(oklabFloat);
@@ -83,7 +83,7 @@ public class ColorConversion {
 
     /**
      * Convert input RGB integer to OKlab float.   
-     * @param pixelRGB Input RGB as integer.
+     * @param RGB Input RGB as integer.
      * @return an OKlab float containing the color from inbut RGB pixel in the OKlab colorspace.
      */
     public static float convertRGBtoOKlab(int RGB){
