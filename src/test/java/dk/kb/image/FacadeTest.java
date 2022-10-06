@@ -60,8 +60,13 @@ public class FacadeTest {
         log.info("The most used colors has been calculated");
     }
 
-    // TODO: add getlargestBucket test
-    // TODO: Add mising tests
+    @Test
+    public void testGetLargestBucket(){
+        int[] testBuckets = {1,298,3,5,98};
+        assertEquals(1, Facade.getlargestBucket(testBuckets));
+        log.info("Method returns largest bucket");
+
+    }
 
     // method to validate that image is greyscale
     public static boolean isGreyscale(BufferedImage image){
