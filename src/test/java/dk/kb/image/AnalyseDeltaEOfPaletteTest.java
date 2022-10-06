@@ -2,8 +2,7 @@ package dk.kb.image;
 
 import org.junit.jupiter.api.Test;
 
-//TODO: Refactor class with new name 
-public class TestDeltaEAnalysis {
+public class AnalyseDeltaEOfPaletteTest {
 
     @Test
     public void getHexColors(){
