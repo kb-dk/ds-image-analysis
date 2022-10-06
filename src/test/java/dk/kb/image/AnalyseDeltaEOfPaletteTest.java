@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 public class AnalyseDeltaEOfPaletteTest {
 
+    //TODO: Add AnalyseHexPaletteDeltaE test
     @Test
     public void getHexColors(){
         String[] hexValues = PalettePicker.smkHexPalette();
@@ -11,9 +12,7 @@ public class AnalyseDeltaEOfPaletteTest {
         System.out.println(hexValues[2]);
     }
 
-    // TODO: Check for missing tests
     // TODO: add missing tests
 
-    // TODO: Add missing test classes
 }
 

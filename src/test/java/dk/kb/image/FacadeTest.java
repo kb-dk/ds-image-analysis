@@ -44,7 +44,7 @@ public class FacadeTest {
     }
 
     @Test
-    public void testMostUsedColor() throws IOException{
+    public void testMostUsedRGBColor() throws IOException{
         BufferedImage img;
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
         assertFalse(Facade.getMostUsedRGBColor(img).isEmpty());
@@ -56,11 +56,11 @@ public class FacadeTest {
         BufferedImage img;
         int x = 5;
         img = ImageIO.read(Resolver.resolveStream("concert.jpg"));
-        assertFalse(Facade.getMostUsedOKLabColor(img, x).isEmpty());
+        assertFalse(Facade.getMostUsedOKLabColors(img, x).isEmpty());
         log.info("The most used colors has been calculated");
     }
 
-    // TODO: Check which tests are missing
+    // TODO: add getlargestBucket test
     // TODO: Add mising tests
 
     // method to validate that image is greyscale

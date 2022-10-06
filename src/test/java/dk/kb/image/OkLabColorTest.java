@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 public class OkLabColorTest {
     private Logger log = LoggerFactory.getLogger(this.toString());
 
+    //TODO: Add countBucketsForImg test
+    //TODO: Add updateBucketCounter test
+    //TODO: Add printResult test
     @Test 
     public void testDeltaE() throws IOException{
         int pixelRGB1 = Color.red.getRGB();
@@ -29,6 +32,10 @@ public class OkLabColorTest {
         log.info("DeltaE gets calculated and returns value between 0 and 1.");
     }
 
-    // TODO: Check which test are missing
+    //TODO: Add bucketsAndBucketCountToMap test
+    //TODO: Add sortMap test
+    //TODO: Add return returnTopXAsHex
+    //TODO: Add okEntry2RGBHex test
+
     // TODO: Add missing tests
 }
