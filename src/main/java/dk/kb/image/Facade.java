@@ -10,11 +10,6 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.annotations.SerializedName;
-
-import dk.kb.image.api.v1.impl.ColorAnalysisApiServiceImpl;
 import dk.kb.image.model.v1.InlineResponse200Dto;
 
 import java.awt.image.BufferedImage;
