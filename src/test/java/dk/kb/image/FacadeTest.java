@@ -47,7 +47,7 @@ public class FacadeTest {
     public void testMostUsedRGBColor() throws IOException{
         BufferedImage img;
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        assertFalse(Facade.getMostUsedRGBColor(img).isEmpty());
+        assertFalse(Facade.getMostUsedRGBColor(img, 5).isEmpty());
         log.info("The most used color has been calculated");
     }
 
