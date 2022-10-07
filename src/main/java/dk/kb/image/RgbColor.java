@@ -144,9 +144,9 @@ public class RgbColor {
      * @param okEntry input entry containing Oklab float key and an integer value of pixels with the color of the key.
      * @return a JSON object containing the String RGB hex value and a float with the percentage of pixels from the image with the given color. 
      */
-    public static InlineResponse200Dto Rgb2Hex(Entry<Integer, Integer> okEntry){ 
-        String key = ColorConversion.convertOKlabToHex(okEntry.getKey());
-        float value = okEntry.getValue();
+    public static InlineResponse200Dto Rgb2Hex(Entry<Integer, Integer> rgbEntry){ 
+        String key = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & rgbEntry.getKey()));
+        float value = rgbEntry.getValue();
         float percentage = value/pixelCount*100;
 
         InlineResponse200Dto response = new InlineResponse200Dto();

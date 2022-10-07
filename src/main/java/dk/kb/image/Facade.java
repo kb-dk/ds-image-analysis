@@ -75,6 +75,7 @@ public class Facade {
         return result;
     }
 
+    //TODO: This one returns weird #FF00FF colors. And many of them.
     /**
      * Get primary RGB color from input image.
      * <p>
