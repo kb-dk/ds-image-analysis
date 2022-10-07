@@ -120,29 +120,17 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
     
     }
 
-    /**
-     * Get the most dominant color from an image. Calculated in RGB space with euclidian distance.
-     * 
-     * @param image: The image to analyse
-     * 
-     * @return <ul>
-      *   <li>code = 200, message = "The dominant color", response = String.class</li>
-      *   </ul>
-      * @throws ServiceException when other http codes should be returned
-      *
-      * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
-     */
+
     @Override
-    public String getMainRgbColor( Attachment imageDetail) throws ServiceException {
+    public List<InlineResponse200Dto> getMainRgbColor(Attachment imageDetail, Integer topColors) {
         // read image
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
-            String response = Facade.getMostUsedRGBColor(img);
+            List<InlineResponse200Dto> response = Facade.getMostUsedRGBColor(img, topColors);
             return response;
         } catch (Exception f){
             throw handleException(f);
         }
-    
     }
 }

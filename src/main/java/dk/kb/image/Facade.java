@@ -89,16 +89,18 @@ public class Facade {
      * </p>
      * @return the primary RGB color from input image as HEX value.
      */
-    public static String getMostUsedRGBColor(BufferedImage img){
+    public static List<InlineResponse200Dto> getMostUsedRGBColor(BufferedImage img, int x){
         // Define simple buckets
         int[] buckets = PalettePicker.smkRgbBuckets();
         // Count pixels and add 1 to closest bucket
         int[] bucketCount = RgbColor.countBucketsForImg(img, buckets);
-        // Get best bucket
-        int largestBucket = getlargestBucket(bucketCount);
-        // Returns result as HEX value
-        String result = RgbColor.printResult(buckets, largestBucket); 
-        return result;
+        // Create map, where buckets and bucketCount has been combined
+        Map<Integer, Integer> bucketsWithCount = RgbColor.bucketsAndBucketCountToMap(buckets, bucketCount);
+        // Sorts and returns the combined map
+        List<Entry<Integer, Integer>> sortedList = RgbColor.sortMap(bucketsWithCount);
+        //  Returns top X from the sorted list
+        List<InlineResponse200Dto> topX = RgbColor.returnTopXAsHex(sortedList, x);
+        return topX;
     }
 
     /**
