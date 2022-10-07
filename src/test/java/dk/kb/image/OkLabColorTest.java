@@ -8,17 +8,13 @@ import org.junit.jupiter.api.Test;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.AbstractMap;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
-import javax.security.auth.login.AppConfigurationEntry.LoginModuleControlFlag;
-import javax.validation.constraints.AssertTrue;
+
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
