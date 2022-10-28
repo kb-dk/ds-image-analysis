@@ -3,6 +3,7 @@ package dk.kb.image;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
+
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
