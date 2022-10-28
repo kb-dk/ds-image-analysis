@@ -19,6 +19,7 @@ info:
     To check which color in the palette the pixels of the image looks like the most, we can use different approaches. The endpoint *main-rgb-colors* calculates the euclidean distance between pixel color and palette colors,
     and then categorises the color of each pixel this way. The *main-OKlab-colors* calculates [CIEDE2000 deltaE](https://en.wikipedia.org/wiki/Color_difference#CIEDE2000) between each pixel and palette colors. This calculation is a more accurate measurement of perceived colors.    
 
+    The services support multiple image formats such as: jpg, bmp, png, tif, and jpeg.
   contact:
     email: '${user.name}@kb.dk'
   license:
