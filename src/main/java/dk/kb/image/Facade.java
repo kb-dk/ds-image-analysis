@@ -76,18 +76,17 @@ public class Facade {
     }
 
     /**
-     * Get primary RGB color from input image.
+     * Get dominant RGB colors from input image.
      * <p>
-     * This method uses the standard RGB colorspace and a very limited amount of color bins. 
-     * Currently it contains six colors (RED, GREEN, BLUE, YELLOW, CYAN and MAGENTA).
-     * The method calculates the euclidian distance between the colors of the input img pixels and the colors of the buckets. 
+     * This method uses the standard RGB colorspace and uses SMKs color palette.
+     * The method calculates the euclidean distance between the colors of the input img pixels and the colors of the buckets.
      * </p>
-     * @return the primary RGB color from input image as HEX value.
+     * @return the dominant RGB colors from input image as HEX value.
      */
     public static List<InlineResponse200Dto> getMostUsedRGBColors(BufferedImage img, int x){
         // Define simple buckets
         int[] buckets = PalettePicker.smkRgbBuckets();
-        // Count pixels and add 1 to closest bucket
+        // Count pixels and add 1 to the closest bucket
         int[] bucketCount = RgbColor.countBucketsForImg(img, buckets);
         // Create map, where buckets and bucketCount has been combined
         Map<Integer, Integer> bucketsWithCount = RgbColor.bucketsAndBucketCountToMap(buckets, bucketCount);
