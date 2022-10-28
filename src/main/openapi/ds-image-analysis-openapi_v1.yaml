@@ -62,20 +62,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: 
-                  type: object
-                  properties:
-                    hexRGB:
-                      type: string
-                    percent:
-                      type: number
-                      format: float
-                example:
-                - hexRGB: '#000000'
-                  percent: 8.38468
-                - hexRGB: '#FFFFFF'
-                  percent: 5.23782
+                "$ref": "#/components/schemas/ReturnedColors"
 
   /main-OKlab-colors:
     post:
@@ -115,20 +102,7 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items: 
-                  type: object
-                  properties:
-                    hexRGB:
-                      type: string
-                    percent:
-                      type: number
-                      format: float
-                example:
-                - hexRGB: '#000000'
-                  percent: 8.38468
-                - hexRGB: '#FFFFFF'
-                  percent: 5.23782
+                "$ref": "#/components/schemas/ReturnedColors"
 
 
   /colorcount:
@@ -264,6 +238,21 @@ components:
   schemas:
     # Basic status response component.
     # TODO: Extend this to provide application specific status, such as a list of running jobs or free disk space
+    ReturnedColors:
+      type: array
+      items:
+        type: object
+        properties:
+          hexRGB:
+            type: string
+          percent:
+            type: number
+            format: float
+      example:
+        - hexRGB: '#000000'
+          percent: 8.38468
+        - hexRGB: '#FFFFFF'
+          percent: 5.23782
     Status:
       type: object
       required:
