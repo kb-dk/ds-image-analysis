@@ -84,7 +84,7 @@ public class Facade {
      * </p>
      * @return the primary RGB color from input image as HEX value.
      */
-    public static List<InlineResponse200Dto> getMostUsedRGBColor(BufferedImage img, int x){
+    public static List<InlineResponse200Dto> getMostUsedRGBColors(BufferedImage img, int x){
         // Define simple buckets
         int[] buckets = PalettePicker.smkRgbBuckets();
         // Count pixels and add 1 to closest bucket

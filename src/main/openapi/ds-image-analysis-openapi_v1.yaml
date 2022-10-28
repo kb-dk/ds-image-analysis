@@ -7,17 +7,17 @@ info:
 
     **Color Analysis**
     
-    The endpoints in this category all relates to working with colors of images. In this context it is usefull to have an understanding of some color theory. 
+    The endpoints in this category all relates to working with colors of images. In this context it is usefully to have an understanding of some color theory. 
     The first part to consider is how we understand colors. The most common way of understanding colors is as RGB colors where colors are understood as a mixture of red, green and blue colors with values ranging from 0-255.
-    Then by combining different values of red, green and blue it is posible to create more than 16 million different colors. It is also posible to understand colors perceptually. Perceptual colorspaces are based on the human experience of of colors and not on the mixture of different color components.
+    Then by combining different values of red, green and blue it is possible to create more than 16 million different colors. It is also possible to understand colors perceptually. Perceptual colorspaces are based on the human experience of of colors and not on the mixture of different color components.
 
-    This API contains two endpoints that can recognize colors in images. One of these endpoints works in the RGB colorspace while the other works in the perceptual colorspace OKlab.
-    OKlab is a colorspace that understand color in a perceptual manner, but makes it posible to analyse colors computationaly in a fairly easy way.
+    This API contains two endpoints that can recognize colors in images. One of these endpoints works in the RGB colorspace while the other works in the perceptual colorspace [OKlab](https://bottosson.github.io/posts/oklab/).
+    OKlab is a colorspace that understand color in a perceptual manner, but makes it possible to analyse colors computationally in a fairly easy way.
 
     When analysing colors of images we are making many analytical choices. One of the most important questions relate to which colors we compare the images to. Our methods use a palette of 256 colors.
-    This palette has been created by the National Gallery of Denmark. 
-    To check which color in the palette the pixels of the image looks like the most, we can use different approches. The endpoint *main-rgb-color* calculates the euclidian distance between pixel color and palette colors,
-    and then categorises the color of each pixel this way. The *main-OKlab-colors* calculates CIEDE2000 deltaE between each pixel and palette colors. This calculation is a more accurate meassurement of percived colors.    
+    This palette has been created by the [National Gallery of Denmark](https://www.smk.dk/en/) and can be seen in their [interface](https://open.smk.dk/art/advanced/colors?q=*&page=0). 
+    To check which color in the palette the pixels of the image looks like the most, we can use different approaches. The endpoint *main-rgb-colors* calculates the euclidean distance between pixel color and palette colors,
+    and then categorises the color of each pixel this way. The *main-OKlab-colors* calculates [CIEDE2000 deltaE](https://en.wikipedia.org/wiki/Color_difference#CIEDE2000) between each pixel and palette colors. This calculation is a more accurate measurement of perceived colors.    
 
   contact:
     email: '${user.name}@kb.dk'
@@ -31,12 +31,12 @@ servers:
 
 paths:
   # These endpoints has been created from the colorizer endpoint-template
-  /main-rgb-color:
+  /main-rgb-colors:
     post:
       tags:
         - 'Color Analysis'
-      summary: 'Get the most dominant colors from an image. Calculated in RGB space with euclidian distance.'
-      operationId: getMainRgbColor
+      summary: 'Get the dominant colors from an image. Calculated in RGB space with euclidian distance.'
+      operationId: getMainRgbColors
       requestBody:
         content:
           multipart/form-data:
@@ -81,7 +81,7 @@ paths:
     post:
       tags:
         - 'Color Analysis'
-      summary: 'Get the most dominant colors from an image. Calculated in OKlab colorspace and messured with deltaE.'
+      summary: 'Get the dominant colors from an image. Calculated in OKlab colorspace and messured with deltaE.'
       operationId: getMainOkLabColors
       description: |
         This endpoint delivers the top X most used colors in a given image.
