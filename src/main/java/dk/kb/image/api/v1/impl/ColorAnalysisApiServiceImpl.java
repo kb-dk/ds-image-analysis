@@ -4,6 +4,7 @@ import dk.kb.image.Facade;
 import dk.kb.image.api.v1.*;
 import dk.kb.image.model.v1.InlineResponse200Dto;
 
+import java.util.Collections;
 import java.util.List;
 
 import dk.kb.util.webservice.exception.ServiceException;
@@ -61,26 +62,23 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
 
     /**
      * Get the most dominant color from an image. Calculated in OKlab colorspace and messured with deltaE.
-     * 
-     * @param image: The image to analyse
-     * 
+     *
+     * @param image:      The image to analyse
      * @param top-colors: Number of colors to return
-     * 
      * @return <ul>
-      *   <li>code = 200, message = "The dominant color", response = String.class</li>
-      *   </ul>
-      * @throws ServiceException when other http codes should be returned
-      *
-      * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
+     * <li>code = 200, message = "The dominant color", response = String.class</li>
+     * </ul>
+     * @throws ServiceException when other http codes should be returned
+     * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
      */
     @Override
-    public List<InlineResponse200Dto> getMainOkLabColors( @Multipart(value = "image" ) Attachment imageDetail, @Multipart(value = "top-colors")  Integer topColors){
+    public List<Object> getMainOkLabColors(@Multipart(value = "image" ) Attachment imageDetail, @Multipart(value = "top-colors")  Integer topColors){
     // read image
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
             List<InlineResponse200Dto> response = Facade.getMostUsedOKLabColors(img, topColors);
-            return response;
+            return Collections.singletonList(response);
         } catch (Exception f){
             throw handleException(f);
         }
@@ -89,13 +87,13 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
 
 
     @Override
-    public List<InlineResponse200Dto> getMainRgbColors(Attachment imageDetail, Integer topColors) {
+    public List<Object> getMainRgbColors(Attachment imageDetail, Integer topColors) {
         // read image
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
             List<InlineResponse200Dto> response = Facade.getMostUsedRGBColors(img, topColors);
-            return response;
+            return Collections.singletonList(response);
         } catch (Exception f){
             throw handleException(f);
         }
