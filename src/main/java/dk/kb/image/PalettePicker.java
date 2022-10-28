@@ -41,13 +41,13 @@ public class PalettePicker {
      * @return a float[] of OKlab colors.
      */
     public static float[] smkOkLabBuckets(){
-        float[] smkOkLabBuckets = ColorConversion.convertHexArrayToOKlabArray(smkHexPalette());
+        float[] smkOkLabBuckets = ColorConversion.convertHexArrayToOKlabArray(SMK_HEX_PALETTE);
         return smkOkLabBuckets;
     }
 
     public static int[] smkRgbBuckets(){
-        int[] smgRgbBuckets = new int[PalettePicker.smkHexPalette().length];
-        String[] hexPalette = PalettePicker.smkHexPalette();
+        int[] smgRgbBuckets = new int[PalettePicker.SMK_HEX_PALETTE.length];
+        String[] hexPalette = PalettePicker.SMK_HEX_PALETTE;
         for (int i=0; i<smgRgbBuckets.length; i++){
             Color color = Color.decode(hexPalette[i]);
             smgRgbBuckets[i] = color.getRGB();
@@ -56,15 +56,13 @@ public class PalettePicker {
         return smgRgbBuckets;
     }
     /**
-     * Create a string[] of 256 hex colors used by SMK (National Gallery of Denmark).
+     * A string[] of 256 hex colors used by SMK (National Gallery of Denmark).
      * It is not clear how this palette has been constructed in the first place.
-     * @return a string[] of 256 hex values.
      */
-    public static String[] smkHexPalette(){
-        // 256 color palette from SMK Open (National Gallery of Denmark).
-        // Used in their image discovery at: https://open.smk.dk/art/advanced/colors?q=*&page=0 
-        // It is unclear how they have come to use this exact colorpalette 
-        return new String[]{
+    public static String[] SMK_HEX_PALETTE = new String[]{
+            // 256 color palette from SMK Open (National Gallery of Denmark).
+            // Used in their image discovery at: https://open.smk.dk/art/advanced/colors?q=*&page=0
+            // It is unclear how they have come to use this exact colorpalette
             "#FDDCE5", "#FADCEC", "#F6DAED", "#EEDCED", "#E4DAEE", "#DFE1F1", "#DFEEFA", "#E1F5FA",
             "#E1F3F0", "#E2F1DE", "#EAF3D9", "#F8F9DC", "#FEFCDF", "#FFF1DC", "#FEE1DC", "#FCD4D7",
             "#FAC7D2", "#F5C7DA", "#EDC7DC", "#DFC7DF", "#D0C4E3", "#CBCBE7", "#C9E1F6", "#CDECF5",
@@ -76,7 +74,7 @@ public class PalettePicker {
             "#CE709E", "#B176A2", "#8C6EA1", "#716DA1", "#6B73A7", "#73A1D2", "#7FC1D9", "#83BFB4", "#83BA72",
             "#9ABE5E", "#C3D268", "#F8E36C", "#FCAA6B", "#EE796B", "#EB626D", "#E84B6E", "#CB6092", "#A5689B",
             "#81659B", "#67669D", "#596A9F", "#638FC3", "#73BDD5", "#7DBCA9", "#7CB45E", "#8ABA49", "#BCCD40",
-            "#F6DA46", "#F99C47", "#EC6449", "#E94E56", "#E73863", "#CB4E8D", "#A26095", "#7E6199", "#5D629B", 
+            "#F6DA46", "#F99C47", "#EC6449", "#E94E56", "#E73863", "#CB4E8D", "#A26095", "#7E6199", "#5D629B",
             "#4B669E", "#5486BD", "#6CBDD4",
             "#75BAA1", "#73B15A", "#80B74C", "#B4C93D", "#F6D727", "#F68E2B", "#E84B33", "#E73843", "#E72653",
             "#CD498C", "#A05E92", "#7B5F98", "#53609A", "#46639C", "#4E80B8", "#6ABBD3", "#71B99E", "#6FB058",
@@ -95,6 +93,6 @@ public class PalettePicker {
             "#040A14", "#031014", "#03140E", "#081A0C", "#0E1C0A", "#141C0A", "#191909", "#170E06", "#140604",
             "#140604", "#FFFFFF", "#EEEEEE", "#DDDDDD", "#CCCCCC", "#BBBBBB", "#AAAAAA", "#999999", "#888888",
             "#777777", "#666666", "#555555", "#444444", "#333333", "#222222", "#111111", "#000000",
-        };
-    }
+    };
+
 }
