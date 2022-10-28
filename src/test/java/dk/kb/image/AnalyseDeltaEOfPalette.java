@@ -1,5 +1,8 @@
 package dk.kb.image;
 
+import dk.kb.image.ColorConversion;
+import dk.kb.image.OkLabColor;
+
 import java.util.ArrayList;
 import java.util.List;
 
