@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.stream.Collectors;
 
-import dk.kb.image.model.v1.InlineResponse200Dto;
+import dk.kb.image.model.v1.DominantColorDto;
 
 public class RgbColor {
     static int pixelCount = 0;
@@ -131,7 +131,7 @@ public class RgbColor {
      * @param x integer to limit size of returned list.
      * @return a JSON array containing the first x entries from the input list.
      */
-    public static List<InlineResponse200Dto> returnTopXAsHex(List<Entry<Integer, Integer>> list, int x){
+    public static List<DominantColorDto> returnTopXAsHex(List<Entry<Integer, Integer>> list, int x){
         return list.stream().
                 map(entry-> RgbColor.Rgb2Hex(entry)).
                 limit(x).
@@ -144,12 +144,12 @@ public class RgbColor {
      * @param okEntry input entry containing Oklab float key and an integer value of pixels with the color of the key.
      * @return a JSON object containing the String RGB hex value and a float with the percentage of pixels from the image with the given color. 
      */
-    public static InlineResponse200Dto Rgb2Hex(Entry<Integer, Integer> rgbEntry){ 
+    public static DominantColorDto Rgb2Hex(Entry<Integer, Integer> rgbEntry){ 
         String key = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & rgbEntry.getKey()));
         float value = rgbEntry.getValue();
         float percentage = value/pixelCount*100;
 
-        InlineResponse200Dto response = new InlineResponse200Dto();
+        DominantColorDto response = new DominantColorDto();
 
         response.hexRGB(key);
         response.percent(percentage);

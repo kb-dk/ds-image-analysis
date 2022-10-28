@@ -10,7 +10,8 @@ import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
 
-import dk.kb.image.model.v1.InlineResponse200Dto;
+import dk.kb.image.model.v1.DominantColorDto;
+import dk.kb.image.model.v1.DominantColorDto;
 
 import java.awt.image.BufferedImage;
 
@@ -83,7 +84,7 @@ public class Facade {
      * </p>
      * @return the dominant RGB colors from input image as HEX value.
      */
-    public static List<InlineResponse200Dto> getMostUsedRGBColors(BufferedImage img, int x){
+    public static List<DominantColorDto> getMostUsedRGBColors(BufferedImage img, int x){
         // Define simple buckets
         int[] buckets = PalettePicker.smkRgbBuckets();
         // Count pixels and add 1 to the closest bucket
@@ -93,7 +94,7 @@ public class Facade {
         // Sorts and returns the combined map
         List<Entry<Integer, Integer>> sortedList = RgbColor.sortMap(bucketsWithCount);
         //  Returns top X from the sorted list
-        List<InlineResponse200Dto> topX = RgbColor.returnTopXAsHex(sortedList, x);
+        List<DominantColorDto> topX = RgbColor.returnTopXAsHex(sortedList, x);
         return topX;
     }
 
@@ -109,7 +110,7 @@ public class Facade {
      * @param img
      * @return a JSON array of top X colors RGB hex value and percentage of pixels in given color.
      */
-    public static List<InlineResponse200Dto> getMostUsedOKLabColors(BufferedImage img, int x){
+    public static List<DominantColorDto> getMostUsedOKLabColors(BufferedImage img, int x){
         // Define buckets
         float[] buckets = PalettePicker.smkOkLabBuckets();
         // Count pixels and add 1 to closest bucket
@@ -119,7 +120,7 @@ public class Facade {
         // Sorts and returns the combined map
         List<Entry<Float, Integer>> sortedList = OkLabColor.sortMap(bucketsWithCount);
         //  Returns top X from the sorted list
-        List<InlineResponse200Dto> topX = OkLabColor.returnTopXAsHex(sortedList, x);
+        List<DominantColorDto> topX = OkLabColor.returnTopXAsHex(sortedList, x);
 
         return topX;
     }

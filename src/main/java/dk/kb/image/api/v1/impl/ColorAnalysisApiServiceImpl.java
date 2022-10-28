@@ -2,7 +2,7 @@ package dk.kb.image.api.v1.impl;
 
 import dk.kb.image.Facade;
 import dk.kb.image.api.v1.*;
-import dk.kb.image.model.v1.InlineResponse200Dto;
+import dk.kb.image.model.v1.DominantColorDto;
 
 import java.util.Collections;
 import java.util.List;
@@ -72,13 +72,13 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
      * @implNote return will always produce a HTTP 200 code. Throw ServiceException if you need to return other codes
      */
     @Override
-    public List<Object> getMainOkLabColors(@Multipart(value = "image" ) Attachment imageDetail, @Multipart(value = "top-colors")  Integer topColors){
+    public List<DominantColorDto> getMainOkLabColors(@Multipart(value = "image" ) Attachment imageDetail, @Multipart(value = "top-colors")  Integer topColors){
     // read image
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
-            List<InlineResponse200Dto> response = Facade.getMostUsedOKLabColors(img, topColors);
-            return Collections.singletonList(response);
+            List<DominantColorDto> response = Facade.getMostUsedOKLabColors(img, topColors);
+            return response;
         } catch (Exception f){
             throw handleException(f);
         }
@@ -87,13 +87,13 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
 
 
     @Override
-    public List<Object> getMainRgbColors(Attachment imageDetail, Integer topColors) {
+    public List<DominantColorDto> getMainRgbColors(Attachment imageDetail, Integer topColors) {
         // read image
         try {
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
-            List<InlineResponse200Dto> response = Facade.getMostUsedRGBColors(img, topColors);
-            return Collections.singletonList(response);
+            List<DominantColorDto> response = Facade.getMostUsedRGBColors(img, topColors);
+            return response;
         } catch (Exception f){
             throw handleException(f);
         }

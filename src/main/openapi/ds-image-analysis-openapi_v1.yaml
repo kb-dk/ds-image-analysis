@@ -63,7 +63,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/ReturnedColors"
+                "$ref": "#/components/schemas/DominantColors"
 
   /main-OKlab-colors:
     post:
@@ -103,7 +103,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/ReturnedColors"
+                "$ref": "#/components/schemas/DominantColors"
 
 
   /colorcount:
@@ -239,21 +239,20 @@ components:
   schemas:
     # Basic status response component.
     # TODO: Extend this to provide application specific status, such as a list of running jobs or free disk space
-    ReturnedColors:
+    DominantColors:
       type: array
       items:
-        type: object
-        properties:
-          hexRGB:
-            type: string
-          percent:
-            type: number
-            format: float
-      example:
-        - hexRGB: '#000000'
-          percent: 8.38468
-        - hexRGB: '#FFFFFF'
-          percent: 5.23782
+        $ref: '#/components/schemas/DominantColor'
+
+    DominantColor:
+      type: object
+      properties:
+        hexRGB:
+          type: string
+        percent:
+          type: number
+          format: float
+
     Status:
       type: object
       required:
