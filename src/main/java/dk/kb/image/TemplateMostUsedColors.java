@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.Map;
 
-abstract class  MostUsedColors <C> {
+abstract class TemplateMostUsedColors<C> {
     final List<DominantColorDto> getMostUsedColors(BufferedImage img, int x){
         // Define buckets
         List<C> buckets = defineBuckets();

@@ -1,8 +1,5 @@
 package dk.kb.image;
 
-import dk.kb.image.ColorConversion;
-import dk.kb.image.OkLabColor;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,16 +11,16 @@ public class AnalyseDeltaEOfPalette {
      * @return a string[] with information on colors that perceptually looks the same.
      */
     public static List<String> AnalyseHexPaletteDeltaE(String[] hexPalette){
-        float[] colorPalette = ColorConversion.convertHexArrayToOKlabArray(hexPalette);
+        List<Float> colorPalette = ColorConversion.convertHexArrayToOKlabArray(hexPalette);
         float[] colorFloatArrayI;
         float[] colorFloatArrayJ;
         String[] deltaEArray = new String[hexPalette.length];
 
-        for (int i = 0; i < colorPalette.length; i ++){
-            colorFloatArrayI = ColorConversion.convertOKlabFloatToFloatArray(colorPalette[i]);
-            for(int j = i+1; j < colorPalette.length; j++){
-                colorFloatArrayJ = ColorConversion.convertOKlabFloatToFloatArray(colorPalette[j]);
-                double deltaE = OkLabColor.calculateDeltaE(colorFloatArrayI, colorFloatArrayJ);
+        for (int i = 0; i < colorPalette.size(); i ++){
+            colorFloatArrayI = ColorConversion.convertOKlabFloatToFloatArray(colorPalette.get(i));
+            for(int j = i+1; j < colorPalette.size(); j++){
+                colorFloatArrayJ = ColorConversion.convertOKlabFloatToFloatArray(colorPalette.get(j));
+                double deltaE = MostUsedOkLabColor.calculateDeltaE(colorFloatArrayI, colorFloatArrayJ);
 
                 // This articel has a table that makes it easy to understand the values of delta E: 
                 // http://zschuessler.github.io/DeltaE/learn/ 

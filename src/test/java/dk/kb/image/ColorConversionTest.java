@@ -7,14 +7,16 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 public class ColorConversionTest {
     private Logger log = LoggerFactory.getLogger(this.toString());
     
     @Test
     public void testConvertHexArrayToOKlabArray(){
         String[] testPalette = {"#ffffff", "#222222"};
-        float[] oklabResult = ColorConversion.convertHexArrayToOKlabArray(testPalette);
-        assertTrue(oklabResult[0] == -84904433160159100000000000000000000000.000000 && oklabResult[1] == -84903297345221300000000000000000000000.000000);
+        List<Float> oklabResult = ColorConversion.convertHexArrayToOKlabArray(testPalette);
+        assertTrue(oklabResult.get(0) == -84904433160159100000000000000000000000.000000 && oklabResult.get(1) == -84903297345221300000000000000000000000.000000);
         log.info("Hex values get corretly converted to the OKlab colorspace");
     }
 

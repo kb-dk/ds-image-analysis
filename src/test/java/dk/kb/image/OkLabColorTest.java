@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,11 +29,13 @@ public class OkLabColorTest {
     @Test
     public void testCountBucketsForImg() throws IOException{
         BufferedImage img;
-        float[] buckets = {1.1709022E-38f, -8.4903297E37f};
+        List<Float> buckets = new ArrayList<>();
+        buckets.add(1.1709022E-38f);
+        buckets.add(-8.4903297E37f);
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        int[] result = OkLabColor.countBucketsForImg(img, buckets);
+        int[] result = MostUsedOkLabColor.countBucketsForImg(img, buckets);
         assertTrue(result[0]<result[1]);
-        log.info("Bucket counter divides pixels tp correct buckets.");
+        log.info("Bucket counter divides pixels to correct buckets.");
     }
 
     @Test 
@@ -45,7 +48,7 @@ public class OkLabColorTest {
         float[] fa2 = ColorConversion.convertOKlabFloatToFloatArray(oklabFloat2);
         log.info("Testing with colors red and green from java.awt.Color");
         
-        double result = OkLabColor.calculateDeltaE(fa1, fa2);
+        double result = MostUsedOkLabColor.calculateDeltaE(fa1, fa2);
         assertTrue(result <= 1 & result >= 0);
         log.info("DeltaE gets calculated and returns value between 0 and 1.");
     }
@@ -53,7 +56,7 @@ public class OkLabColorTest {
     @Test
     public void testSortMap(){
         Map<Float, Integer>  testMap = OkLabColorTest.createTestMap();
-        List<Entry<Float, Integer>> sortedList = OkLabColor.sortMap(testMap);
+        List<Entry<Float, Integer>> sortedList = MostUsedOkLabColor.sortMap(testMap);
         assertEquals(testMap.get(1.2f), sortedList.get(0).getValue());
         log.info("Map gets sorted.");
     }

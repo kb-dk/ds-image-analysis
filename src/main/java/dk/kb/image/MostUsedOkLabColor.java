@@ -1,17 +1,12 @@
 package dk.kb.image;
 
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
 import dk.kb.image.model.v1.DominantColorDto;
 
-public class OkLabColor {
+import java.awt.image.BufferedImage;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
     static int pixelCount = 0;
 
     /**
@@ -19,9 +14,9 @@ public class OkLabColor {
      * @param buckets float array of bucket colors.
      * @return the integer array bucketCounter, which contains the count for each bucket for the input image,
      */
-    public static int[] countBucketsForImg(BufferedImage img, float[] buckets){
+    public static int[] countBucketsForImg(BufferedImage img, List<Float> buckets){
         // Create bucket counter array
-        int[] bucketCounter = new int[buckets.length];
+        int[] bucketCounter = new int[buckets.size()];
         // get image's width and height
         int width = img.getWidth();
         int height = img.getHeight();
@@ -32,26 +27,26 @@ public class OkLabColor {
                 pixelCount ++;
                 int pixelRGB = img.getRGB(x, y);
                 float pixelOKlab = ColorConversion.convertRGBtoOKlab(pixelRGB);
-                OkLabColor.updateBucketCounter(pixelOKlab, buckets, bucketCounter);
+                updateBucketCounter(pixelOKlab, buckets, bucketCounter);
             }
         }
         return bucketCounter;
     }
 
     /**
-     * Method to update bucketCounter in countBucketsForImg(). 
+     * Method to update bucketCounter in countBucketsForImg().
      * @param pixel The current pixels OKlab color value as float.
      * @param buckets float array of color buckets.
      * @param bucketCounter Integer array to store count of buckets.
      */
-    public static void updateBucketCounter(float pixel, float[] buckets, int[] bucketCounter){
+    public static void updateBucketCounter(float pixel, List<Float> buckets, int[] bucketCounter){
         // Values for checking max
         int bestColor = 0;
         double minDistance = 2147483647;
-        for (int i = 0; i < buckets.length; i ++){
+        for (int i = 0; i < buckets.size(); i ++){
             float[] pixelFloatArray = ColorConversion.convertOKlabFloatToFloatArray(pixel);
-            float[] bucketFloatArray = ColorConversion.convertOKlabFloatToFloatArray(buckets[i]);
-            double totalDistance = OkLabColor.calculateDeltaE(pixelFloatArray, bucketFloatArray);
+            float[] bucketFloatArray = ColorConversion.convertOKlabFloatToFloatArray(buckets.get(i));
+            double totalDistance = calculateDeltaE(pixelFloatArray, bucketFloatArray);
             // Evaluates total distance against minimum distance for given bucket
             if (totalDistance < minDistance) {
                 minDistance = totalDistance;
@@ -74,11 +69,11 @@ public class OkLabColor {
 
     /**
      * Calculate the colour difference value between two colours in a lab space.
-     * This CIEDE2000 calculation fits the OKlab colorspace. 
+     * This CIEDE2000 calculation fits the OKlab colorspace.
      * DeltaE function from: https://stackoverflow.com/a/61343807
      * The function has been proof read against the equation from:
      * M. R. Luo, G. Cui, B. Rigg: The Development of the CIE 2000 Colour-Difference Formula: CIEDE2000 in COLOR research and application Volume 26, Number 5, October 2001
-     * @param lab1 double array containing values L, A and B of first color. 
+     * @param lab1 double array containing values L, A and B of first color.
      * @param lab2 double array containing values L, A and B of second color.
      * @return the CIE 2000 colour difference
      */
@@ -86,56 +81,56 @@ public class OkLabColor {
         // Extract L, A and B values from input arrays.
         // Furthermore converts floats to doubles to make precise calculation
         double L1 = lab1[0];
-        double a1 = lab1[1]; 
+        double a1 = lab1[1];
         double b1 = lab1[2];
         double L2 = lab2[0];
         double a2 = lab2[1];
         double b2 = lab2[2];
-    
+
         // Calculates CIEDE2000
         double Lmean = (L1 + L2) / 2.0;
         double C1 =  Math.sqrt(a1*a1 + b1*b1);
         double C2 =  Math.sqrt(a2*a2 + b2*b2);
         double Cmean = (C1 + C2) / 2.0;
-    
+
         double G =  ( 1 - Math.sqrt( Math.pow(Cmean, 7) / (Math.pow(Cmean, 7) + Math.pow(25, 7)) ) ) / 2;
         double a1prime = a1 * (1 + G);
         double a2prime = a2 * (1 + G);
-    
+
         double C1prime =  Math.sqrt(a1prime*a1prime + b1*b1);
         double C2prime =  Math.sqrt(a2prime*a2prime + b2*b2);
         double Cmeanprime = (C1prime + C2prime) / 2;
-    
+
         double h1prime =  Math.atan2(b1, a1prime) + 2*Math.PI * (Math.atan2(b1, a1prime)<0 ? 1 : 0);
         double h2prime =  Math.atan2(b2, a2prime) + 2*Math.PI * (Math.atan2(b2, a2prime)<0 ? 1 : 0);
         double Hmeanprime =  ((Math.abs(h1prime - h2prime) > Math.PI) ? (h1prime + h2prime + 2*Math.PI) / 2 : (h1prime + h2prime) / 2);
-    
+
         double T =  1.0 - 0.17 * Math.cos(Hmeanprime - Math.PI/6.0) + 0.24 * Math.cos(2*Hmeanprime) + 0.32 * Math.cos(3*Hmeanprime + Math.PI/30) - 0.2 * Math.cos(4*Hmeanprime - 21*Math.PI/60);
-    
+
         double deltahprime =  ((Math.abs(h1prime - h2prime) <= Math.PI) ? h2prime - h1prime : (h2prime <= h1prime) ? h2prime - h1prime + 2*Math.PI : h2prime - h1prime - 2*Math.PI);
-    
+
         double deltaLprime = L2 - L1;
         double deltaCprime = C2prime - C1prime;
         double deltaHprime =  2.0 * Math.sqrt(C1prime*C2prime) * Math.sin(deltahprime / 2.0);
         double SL =  1.0 + ( (0.015*(Lmean - 50)*(Lmean - 50)) / (Math.sqrt( 20 + (Lmean - 50)*(Lmean - 50) )) );
         double SC =  1.0 + 0.045 * Cmeanprime;
         double SH =  1.0 + 0.015 * Cmeanprime * T;
-    
+
         double deltaTheta =  (30 * Math.PI / 180) * Math.exp(-((180/Math.PI*Hmeanprime-275)/25)*((180/Math.PI*Hmeanprime-275)/25));
         double RC =  (2 * Math.sqrt(Math.pow(Cmeanprime, 7) / (Math.pow(Cmeanprime, 7) + Math.pow(25, 7))));
         double RT =  (-RC * Math.sin(2 * deltaTheta));
-    
+
         double KL = 1;
         double KC = 1;
         double KH = 1;
-    
+
         double deltaE = Math.sqrt(
                 ((deltaLprime/(KL*SL)) * (deltaLprime/(KL*SL))) +
                 ((deltaCprime/(KC*SC)) * (deltaCprime/(KC*SC))) +
                 ((deltaHprime/(KH*SH)) * (deltaHprime/(KH*SH))) +
                 (RT * (deltaCprime/(KC*SC)) * (deltaHprime/(KH*SH)))
                 );
-    
+
         return deltaE;
     }
 
@@ -146,13 +141,13 @@ public class OkLabColor {
      * @param bucketCount int[] with the values for the map.
      * @return a map with key-value pairs from the input float[] and int[].
      */
-    public static Map<Float, Integer> bucketsAndBucketCountToMap(float[] buckets, int[] bucketCount){
-    
+    public static Map<Float, Integer> bucketsAndBucketCountToMap(List<Float> buckets, int[] bucketCount){
+
         Map<Float, Integer> map = new HashMap<>();
-        for (int i=0; i<buckets.length; i++) {
-            map.put(buckets[i], bucketCount[i]);
+        for (int i=0; i<buckets.size(); i++) {
+            map.put(buckets.get(i), bucketCount[i]);
         }
-    
+
         return map;
     }
 
@@ -161,11 +156,11 @@ public class OkLabColor {
      * @param map of type map<Float, Integer> to be sorted
      * @return a list of entries of the type Entry<Float, Integer> sorted after biggest value.
      */
-    public static List<Entry<Float, Integer>> sortMap(Map<Float, Integer> map){
-        List<Entry<Float, Integer>> sortedList = new ArrayList<>(map.entrySet());
-    	sortedList.sort(Entry.comparingByValue());
+    public static List<Map.Entry<Float, Integer>> sortMap(Map<Float, Integer> map){
+        List<Map.Entry<Float, Integer>> sortedList = new ArrayList<>(map.entrySet());
+    	sortedList.sort(Map.Entry.comparingByValue());
         Collections.reverse(sortedList);
-    
+
         return sortedList;
     }
 
@@ -175,9 +170,9 @@ public class OkLabColor {
      * @param x integer to limit size of returned list.
      * @return a JSON array containing the first x entries from the input list.
      */
-    public static List<DominantColorDto> returnTopXAsHex(List<Entry<Float, Integer>> list, int x){
+    public static List<DominantColorDto> returnTopXAsHex(List<Map.Entry<Float, Integer>> list, int x){
         return list.stream().
-                map(entry-> OkLabColor.okEntry2RGBHex(entry)).
+                map(entry-> okEntry2RGBHex(entry)).
                 limit(x).
                 collect(Collectors.toList());
     }
@@ -186,9 +181,9 @@ public class OkLabColor {
      * Convert an entry<Float, Integer> containing OKlab float value and number of pixels with that color into JSON object
      * containing the RGB hex value of the OKlab color  and the pixel value as percentage of the full picture.
      * @param okEntry input entry containing Oklab float key and an integer value of pixels with the color of the key.
-     * @return a JSON object containing the String RGB hex value and a float with the percentage of pixels from the image with the given color. 
+     * @return a JSON object containing the String RGB hex value and a float with the percentage of pixels from the image with the given color.
      */
-    public static DominantColorDto okEntry2RGBHex(Entry<Float, Integer> okEntry){ 
+    public static DominantColorDto okEntry2RGBHex(Map.Entry<Float, Integer> okEntry){
         String key = ColorConversion.convertOKlabToHex(okEntry.getKey());
         float value = okEntry.getValue();
         float percentage = value/pixelCount*100;
@@ -200,5 +195,33 @@ public class OkLabColor {
 
         return response;
     }
-    
+
+    @Override
+    public List<Float> defineBuckets() {
+        List<Float> buckets = PalettePicker.smkOkLabBuckets();
+        return buckets;
+    }
+
+    @Override
+    public int[] defineBucketCount(BufferedImage img, List<Float> buckets) {
+        int[] bucketCount = countBucketsForImg(img, buckets);
+        return bucketCount;
+    }
+
+    @Override
+    public Map<Float, Integer> combineBucketsAndBucketCount(List<Float> buckets, int[] bucketCount) {
+        Map<Float, Integer> bucketsWithCount = bucketsAndBucketCountToMap(buckets, bucketCount);
+        return bucketsWithCount;
+    }
+
+    @Override
+    public List<Map.Entry<Float, Integer>> sortList(Map<Float, Integer> bucketsWithCount) {
+        List<Map.Entry<Float, Integer>> sortedList = sortMap(bucketsWithCount);
+        return sortedList;
+    }
+
+    @Override
+    public List<DominantColorDto> returnResult(List<Map.Entry<Float, Integer>> sortedList, int x) {
+        return returnTopXAsHex(sortedList, x);
+    }
 }
