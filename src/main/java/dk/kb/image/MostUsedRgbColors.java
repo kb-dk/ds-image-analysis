@@ -6,7 +6,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class MostUsedRgbColors extends MostUsedColors<Integer> {
+public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
     static int pixelCount = 0;
 
     /**
