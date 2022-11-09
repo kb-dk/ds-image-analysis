@@ -69,8 +69,7 @@ public class OkLabColor {
      * @return the most used hex color as a string.
      */
     public static String printResult(float[] buckets, int largestBucket){
-        String hexColor = ColorConversion.convertOKlabToHex(buckets[largestBucket]);
-        return hexColor;
+        return ColorConversion.convertOKlabToHex(buckets[largestBucket]);
     }
 
     /**

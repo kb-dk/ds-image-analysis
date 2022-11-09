@@ -1,18 +1,12 @@
 package dk.kb.image;
 
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.stream.Collectors;
-
 import dk.kb.image.model.v1.DominantColorDto;
 
-public class RgbColor {
+import java.awt.image.BufferedImage;
+import java.util.*;
+import java.util.stream.Collectors;
+
+public class MostUsedRgbColors extends MostUsedColors<Integer> {
     static int pixelCount = 0;
 
     /**
@@ -20,37 +14,37 @@ public class RgbColor {
      * @param buckets Integer array of bucket colors.
      * @return the integer array bucketCounter, which contains the count for each bucket for the input image,
      */
-    public static int[] countBucketsForImg(BufferedImage img, int[] buckets){
+    public static int[] countBucketsForImg(BufferedImage img, List<Integer> buckets){
         // Create bucket counter array
-        int[] bucketCounter = new int[buckets.length];
+        int[] bucketCounter = new int[buckets.size()];
         // get image's width and height
         int width = img.getWidth();
         int height = img.getHeight();
-    
+
         // Loop over all pixels in image and get RGB color
         for(int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
                 // Get RGB for each pixel
                 pixelCount ++;
                 int pixelRGB = img.getRGB(x, y);
-                RgbColor.updateBucketCounter(pixelRGB, buckets, bucketCounter);
+                updateBucketCounter(pixelRGB, buckets, bucketCounter);
             }
         }
         return bucketCounter;
     }
 
     /**
-     * Method to update bucketCounter in countBucketsForImg(). 
+     * Method to update bucketCounter in countBucketsForImg().
      * @param pixel The current pixels RGB value as integer.
      * @param buckets Integer array of color buckets.
      * @param bucketCounter Integer array to store count of buckets.
      */
-    public static void updateBucketCounter(int pixel, int[] buckets, int[] bucketCounter){
+    public static void updateBucketCounter(int pixel, List<Integer> buckets, int[] bucketCounter){
         // Values for checking max
         int bestColor = 0;
         int minDistance = 2147483647;
-        for (int i = 0; i < buckets.length; i ++){
-            int totalDistance = RgbColor.getEuclidianColorDistance(pixel, buckets[i]);
+        for (int i = 0; i < buckets.size(); i ++){
+            int totalDistance = getEuclidianColorDistance(pixel, buckets.get(i));
             // Evaluates total distance against minimum distance for given bucket
             if (totalDistance < minDistance) {
                 minDistance = totalDistance;
@@ -58,11 +52,11 @@ public class RgbColor {
             }
         }
          // Add 1 to the bucket closest to pixel color
-         bucketCounter[bestColor] ++;
+        bucketCounter[bestColor] ++;
     }
 
     /**
-     * Calculate Euclidian color distance between two RGB colors. 
+     * Calculate Euclidian color distance between two RGB colors.
      * @param pixel1 RGB color of pixel1 as integer.
      * @param pixel2 RGB color of pixel2 as integer.
      * @return the total distance between pixel 1 and 2. Higher number = Bigger distance.""
@@ -102,13 +96,13 @@ public class RgbColor {
      * @param bucketCount int[] with the values for the map.
      * @return a map with key-value pairs from the input float[] and int[].
      */
-    public static Map<Integer, Integer> bucketsAndBucketCountToMap(int[] buckets, int[] bucketCount){
-    
+    public static Map<Integer, Integer> bucketsAndBucketCountToMap(List<Integer> buckets, int[] bucketCount){
+
         Map<Integer, Integer> map = new HashMap<>();
-        for (int i=0; i<buckets.length; i++) {
-            map.put(buckets[i], bucketCount[i]);
+        for (int i=0; i<buckets.size(); i++) {
+            map.put(buckets.get(i), bucketCount[i]);
         }
-    
+
         return map;
     }
 
@@ -117,11 +111,11 @@ public class RgbColor {
      * @param map of type map<Float, Integer> to be sorted
      * @return a list of entries of the type Entry<Float, Integer> sorted after biggest value.
      */
-    public static List<Entry<Integer, Integer>> sortMap(Map<Integer, Integer> map){
-        List<Entry<Integer, Integer>> sortedList = new ArrayList<>(map.entrySet());
-    	sortedList.sort(Entry.comparingByValue());
+    public static List<Map.Entry<Integer, Integer>> sortMap(Map<Integer, Integer> map){
+        List<Map.Entry<Integer, Integer>> sortedList = new ArrayList<>(map.entrySet());
+    	sortedList.sort(Map.Entry.comparingByValue());
         Collections.reverse(sortedList);
-    
+
         return sortedList;
     }
 
@@ -131,9 +125,9 @@ public class RgbColor {
      * @param x integer to limit size of returned list.
      * @return a JSON array containing the first x entries from the input list.
      */
-    public static List<DominantColorDto> returnTopXAsHex(List<Entry<Integer, Integer>> list, int x){
+    public static List<DominantColorDto> returnTopXAsHex(List<Map.Entry<Integer, Integer>> list, int x){
         return list.stream().
-                map(entry-> RgbColor.Rgb2Hex(entry)).
+                map(entry-> Rgb2Hex(entry)).
                 limit(x).
                 collect(Collectors.toList());
     }
@@ -141,10 +135,10 @@ public class RgbColor {
     /**
      * Convert an entry<Float, Integer> containing OKlab float value and number of pixels with that color into JSON object
      * containing the RGB hex value of the OKlab color  and the pixel value as percentage of the full picture.
-     * @param okEntry input entry containing Oklab float key and an integer value of pixels with the color of the key.
-     * @return a JSON object containing the String RGB hex value and a float with the percentage of pixels from the image with the given color. 
+     * @param rgbEntry input entry containing Oklab float key and an integer value of pixels with the color of the key.
+     * @return a JSON object containing the String RGB hex value and a float with the percentage of pixels from the image with the given color.
      */
-    public static DominantColorDto Rgb2Hex(Entry<Integer, Integer> rgbEntry){ 
+    public static DominantColorDto Rgb2Hex(Map.Entry<Integer, Integer> rgbEntry){
         String key = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & rgbEntry.getKey()));
         float value = rgbEntry.getValue();
         float percentage = value/pixelCount*100;
@@ -156,5 +150,33 @@ public class RgbColor {
 
         return response;
     }
-    
+
+    @Override
+    public List<Integer> defineBuckets() {
+        List<Integer> buckets = PalettePicker.smkRgbBuckets();
+        return buckets;
+    }
+
+    @Override
+    public int[] defineBucketCount(BufferedImage img, List<Integer> buckets) {
+        int[] bucketCount = countBucketsForImg(img, buckets);
+        return bucketCount;
+    }
+    @Override
+    public Map<Integer, Integer> combineBucketsAndBucketCount(List<Integer> buckets, int[] bucketCount) {
+        Map<Integer, Integer> bucketsWithCount = bucketsAndBucketCountToMap(buckets, bucketCount);
+        return bucketsWithCount;
+    }
+
+    @Override
+    public List<Map.Entry<Integer, Integer>> sortList(Map<Integer, Integer> bucketsWithCount) {
+        List<Map.Entry<Integer, Integer>> sortedList = sortMap(bucketsWithCount);
+        return sortedList;
+    }
+
+    @Override
+    List<DominantColorDto> returnResult(List<Map.Entry<Integer, Integer>> sortedList, int x) {
+        return returnTopXAsHex(sortedList, x);
+    }
+
 }

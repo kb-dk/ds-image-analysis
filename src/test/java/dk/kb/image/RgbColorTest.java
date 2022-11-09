@@ -10,6 +10,7 @@ import dk.kb.util.Resolver;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -19,9 +20,9 @@ public class RgbColorTest {
     @Test
     public void testCountBucketsForImg() throws IOException{
         BufferedImage img;
-        int[] buckets = PalettePicker.defineSimpleBuckets();
+        List<Integer> buckets = PalettePicker.defineSimpleBuckets();
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        int[] result = RgbColor.countBucketsForImg(img, buckets);
+        int[] result = MostUsedRgbColors.countBucketsForImg(img, buckets);
         assertTrue(result[3] == 22089);
         log.info("Bucket counter divides pixels to correct buckets.");
     }
@@ -32,8 +33,8 @@ public class RgbColorTest {
         int pink = Color.PINK.getRGB();
         int blue = Color.BLUE.getRGB();
 
-        int redResult = RgbColor.getEuclidianColorDistance(red, pink);
-        int blueResult = RgbColor.getEuclidianColorDistance(blue, pink);
+        int redResult = MostUsedRgbColors.getEuclidianColorDistance(red, pink);
+        int blueResult = MostUsedRgbColors.getEuclidianColorDistance(blue, pink);
         assertTrue(redResult<blueResult);
         log.info("Pink color is closer to red than to blue as expected.");
     }

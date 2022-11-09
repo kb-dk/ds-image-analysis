@@ -11,6 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import dk.kb.util.Resolver;
@@ -44,6 +45,7 @@ public class FacadeTest {
         log.info("Colors get counted"); 
     }
 
+
     @Test
     public void testMostUsedRGBColor() throws IOException{
         BufferedImage img;
@@ -51,6 +53,7 @@ public class FacadeTest {
         assertFalse(Facade.getMostUsedRGBColors(img, 5).isEmpty());
         log.info("The most used color has been calculated");
     }
+
 
     @Test
     public void testMostUsedOKLabColor() throws IOException{

@@ -11,7 +11,6 @@ import java.util.Map.Entry;
 import javax.imageio.ImageIO;
 
 import dk.kb.image.model.v1.DominantColorDto;
-import dk.kb.image.model.v1.DominantColorDto;
 
 import java.awt.image.BufferedImage;
 
@@ -32,7 +31,7 @@ public class Facade {
                 // Here (x,y)denotes the coordinate of image
                 // for modifying the pixel value.
                 // Get RGB value of single pixel
-                int pixel = img.getRGB(x, y); 
+                int pixel = img.getRGB(x, y);
                 // Shifts colors bitwise right
                 int a = (pixel >> 24) & 0xff;
                 int r = (pixel >> 16) & 0xff;
@@ -58,9 +57,9 @@ public class Facade {
      * Get the amount of unique colors from input image.
      * @return a string with the count of unique colors form the input image.
      */
-    public static int getColorCount(BufferedImage img) throws IOException{
+    public static int getColorCount(BufferedImage img) {
         // Hashset is a collection that only has one of each value
-        Set<Integer> colors = new HashSet<Integer>();
+        Set<Integer> colors = new HashSet<>();
         // get image's width and height
         int width = img.getWidth();
         int height = img.getHeight();
@@ -72,8 +71,7 @@ public class Facade {
                 colors.add(pixel);
             }
         }
-        int result = colors.size();
-        return result;
+        return colors.size();
     }
 
     /**
@@ -84,18 +82,17 @@ public class Facade {
      * </p>
      * @return the dominant RGB colors from input image as HEX value.
      */
-    public static List<DominantColorDto> getMostUsedRGBColors(BufferedImage img, int x){
+    public static List<DominantColorDto> getMostUsedRGBColors(BufferedImage img, int x) {
         // Define simple buckets
-        int[] buckets = PalettePicker.smkRgbBuckets();
+        List<Integer> buckets = PalettePicker.smkRgbBuckets();
         // Count pixels and add 1 to the closest bucket
-        int[] bucketCount = RgbColor.countBucketsForImg(img, buckets);
+        int[] bucketCount = MostUsedRgbColors.countBucketsForImg(img, buckets);
         // Create map, where buckets and bucketCount has been combined
-        Map<Integer, Integer> bucketsWithCount = RgbColor.bucketsAndBucketCountToMap(buckets, bucketCount);
+        Map<Integer, Integer> bucketsWithCount = MostUsedRgbColors.bucketsAndBucketCountToMap(buckets, bucketCount);
         // Sorts and returns the combined map
-        List<Entry<Integer, Integer>> sortedList = RgbColor.sortMap(bucketsWithCount);
+        List<Entry<Integer, Integer>> sortedList = MostUsedRgbColors.sortMap(bucketsWithCount);
         //  Returns top X from the sorted list
-        List<DominantColorDto> topX = RgbColor.returnTopXAsHex(sortedList, x);
-        return topX;
+        return MostUsedRgbColors.returnTopXAsHex(sortedList, x);
     }
 
     /**
@@ -113,16 +110,14 @@ public class Facade {
     public static List<DominantColorDto> getMostUsedOKLabColors(BufferedImage img, int x){
         // Define buckets
         float[] buckets = PalettePicker.smkOkLabBuckets();
-        // Count pixels and add 1 to closest bucket
+        // Count pixels and add 1 to the closest bucket
         int[] bucketCount = OkLabColor.countBucketsForImg(img, buckets);
         // Create map, where buckets and bucketCount has been combined
         Map<Float, Integer> bucketsWithCount = OkLabColor.bucketsAndBucketCountToMap(buckets, bucketCount);
         // Sorts and returns the combined map
         List<Entry<Float, Integer>> sortedList = OkLabColor.sortMap(bucketsWithCount);
         //  Returns top X from the sorted list
-        List<DominantColorDto> topX = OkLabColor.returnTopXAsHex(sortedList, x);
-
-        return topX;
+        return OkLabColor.returnTopXAsHex(sortedList, x);
     }
 
     /**
@@ -130,7 +125,8 @@ public class Facade {
      * @param bucketCount integer array containing the count of each color bucket.
      * @return the index of the most used bucket.
      */
-    public static int getlargestBucket(int[] bucketCount){ 
+    public static int getlargestBucket(int[] bucketCount){
+        // TODO: This method is never used.
         // Values for getting most used Bucket
         int largestBucket = 0;
         int maxCount = 0;
