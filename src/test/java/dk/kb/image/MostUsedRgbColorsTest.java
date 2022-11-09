@@ -14,7 +14,7 @@ import java.util.List;
 
 import javax.imageio.ImageIO;
 
-public class RgbColorTest {
+public class MostUsedRgbColorsTest {
     private Logger log = LoggerFactory.getLogger(this.toString());
 
     @Test
