@@ -1,6 +1,8 @@
 package dk.kb.image;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.badlogic.gdx.utils.FloatArray;
 import com.github.tommyettinger.colorful.oklab.Palette;
@@ -12,16 +14,16 @@ public class PalettePicker {
      * Used in getMostUsedRGBColor() to extract primary color.
      * @return an integer array of RGB colors.
      */
-    public static int[] defineSimpleBuckets(){
+    public static List<Integer> defineSimpleBuckets(){
          // Define colors as integers in array
-        return new int[]{
-            Color.RED.getRGB(),
-            Color.GREEN.getRGB(),
-            Color.BLUE.getRGB(),
-            Color.YELLOW.getRGB(),
-            Color.CYAN.getRGB(),
-            Color.MAGENTA.getRGB()
-            };
+        List<Integer> colors = new ArrayList<>();
+        colors.add(Color.RED.getRGB());
+        colors.add(Color.GREEN.getRGB());
+        colors.add(Color.BLUE.getRGB());
+        colors.add(Color.YELLOW.getRGB());
+        colors.add(Color.CYAN.getRGB());
+        colors.add(Color.MAGENTA.getRGB());
+        return colors;
     }
 
     /**
@@ -45,12 +47,13 @@ public class PalettePicker {
         return smkOkLabBuckets;
     }
 
-    public static int[] smkRgbBuckets(){
-        int[] smgRgbBuckets = new int[PalettePicker.SMK_HEX_PALETTE.length];
+    public static List<Integer> smkRgbBuckets(){
+        List<Integer> smgRgbBuckets = new ArrayList<>(PalettePicker.SMK_HEX_PALETTE.length);
+        //int[] smgRgbBuckets = new int[PalettePicker.SMK_HEX_PALETTE.length];
         String[] hexPalette = PalettePicker.SMK_HEX_PALETTE;
-        for (int i=0; i<smgRgbBuckets.length; i++){
+        for (int i=0; i<hexPalette.length; i++){
             Color color = Color.decode(hexPalette[i]);
-            smgRgbBuckets[i] = color.getRGB();
+            smgRgbBuckets.add(i, color.getRGB());
         }
 
         return smgRgbBuckets;
