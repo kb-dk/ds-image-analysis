@@ -42,8 +42,8 @@ public class PalettePicker {
      * Convert a string[] of hex colors to a float[] of colors in the OKlab Colorspace.
      * @return a float[] of OKlab colors.
      */
-    public static float[] smkOkLabBuckets(){
-        float[] smkOkLabBuckets = ColorConversion.convertHexArrayToOKlabArray(SMK_HEX_PALETTE);
+    public static List<Float> smkOkLabBuckets(){
+        List<Float> smkOkLabBuckets = ColorConversion.convertHexArrayToOKlabArray(SMK_HEX_PALETTE);
         return smkOkLabBuckets;
     }
 

@@ -109,15 +109,15 @@ public class Facade {
      */
     public static List<DominantColorDto> getMostUsedOKLabColors(BufferedImage img, int x){
         // Define buckets
-        float[] buckets = PalettePicker.smkOkLabBuckets();
+        List<Float> buckets = PalettePicker.smkOkLabBuckets();
         // Count pixels and add 1 to the closest bucket
-        int[] bucketCount = OkLabColor.countBucketsForImg(img, buckets);
+        int[] bucketCount = MostUsedOkLabColor.countBucketsForImg(img, buckets);
         // Create map, where buckets and bucketCount has been combined
-        Map<Float, Integer> bucketsWithCount = OkLabColor.bucketsAndBucketCountToMap(buckets, bucketCount);
+        Map<Float, Integer> bucketsWithCount = MostUsedOkLabColor.bucketsAndBucketCountToMap(buckets, bucketCount);
         // Sorts and returns the combined map
-        List<Entry<Float, Integer>> sortedList = OkLabColor.sortMap(bucketsWithCount);
+        List<Entry<Float, Integer>> sortedList = MostUsedOkLabColor.sortMap(bucketsWithCount);
         //  Returns top X from the sorted list
-        return OkLabColor.returnTopXAsHex(sortedList, x);
+        return MostUsedOkLabColor.returnTopXAsHex(sortedList, x);
     }
 
     /**

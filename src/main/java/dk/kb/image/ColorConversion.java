@@ -1,6 +1,8 @@
 package dk.kb.image;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import com.github.tommyettinger.colorful.oklab.ColorTools;
@@ -12,10 +14,9 @@ public class ColorConversion {
      * @param inputPalette is a String[] of hex colors to be converted.
      * @return a float[] of colors defined in the OKlab colorspace.
      */
-    public static float[] convertHexArrayToOKlabArray(String[] inputPalette){
-        int length = inputPalette.length;
-        int[] valuesRGB = new int[length];
-        float[] valuesOKlab = new float[length]; 
+    public static List<Float> convertHexArrayToOKlabArray(String[] inputPalette){
+        int[] valuesRGB = new int[inputPalette.length];
+        List<Float> valuesOKlab = new ArrayList<Float>(inputPalette.length);
         // Hex to RGB 
         for (int i = 0; i < inputPalette.length; i ++){
             Color color = Color.decode(inputPalette[i]);
@@ -24,7 +25,7 @@ public class ColorConversion {
         // RGB to OKlab
         for (int i = 0; i < inputPalette.length; i ++){
             float okLabFloat = ColorConversion.convertRGBtoOKlab(valuesRGB[i]);
-            valuesOKlab[i] = okLabFloat;
+            valuesOKlab.add(i, okLabFloat);
         }
     
         return valuesOKlab;
