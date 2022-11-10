@@ -109,16 +109,17 @@ public class Facade {
      * @return a JSON array of top X colors RGB hex value and percentage of pixels in given color.
      */
     public static List<DominantColorDto> getMostUsedOKLabColors(BufferedImage img, int x){
+        MostUsedOkLabColor findMostUsedOkLabColors = new MostUsedOkLabColor();
         // Define buckets
-        List<Float> buckets = PalettePicker.smkOkLabBuckets();
+        List<Float> buckets = findMostUsedOkLabColors.defineBuckets();
         // Count pixels and add 1 to the closest bucket
-        int[] bucketCount = MostUsedOkLabColor.countBucketsForImg(img, buckets);
+        int[] bucketCount = findMostUsedOkLabColors.defineBucketCount(img, buckets);
         // Create map, where buckets and bucketCount has been combined
-        Map<Float, Integer> bucketsWithCount = MostUsedOkLabColor.bucketsAndBucketCountToMap(buckets, bucketCount);
+        Map<Float, Integer> bucketsWithCount = findMostUsedOkLabColors.combineBucketsAndBucketCount(buckets, bucketCount);
         // Sorts and returns the combined map
-        List<Entry<Float, Integer>> sortedList = MostUsedOkLabColor.sortMap(bucketsWithCount);
+        List<Entry<Float, Integer>> sortedList = findMostUsedOkLabColors.sortList(bucketsWithCount);
         //  Returns top X from the sorted list
-        return MostUsedOkLabColor.returnTopXAsHex(sortedList, x);
+        return findMostUsedOkLabColors.returnResult(sortedList, x);
     }
 
     /**
