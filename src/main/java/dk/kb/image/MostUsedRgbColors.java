@@ -2,12 +2,10 @@ package dk.kb.image;
 
 import dk.kb.image.model.v1.DominantColorDto;
 
-import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
-    static int pixelCount = 0;
     @Override
     public List<Integer> defineBuckets() {
         List<Integer> buckets = PalettePicker.smkRgbBuckets();
@@ -15,24 +13,26 @@ public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
     }
 
     /**
-     * Loop through pixels of input image, get RGB color for pixel and +1 to bucket closest to pixel color.
-     * @param buckets Integer array of bucket colors.
-     * @return the integer array bucketCounter, which contains the count for each bucket for the input image,
+     * Method to update bucketCounter in countBucketsForImg().
+     * @param pixel The current pixels RGB value as integer.
+     * @param buckets Integer array of color buckets.
+     * @param bucketCounter Integer array to store count of buckets.
      */
     @Override
-    public int[] defineBucketCount(BufferedImage img, List<Integer> buckets, int height, int width) {
-        // Create bucket counter array
-        int[] bucketCounter = new int[buckets.size()];
-        // Loop over all pixels in image and get RGB color
-        for(int y = 0; y < height; y++) {
-            for (int x = 0; x < width; x++) {
-                // Get RGB for each pixel
-                pixelCount ++;
-                int pixelRGB = img.getRGB(x, y);
-                updateBucketCounter(pixelRGB, buckets, bucketCounter);
+    void updateBucketCounter(int pixel, List<Integer> buckets, int[] bucketCounter) {
+        // Values for checking max
+        int bestColor = 0;
+        int minDistance = 2147483647;
+        for (int i = 0; i < buckets.size(); i ++){
+            int totalDistance = getEuclidianColorDistance(pixel, buckets.get(i));
+            // Evaluates total distance against minimum distance for given bucket
+            if (totalDistance < minDistance) {
+                minDistance = totalDistance;
+                bestColor = i;
             }
         }
-        return bucketCounter;
+        // Add 1 to the bucket closest to pixel color
+        bucketCounter[bestColor] ++;
     }
 
     /**
@@ -79,27 +79,6 @@ public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
                 limit(x).
                 collect(Collectors.toList());
     }
-    /**
-     * Method to update bucketCounter in countBucketsForImg().
-     * @param pixel The current pixels RGB value as integer.
-     * @param buckets Integer array of color buckets.
-     * @param bucketCounter Integer array to store count of buckets.
-     */
-    public static void updateBucketCounter(int pixel, List<Integer> buckets, int[] bucketCounter){
-        // Values for checking max
-        int bestColor = 0;
-        int minDistance = 2147483647;
-        for (int i = 0; i < buckets.size(); i ++){
-            int totalDistance = getEuclidianColorDistance(pixel, buckets.get(i));
-            // Evaluates total distance against minimum distance for given bucket
-            if (totalDistance < minDistance) {
-                minDistance = totalDistance;
-                bestColor = i;
-            }
-        }
-        // Add 1 to the bucket closest to pixel color
-        bucketCounter[bestColor] ++;
-    }
 
     /**
      * Calculate Euclidean color distance between two RGB colors.
@@ -130,7 +109,7 @@ public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
      * @param rgbEntry input entry containing Oklab float key and an integer value of pixels with the color of the key.
      * @return a JSON object containing the String RGB hex value and a float with the percentage of pixels from the image with the given color.
      */
-    public static DominantColorDto Rgb2Hex(Map.Entry<Integer, Integer> rgbEntry){
+    public DominantColorDto Rgb2Hex(Map.Entry<Integer, Integer> rgbEntry){
         String key = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & rgbEntry.getKey()));
         float value = rgbEntry.getValue();
         float percentage = value/pixelCount*100;

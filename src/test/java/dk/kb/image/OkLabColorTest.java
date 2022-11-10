@@ -38,7 +38,7 @@ public class OkLabColorTest {
         int width = img.getWidth();
         int height = img.getHeight();
 
-        int[] result = myOkLabColor.defineBucketCount(img, buckets, width, height);
+        int[] result = myOkLabColor.getBucketCount(img, buckets);
         assertTrue(result[0]<result[1]);
         log.info("Bucket counter divides pixels to correct buckets.");
     }
