@@ -24,7 +24,9 @@ public class MostUsedRgbColorsTest {
         MostUsedRgbColors myRgbColors = new MostUsedRgbColors();
 
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        int[] result = myRgbColors.defineBucketCount(img, buckets);
+        int width = img.getWidth();
+        int height = img.getHeight();
+        int[] result = myRgbColors.defineBucketCount(img, buckets, width, height);
         assertTrue(result[3] == 22089);
         log.info("Bucket counter divides pixels to correct buckets.");
     }
