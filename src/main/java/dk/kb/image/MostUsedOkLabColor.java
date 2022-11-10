@@ -5,7 +5,16 @@ import dk.kb.image.model.v1.DominantColorDto;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implements the OK Lab colorspace for the MostUsedColors template.
+ * The OK Lab colorspace works with floats.
+ */
 public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
+    /**
+     * Defines which color palette to use. This palette consists of 256 hex colors used by SMK (National Gallery of Denmark) converted to OKLab colorspace.
+     * It is not clear how this palette has been constructed in the first place.
+     * @return the palette as a list of floats
+     */
     @Override
     public List<Float> defineBuckets() {
         List<Float> buckets = PalettePicker.smkOkLabBuckets();
@@ -37,11 +46,10 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
         }
         // Add 1 to the bucket closest to pixel color
         bucketCounter[bestColor] ++;
-
     }
 
     /**
-     * Combine colorbuckets float[] and bucketCount int[] into a map. The float[] holds the keys and the int[] holds the values.
+     * Combine color-buckets float[] and bucketCount int[] into a map. The float[] holds the keys and the int[] holds the values.
      * The arrays get combined by index number.
      * @param buckets float[] with keys of the map.
      * @param bucketCount int[] with the values for the map.
@@ -53,7 +61,6 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
         for (int i=0; i<buckets.size(); i++) {
             bucketsWithCount.put(buckets.get(i), bucketCount[i]);
         }
-
         return bucketsWithCount;
     }
 
@@ -67,7 +74,6 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
         List<Map.Entry<Float, Integer>> sortedList = new ArrayList<>(bucketsWithCount.entrySet());
         sortedList.sort(Map.Entry.comparingByValue());
         Collections.reverse(sortedList);
-
         return sortedList;
     }
 
@@ -90,7 +96,7 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
      * Calculate the colour difference value between two colours in a lab space.
      * This CIEDE2000 calculation fits the OKlab colorspace.
      * DeltaE function from: https://stackoverflow.com/a/61343807
-     * The function has been proof read against the equation from:
+     * The function has been proofread against the equation from:
      * M. R. Luo, G. Cui, B. Rigg: The Development of the CIE 2000 Colour-Difference Formula: CIEDE2000 in COLOR research and application Volume 26, Number 5, October 2001
      * @param lab1 double array containing values L, A and B of first color.
      * @param lab2 double array containing values L, A and B of second color.
@@ -98,14 +104,13 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
      */
     public static double calculateDeltaE(float[] lab1, float[] lab2) {
         // Extract L, A and B values from input arrays.
-        // Furthermore converts floats to doubles to make precise calculation
+        // Furthermore, converts floats to doubles to make precise calculation
         double L1 = lab1[0];
         double a1 = lab1[1];
         double b1 = lab1[2];
         double L2 = lab2[0];
         double a2 = lab2[1];
         double b2 = lab2[2];
-
         // Calculates CIEDE2000
         double Lmean = (L1 + L2) / 2.0;
         double C1 =  Math.sqrt(a1*a1 + b1*b1);
@@ -149,7 +154,6 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
                 ((deltaHprime/(KH*SH)) * (deltaHprime/(KH*SH))) +
                 (RT * (deltaCprime/(KC*SC)) * (deltaHprime/(KH*SH)))
                 );
-
         return deltaE;
     }
 

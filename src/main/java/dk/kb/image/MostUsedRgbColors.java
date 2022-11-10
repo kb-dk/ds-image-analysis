@@ -5,6 +5,10 @@ import dk.kb.image.model.v1.DominantColorDto;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Implements the RGB colorspace for the MostUsedColors template.
+ * The RGB colorspace works with integers.
+ */
 public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
     @Override
     public List<Integer> defineBuckets() {
