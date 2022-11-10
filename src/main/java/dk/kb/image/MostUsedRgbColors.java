@@ -10,6 +10,11 @@ import java.util.stream.Collectors;
  * The RGB colorspace works with integers.
  */
 public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
+    /**
+     * Defines which color palette to use. This palette consists of 256 hex colors used by SMK (National Gallery of Denmark) converted to RGB colorspace.
+     * It is not clear how this palette has been constructed in the first place.
+     * @return the palette as a list of integers.
+     */
     @Override
     public List<Integer> defineBuckets() {
         List<Integer> buckets = PalettePicker.smkRgbBuckets();
