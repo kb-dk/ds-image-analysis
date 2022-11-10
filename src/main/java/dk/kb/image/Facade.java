@@ -84,16 +84,7 @@ public class Facade {
      */
     public static List<DominantColorDto> getMostUsedRGBColors(BufferedImage img, int x) {
         MostUsedRgbColors findMostUsedRgbColors = new MostUsedRgbColors();
-        // Define simple buckets
-        List<Integer> buckets = findMostUsedRgbColors.defineBuckets();
-        // Count pixels and add 1 to the closest bucket
-        int[] bucketCount = findMostUsedRgbColors.defineBucketCount(img, buckets);
-        // Create map, where buckets and bucketCount has been combined
-        Map<Integer, Integer> bucketsWithCount = findMostUsedRgbColors.combineBucketsAndBucketCount(buckets, bucketCount);
-        // Sorts and returns the combined map
-        List<Entry<Integer, Integer>> sortedList = findMostUsedRgbColors.sortList(bucketsWithCount);
-        //  Returns top X from the sorted list
-        return findMostUsedRgbColors.returnResult(sortedList, x);
+        return findMostUsedRgbColors.getMostUsedColors(img, x);
     }
 
     /**
@@ -110,16 +101,7 @@ public class Facade {
      */
     public static List<DominantColorDto> getMostUsedOKLabColors(BufferedImage img, int x){
         MostUsedOkLabColor findMostUsedOkLabColors = new MostUsedOkLabColor();
-        // Define buckets
-        List<Float> buckets = findMostUsedOkLabColors.defineBuckets();
-        // Count pixels and add 1 to the closest bucket
-        int[] bucketCount = findMostUsedOkLabColors.defineBucketCount(img, buckets);
-        // Create map, where buckets and bucketCount has been combined
-        Map<Float, Integer> bucketsWithCount = findMostUsedOkLabColors.combineBucketsAndBucketCount(buckets, bucketCount);
-        // Sorts and returns the combined map
-        List<Entry<Float, Integer>> sortedList = findMostUsedOkLabColors.sortList(bucketsWithCount);
-        //  Returns top X from the sorted list
-        return findMostUsedOkLabColors.returnResult(sortedList, x);
+        return findMostUsedOkLabColors.getMostUsedColors(img, x);
     }
 
     /**
