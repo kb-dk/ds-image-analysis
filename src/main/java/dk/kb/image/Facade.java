@@ -83,16 +83,17 @@ public class Facade {
      * @return the dominant RGB colors from input image as HEX value.
      */
     public static List<DominantColorDto> getMostUsedRGBColors(BufferedImage img, int x) {
+        MostUsedRgbColors findMostUsedRgbColors = new MostUsedRgbColors();
         // Define simple buckets
-        List<Integer> buckets = PalettePicker.smkRgbBuckets();
+        List<Integer> buckets = findMostUsedRgbColors.defineBuckets();
         // Count pixels and add 1 to the closest bucket
-        int[] bucketCount = MostUsedRgbColors.countBucketsForImg(img, buckets);
+        int[] bucketCount = findMostUsedRgbColors.defineBucketCount(img, buckets);
         // Create map, where buckets and bucketCount has been combined
-        Map<Integer, Integer> bucketsWithCount = MostUsedRgbColors.bucketsAndBucketCountToMap(buckets, bucketCount);
+        Map<Integer, Integer> bucketsWithCount = findMostUsedRgbColors.combineBucketsAndBucketCount(buckets, bucketCount);
         // Sorts and returns the combined map
-        List<Entry<Integer, Integer>> sortedList = MostUsedRgbColors.sortMap(bucketsWithCount);
+        List<Entry<Integer, Integer>> sortedList = findMostUsedRgbColors.sortList(bucketsWithCount);
         //  Returns top X from the sorted list
-        return MostUsedRgbColors.returnTopXAsHex(sortedList, x);
+        return findMostUsedRgbColors.returnResult(sortedList, x);
     }
 
     /**
