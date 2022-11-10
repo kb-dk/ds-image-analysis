@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
     static int pixelCount = 0;
-
     @Override
     public List<Integer> defineBuckets() {
         List<Integer> buckets = PalettePicker.smkRgbBuckets();
@@ -21,13 +20,9 @@ public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
      * @return the integer array bucketCounter, which contains the count for each bucket for the input image,
      */
     @Override
-    public int[] defineBucketCount(BufferedImage img, List<Integer> buckets) {
+    public int[] defineBucketCount(BufferedImage img, List<Integer> buckets, int height, int width) {
         // Create bucket counter array
         int[] bucketCounter = new int[buckets.size()];
-        // get image's width and height
-        int width = img.getWidth();
-        int height = img.getHeight();
-
         // Loop over all pixels in image and get RGB color
         for(int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {

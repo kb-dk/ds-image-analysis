@@ -10,10 +10,11 @@ abstract class TemplateMostUsedColors<C> {
     final List<DominantColorDto> getMostUsedColors(BufferedImage img, int x){
         // Define buckets
         List<C> buckets = defineBuckets();
-        // This is identical for all classes. Do it once here
-        loadImageHeightAndWidth(img);
+        // Load image size
+        int height = img.getHeight();
+        int width = img.getWidth();
         // Create bucket counter
-        int[] bucketCount = defineBucketCount(img, buckets);
+        int[] bucketCount = defineBucketCount(img, buckets, height, width);
         // Create combined map of buckets and bucket count
         Map<C, Integer> bucketsWithCount = combineBucketsAndBucketCount(buckets, bucketCount);
         // Sort the map
@@ -22,18 +23,11 @@ abstract class TemplateMostUsedColors<C> {
         return returnResult(sortedList, x);
     }
 
-    // Extract this piece of code to here from both classes
-    void loadImageHeightAndWidth(BufferedImage img) {
-        // get image's width and height
-        int width = img.getWidth();
-        int height = img.getHeight();
-    }
-
     // buckets
     abstract List<C> defineBuckets();
 
     // bucketcounter
-    abstract int[] defineBucketCount(BufferedImage img, List<C> buckets);
+    abstract int[] defineBucketCount(BufferedImage img, List<C> buckets, int height, int width);
 
     //buckets with count
     abstract Map<C, Integer> combineBucketsAndBucketCount(List<C> buckets, int[] bucketCount);
