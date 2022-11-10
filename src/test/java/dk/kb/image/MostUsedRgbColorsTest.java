@@ -21,8 +21,10 @@ public class MostUsedRgbColorsTest {
     public void testCountBucketsForImg() throws IOException{
         BufferedImage img;
         List<Integer> buckets = PalettePicker.defineSimpleBuckets();
+        MostUsedRgbColors myRgbColors = new MostUsedRgbColors();
+
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        int[] result = MostUsedRgbColors.countBucketsForImg(img, buckets);
+        int[] result = myRgbColors.defineBucketCount(img, buckets);
         assertTrue(result[3] == 22089);
         log.info("Bucket counter divides pixels to correct buckets.");
     }
