@@ -29,11 +29,13 @@ public class OkLabColorTest {
     @Test
     public void testCountBucketsForImg() throws IOException{
         BufferedImage img;
+        MostUsedOkLabColor myOkLabColor = new MostUsedOkLabColor();
         List<Float> buckets = new ArrayList<>();
         buckets.add(1.1709022E-38f);
         buckets.add(-8.4903297E37f);
+
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        int[] result = MostUsedOkLabColor.countBucketsForImg(img, buckets);
+        int[] result = myOkLabColor.defineBucketCount(img, buckets);
         assertTrue(result[0]<result[1]);
         log.info("Bucket counter divides pixels to correct buckets.");
     }
@@ -55,8 +57,9 @@ public class OkLabColorTest {
 
     @Test
     public void testSortMap(){
+        MostUsedOkLabColor myOkLabColor = new MostUsedOkLabColor();
         Map<Float, Integer>  testMap = OkLabColorTest.createTestMap();
-        List<Entry<Float, Integer>> sortedList = MostUsedOkLabColor.sortMap(testMap);
+        List<Entry<Float, Integer>> sortedList = myOkLabColor.sortList(testMap);
         assertEquals(testMap.get(1.2f), sortedList.get(0).getValue());
         log.info("Map gets sorted.");
     }

@@ -8,13 +8,19 @@ import java.util.stream.Collectors;
 
 public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
     static int pixelCount = 0;
+    @Override
+    public List<Float> defineBuckets() {
+        List<Float> buckets = PalettePicker.smkOkLabBuckets();
+        return buckets;
+    }
 
     /**
      * Loop through pixels of input image, get OKlab color for pixel and +1 to bucket closest to pixel color.
      * @param buckets float array of bucket colors.
      * @return the integer array bucketCounter, which contains the count for each bucket for the input image,
      */
-    public static int[] countBucketsForImg(BufferedImage img, List<Float> buckets){
+    @Override
+    public int[] defineBucketCount(BufferedImage img, List<Float> buckets) {
         // Create bucket counter array
         int[] bucketCounter = new int[buckets.size()];
         // get image's width and height
@@ -31,6 +37,51 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
             }
         }
         return bucketCounter;
+    }
+
+    /**
+     * Combine colorbuckets float[] and bucketCount int[] into a map. The float[] holds the keys and the int[] holds the values.
+     * The arrays get combined by index number.
+     * @param buckets float[] with keys of the map.
+     * @param bucketCount int[] with the values for the map.
+     * @return a map with key-value pairs from the input float[] and int[].
+     */
+    @Override
+    public Map<Float, Integer> combineBucketsAndBucketCount(List<Float> buckets, int[] bucketCount) {
+        Map<Float, Integer> bucketsWithCount = new HashMap<>();
+        for (int i=0; i<buckets.size(); i++) {
+            bucketsWithCount.put(buckets.get(i), bucketCount[i]);
+        }
+
+        return bucketsWithCount;
+    }
+
+    /**
+     * Method to sort a map<Float, Integer> and have the key-value pair with the biggest value at index 0.
+     * @param bucketsWithCount of type map<Float, Integer> to be sorted
+     * @return a list of entries of the type Entry<Float, Integer> sorted after biggest value.
+     */
+    @Override
+    public List<Map.Entry<Float, Integer>> sortList(Map<Float, Integer> bucketsWithCount) {
+        List<Map.Entry<Float, Integer>> sortedList = new ArrayList<>(bucketsWithCount.entrySet());
+        sortedList.sort(Map.Entry.comparingByValue());
+        Collections.reverse(sortedList);
+
+        return sortedList;
+    }
+
+    /**
+     * Return a JSON array with top X entries from input list.
+     * @param sortedList input list to extract top x from.
+     * @param x integer to limit size of returned list.
+     * @return a JSON array containing the first x entries from the input list.
+     */
+    @Override
+    public List<DominantColorDto> returnResult(List<Map.Entry<Float, Integer>> sortedList, int x) {
+        return sortedList.stream().
+                map(entry-> okEntry2RGBHex(entry)).
+                limit(x).
+                collect(Collectors.toList());
     }
 
     /**
@@ -55,16 +106,6 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
         }
          // Add 1 to the bucket closest to pixel color
          bucketCounter[bestColor] ++;
-    }
-
-    /**
-     * Get the hex color of the most used bucket.
-     * @param buckets float array of color buckets.
-     * @param largestBucket integer containing the index of the most used bucket.
-     * @return the most used hex color as a string.
-     */
-    public static String printResult(float[] buckets, int largestBucket){
-        return ColorConversion.convertOKlabToHex(buckets[largestBucket]);
     }
 
     /**
@@ -135,49 +176,6 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
     }
 
     /**
-     * Combine colorbuckets float[] and bucketCount int[] into a map. The float[] holds the keys and the int[] holds the values.
-     * The arrays get combined by index number.
-     * @param buckets float[] with keys of the map.
-     * @param bucketCount int[] with the values for the map.
-     * @return a map with key-value pairs from the input float[] and int[].
-     */
-    public static Map<Float, Integer> bucketsAndBucketCountToMap(List<Float> buckets, int[] bucketCount){
-
-        Map<Float, Integer> map = new HashMap<>();
-        for (int i=0; i<buckets.size(); i++) {
-            map.put(buckets.get(i), bucketCount[i]);
-        }
-
-        return map;
-    }
-
-    /**
-     * Method to sort a map<Float, Integer> and have the key-value pair with the biggest value at index 0.
-     * @param map of type map<Float, Integer> to be sorted
-     * @return a list of entries of the type Entry<Float, Integer> sorted after biggest value.
-     */
-    public static List<Map.Entry<Float, Integer>> sortMap(Map<Float, Integer> map){
-        List<Map.Entry<Float, Integer>> sortedList = new ArrayList<>(map.entrySet());
-    	sortedList.sort(Map.Entry.comparingByValue());
-        Collections.reverse(sortedList);
-
-        return sortedList;
-    }
-
-    /**
-     * Return a JSON array with top X entries from input list.
-     * @param list input list to extract top x from.
-     * @param x integer to limit size of returned list.
-     * @return a JSON array containing the first x entries from the input list.
-     */
-    public static List<DominantColorDto> returnTopXAsHex(List<Map.Entry<Float, Integer>> list, int x){
-        return list.stream().
-                map(entry-> okEntry2RGBHex(entry)).
-                limit(x).
-                collect(Collectors.toList());
-    }
-
-    /**
      * Convert an entry<Float, Integer> containing OKlab float value and number of pixels with that color into JSON object
      * containing the RGB hex value of the OKlab color  and the pixel value as percentage of the full picture.
      * @param okEntry input entry containing Oklab float key and an integer value of pixels with the color of the key.
@@ -196,32 +194,4 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
         return response;
     }
 
-    @Override
-    public List<Float> defineBuckets() {
-        List<Float> buckets = PalettePicker.smkOkLabBuckets();
-        return buckets;
-    }
-
-    @Override
-    public int[] defineBucketCount(BufferedImage img, List<Float> buckets) {
-        int[] bucketCount = countBucketsForImg(img, buckets);
-        return bucketCount;
-    }
-
-    @Override
-    public Map<Float, Integer> combineBucketsAndBucketCount(List<Float> buckets, int[] bucketCount) {
-        Map<Float, Integer> bucketsWithCount = bucketsAndBucketCountToMap(buckets, bucketCount);
-        return bucketsWithCount;
-    }
-
-    @Override
-    public List<Map.Entry<Float, Integer>> sortList(Map<Float, Integer> bucketsWithCount) {
-        List<Map.Entry<Float, Integer>> sortedList = sortMap(bucketsWithCount);
-        return sortedList;
-    }
-
-    @Override
-    public List<DominantColorDto> returnResult(List<Map.Entry<Float, Integer>> sortedList, int x) {
-        return returnTopXAsHex(sortedList, x);
-    }
 }
