@@ -45,48 +45,23 @@ public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
     }
 
     /**
-     * Combine colorbuckets float[] and bucketCount int[] into a map. The float[] holds the keys and the int[] holds the values.
-     * The arrays get combined by index number.
-     * @param buckets float[] with keys of the map.
-     * @param bucketCount int[] with the values for the map.
-     * @return a map with key-value pairs from the input float[] and int[].
+     * Convert an entry<Float, Integer> containing OKlab float value and number of pixels with that color into JSON object
+     * containing the RGB hex value of the OKlab color  and the pixel value as percentage of the full picture.
+     * @param entry input entry containing Oklab float key and an integer value of pixels with the color of the key.
+     * @return a JSON object containing the String RGB hex value and a float with the percentage of pixels from the image with the given color.
      */
     @Override
-    public Map<Integer, Integer> combineBucketsAndBucketCount(List<Integer> buckets, int[] bucketCount) {
-        Map<Integer, Integer> bucketsWithCount = new HashMap<>();
-        for (int i=0; i<buckets.size(); i++) {
-            bucketsWithCount.put(buckets.get(i), bucketCount[i]);
-        }
+    DominantColorDto entryToRGB(Map.Entry<Integer, Integer> entry) {
+        String key = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & entry.getKey()));
+        float value = entry.getValue();
+        float percentage = value/pixelCount*100;
 
-        return bucketsWithCount;
-    }
+        DominantColorDto response = new DominantColorDto();
 
-    /**
-     * Method to sort a map<Float, Integer> and have the key-value pair with the biggest value at index 0.
-     * @param bucketsWithCount of type map<Float, Integer> to be sorted
-     * @return a list of entries of the type Entry<Float, Integer> sorted after biggest value.
-     */
-    @Override
-    public List<Map.Entry<Integer, Integer>> sortList(Map<Integer, Integer> bucketsWithCount) {
-        List<Map.Entry<Integer, Integer>> sortedList = new ArrayList<>(bucketsWithCount.entrySet());
-        sortedList.sort(Map.Entry.comparingByValue());
-        Collections.reverse(sortedList);
+        response.hexRGB(key);
+        response.percent(percentage);
 
-        return sortedList;
-    }
-
-    /**
-     * Return a JSON array with top X entries from input list.
-     * @param sortedList input list to extract top x from.
-     * @param x integer to limit size of returned list.
-     * @return a JSON array containing the first x entries from the input list.
-     */
-    @Override
-    public List<DominantColorDto> returnResult(List<Map.Entry<Integer, Integer>> sortedList, int x) {
-        return sortedList.stream().
-                map(entry-> Rgb2Hex(entry)).
-                limit(x).
-                collect(Collectors.toList());
+        return response;
     }
 
     /**
@@ -111,24 +86,4 @@ public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
         int totalDistance = (distanceRed + distanceGreen + distanceBlue);
         return totalDistance;
     }
-
-    /**
-     * Convert an entry<Float, Integer> containing OKlab float value and number of pixels with that color into JSON object
-     * containing the RGB hex value of the OKlab color  and the pixel value as percentage of the full picture.
-     * @param rgbEntry input entry containing Oklab float key and an integer value of pixels with the color of the key.
-     * @return a JSON object containing the String RGB hex value and a float with the percentage of pixels from the image with the given color.
-     */
-    public DominantColorDto Rgb2Hex(Map.Entry<Integer, Integer> rgbEntry){
-        String key = String.format(Locale.ROOT, "#%06X", (0xFFFFFF & rgbEntry.getKey()));
-        float value = rgbEntry.getValue();
-        float percentage = value/pixelCount*100;
-
-        DominantColorDto response = new DominantColorDto();
-
-        response.hexRGB(key);
-        response.percent(percentage);
-
-        return response;
-    }
-
 }
