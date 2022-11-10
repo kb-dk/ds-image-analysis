@@ -8,6 +8,12 @@ import java.util.Map;
 
 abstract class TemplateMostUsedColors<C> {
     int pixelCount = 0;
+
+    /**
+     * Template for color analysis. The template defines how the algorithm runs and the subclasses/implementations defines which colorspace to use.
+     * @param x defines how many results that gets returned.
+     * @return top x colors and their percentage of all pixels.
+     */
     final List<DominantColorDto> getMostUsedColors(BufferedImage img, int x){
         // Define buckets
         List<C> buckets = defineBuckets();
@@ -24,10 +30,9 @@ abstract class TemplateMostUsedColors<C> {
     // buckets
     abstract List<C> defineBuckets();
 
-    // bucketcounter
     /**
-     * Loop through pixels of input image, get OKlab color for pixel and +1 to bucket closest to pixel color.
-     * @param buckets float array of bucket colors.
+     * Loop through pixels of input image, get color in colorspace defined by subclass for pixel and +1 to bucket closest to pixel color.
+     * @param buckets array of bucket colors, type is defined by subclass.
      * @return the integer array bucketCounter, which contains the count for each bucket for the input image,
      */
     int[] getBucketCount(BufferedImage img, List<C> buckets){
