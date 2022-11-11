@@ -36,9 +36,10 @@ public class MostUsedRgbColorsTest {
         int red = Color.RED.getRGB();
         int pink = Color.PINK.getRGB();
         int blue = Color.BLUE.getRGB();
+        MostUsedRgbColors myColors = new MostUsedRgbColors();
 
-        int redResult = MostUsedRgbColors.getEuclidianColorDistance(red, pink);
-        int blueResult = MostUsedRgbColors.getEuclidianColorDistance(blue, pink);
+        double redResult = myColors.calculateDistance(red, pink);
+        double blueResult = myColors.calculateDistance(blue, pink);
         assertTrue(redResult<blueResult);
         log.info("Pink color is closer to red than to blue as expected.");
     }

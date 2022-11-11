@@ -21,6 +21,12 @@ public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
         return buckets;
     }
 
+    /**
+     * Calculate Euclidean color distance between two RGB colors.
+     * @param pixel RGB color of input pixel as integer.
+     * @param bucket RGB color of input bucket as integer.
+     * @return the total distance between pixel 1 and 2. Higher number = Bigger distance.
+     */
     @Override
     double calculateDistance(int pixel, Integer bucket) {
             // Divide pixel1 and pixel2 RGB into Red, Green and Blue integers
@@ -57,28 +63,5 @@ public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
         response.percent(percentage);
 
         return response;
-    }
-
-    /**
-     * Calculate Euclidean color distance between two RGB colors.
-     * @param pixel1 RGB color of pixel1 as integer.
-     * @param pixel2 RGB color of pixel2 as integer.
-     * @return the total distance between pixel 1 and 2. Higher number = Bigger distance.
-     */
-    public static int getEuclidianColorDistance(int pixel1, int pixel2){
-        // Divide pixel1 and pixel2 RGB into Red, Green and Blue integers
-        int bucketRed = (pixel1 >> 16) & 0xFF;
-        int bucketGreen = (pixel1 >> 8 ) & 0xFF;
-        int bucketBlue = (pixel1) & 0xFF;
-        int pixelRed = (pixel2 >> 16) & 0xFF;
-        int pixelGreen = (pixel2 >> 8 ) & 0xFF;
-        int pixelBlue = (pixel2) & 0xFF;
-        // Calculate the difference between current pixels Red, Green and Blue values and current bucket colors values
-        int distanceRed = (pixelRed - bucketRed)*(pixelRed - bucketRed);
-        int distanceGreen = (pixelGreen - bucketGreen)*(pixelGreen - bucketGreen);
-        int distanceBlue = (pixelBlue - bucketBlue)*(pixelBlue - bucketBlue);
-        // Add distances together to a total distance as RGB distance
-        int totalDistance = (distanceRed + distanceGreen + distanceBlue);
-        return totalDistance;
     }
 }
