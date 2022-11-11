@@ -62,11 +62,28 @@ abstract class TemplateMostUsedColors<C> {
 
     /**
      * Method to update bucketCounter in getBucketCount().
-     * @param pixel The current pixels color value in the implemented color space.
+     * @param pixel The current pixels color value in RGB colorspace.
      * @param buckets List of color buckets of used type in the implementation.
      * @param bucketCounter Integer array to store count of buckets.
      */
-    abstract void updateBucketCounter(int pixel, List<C> buckets, int[] bucketCounter);
+    void updateBucketCounter(int pixel, List<C> buckets, int[] bucketCounter) {
+        // Convert RGB pixel value to OK Lab float
+        // Values for checking max
+        int bestColor = 0;
+        double minDistance = 2147483647;
+        for (int i = 0; i < buckets.size(); i ++){
+            double totalDistance = calculateDistance(pixel, buckets.get(i));
+            // Evaluates total distance against minimum distance for given bucket
+            if (totalDistance < minDistance) {
+                minDistance = totalDistance;
+                bestColor = i;
+            }
+        }
+        // Add 1 to the bucket closest to pixel color
+        bucketCounter[bestColor] ++;
+    }
+
+    abstract double calculateDistance(int pixel, C bucket);
 
     /**
      * Combine list of color-buckets and bucketCount int[] into a map. The list holds the keys and the int[] holds the values.
