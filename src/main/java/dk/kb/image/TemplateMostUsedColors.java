@@ -7,19 +7,21 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Template to extract dominant colors from image.
+ * Template for color analysis. The template defines how the algorithm runs and the subclasses/implementations defines which colorspace to use.
  * Implementations need to implement a colorspace to work with.
- * @param <C> represents the datatype that the specific implementation implements.
+ * @param <C> represents the datatype used for calculating color difference in the specific implementations.
  */
 abstract class TemplateMostUsedColors<C> {
     int pixelCount = 0;
 
     /**
-     * Template for color analysis. The template defines how the algorithm runs and the subclasses/implementations defines which colorspace to use.
+     * Template for color analysis.
+     * getMostUsedColors defines the template for the main method of the template class.
+     * This method calculates the dominant colors for the input image.
      * @param x defines how many results that gets returned.
      * @return top x colors and their percentage of all pixels.
      */
-    final List<DominantColorDto> getMostUsedColors(BufferedImage img, int x){
+    List<DominantColorDto> getMostUsedColors(BufferedImage img, int x){
         // Define buckets
         List<C> buckets = defineBuckets();
         // Create bucket counter
@@ -61,16 +63,15 @@ abstract class TemplateMostUsedColors<C> {
     }
 
     /**
-     * Method to update bucketCounter in getBucketCount().
+     * Update count for the color bucket that is closest to the color of the input pixel, based on calculation from the method calculateDistance().
      * @param pixel The current pixels color value in RGB colorspace.
      * @param buckets List of color buckets of used type in the implementation.
      * @param bucketCounter Integer array to store count of buckets.
      */
     void updateBucketCounter(int pixel, List<C> buckets, int[] bucketCounter) {
-        // Convert RGB pixel value to OK Lab float
         // Values for checking max
         int bestColor = 0;
-        double minDistance = 2147483647;
+        double minDistance = Double.MAX_VALUE;
         for (int i = 0; i < buckets.size(); i ++){
             double totalDistance = calculateDistance(pixel, buckets.get(i));
             // Evaluates total distance against minimum distance for given bucket
@@ -83,14 +84,23 @@ abstract class TemplateMostUsedColors<C> {
         bucketCounter[bestColor] ++;
     }
 
-    abstract double calculateDistance(int pixel, C bucket);
+    /**
+     * Calculate distance between two colors. When implementing this method it is possible to calculate colors in different ways.
+     * This can be achieved by implementing different calculations, for example euclidean distance or Delta E distance. <br/>
+     * If implementing a colorspace that works with colors as something else than integers,
+     * then implementations of this method has to convert the rgbPixel into the given colorspace before calculating distance.
+     * @param rgbPixel color of the input pixel.
+     * @param color in the implemented colorspace that we compare the input rgbPixel to.
+     * @return the calculated color distance between the inputted rgbPixel and color.
+     */
+    abstract double calculateDistance(int rgbPixel, C color);
 
     /**
-     * Combine list of color-buckets and bucketCount int[] into a map. The list holds the keys and the int[] holds the values.
+     * Combine list of color-buckets and bucketCount int[] into a map. The list holds the values of the palette colors and the int[] specifies how many times the given color has been used in the input image.
      * The arrays get combined by index number.
-     * @param buckets list of implemented type with keys of the map.
-     * @param bucketCount int[] with the values for the map.
-     * @return a map with key-value pairs from the input list and int[].
+     * @param buckets list of palette colors in implemented colorspace.
+     * @param bucketCount int[] of how many times the color with same index has been used.
+     * @return a map consisting of color keys and number of uses as values.
      */
      protected Map<C, Integer> combineBucketsAndBucketCount(List<C> buckets, int[] bucketCount){
          Map<C, Integer> bucketsWithCount = new HashMap<>();
@@ -101,7 +111,7 @@ abstract class TemplateMostUsedColors<C> {
     }
 
     /**
-     * Method to sort a map<C, Integer> and have the key-value pair with the biggest value at index 0.
+     * Method to sort a {@code map<C, Integer>} and have the key-value pair with the biggest value at index 0.
      * @param bucketsWithCount of type map<C, Integer> to be sorted
      * @return a list of entries of the type Entry<C, Integer> sorted after biggest value.
      */
@@ -114,10 +124,10 @@ abstract class TemplateMostUsedColors<C> {
     }
 
     /**
-     * Return a JSON array with top X entries from input list.
-     * @param sortedList input list to extract top x from.
+     * Return a JSON array with top X RGB colors and their percentage from input palette colors and their percentage.
+     * @param sortedList input list holding palette colors and their percentage to extract top x from.
      * @param x integer to limit size of returned list.
-     * @return a JSON array containing the first x entries from the input list.
+     * @return a JSON array containing the first x RGB colors and their percentage from the input list.
      */
     List<DominantColorDto> returnResult(List<Map.Entry<C, Integer>> sortedList, int x){
         return sortedList.stream().
