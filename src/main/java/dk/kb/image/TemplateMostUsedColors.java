@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 /**
  * Template to extract dominant colors from image.
  * Implementations need to implement a colorspace to work with.
- * @param <C>
+ * @param <C> represents the datatype that the specific implementation implements.
  */
 abstract class TemplateMostUsedColors<C> {
     int pixelCount = 0;
