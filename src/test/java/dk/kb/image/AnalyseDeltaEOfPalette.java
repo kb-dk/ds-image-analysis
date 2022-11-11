@@ -13,11 +13,12 @@ public class AnalyseDeltaEOfPalette {
     public static List<String> AnalyseHexPaletteDeltaE(String[] hexPalette){
         List<Float> colorPalette = ColorConversion.convertHexArrayToOKlabArray(hexPalette);
         String[] deltaEArray = new String[hexPalette.length];
+        MostUsedOkLabColor myColors = new MostUsedOkLabColor();
 
         for (int i = 0; i < colorPalette.size(); i ++){
             for(int j = i+1; j < colorPalette.size(); j++){
                 int pixel = ColorConversion.convertOKlabToRgbInt(colorPalette.get(i));
-                double deltaE = MostUsedOkLabColor.calculateDeltaE(pixel, colorPalette.get(j));
+                double deltaE = myColors.calculateDistance(pixel, colorPalette.get(j));
 
                 // This articel has a table that makes it easy to understand the values of delta E: 
                 // http://zschuessler.github.io/DeltaE/learn/ 

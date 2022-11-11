@@ -45,12 +45,13 @@ public class OkLabColorTest {
 
     @Test 
     public void testDeltaE() throws IOException{
+        MostUsedOkLabColor myColor = new MostUsedOkLabColor();
         int pixelRGB1 = Color.red.getRGB();
         int pixelRGB2 = Color.green.getRGB();
         float oklabFloat2 = ColorConversion.convertRGBtoOKlab(pixelRGB2);
         log.info("Testing with colors red and green from java.awt.Color");
         
-        double result = MostUsedOkLabColor.calculateDeltaE(pixelRGB1, oklabFloat2);
+        double result = myColor.calculateDistance(pixelRGB1, oklabFloat2);
         assertTrue(result <= 1 & result >= 0);
         log.info("DeltaE gets calculated and returns value between 0 and 1.");
     }
