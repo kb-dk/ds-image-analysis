@@ -12,15 +12,12 @@ public class AnalyseDeltaEOfPalette {
      */
     public static List<String> AnalyseHexPaletteDeltaE(String[] hexPalette){
         List<Float> colorPalette = ColorConversion.convertHexArrayToOKlabArray(hexPalette);
-        float[] colorFloatArrayI;
-        float[] colorFloatArrayJ;
         String[] deltaEArray = new String[hexPalette.length];
 
         for (int i = 0; i < colorPalette.size(); i ++){
-            colorFloatArrayI = ColorConversion.convertOKlabFloatToFloatArray(colorPalette.get(i));
             for(int j = i+1; j < colorPalette.size(); j++){
-                colorFloatArrayJ = ColorConversion.convertOKlabFloatToFloatArray(colorPalette.get(j));
-                double deltaE = MostUsedOkLabColor.calculateDeltaE(colorFloatArrayI, colorFloatArrayJ);
+                int pixel = ColorConversion.convertOKlabToRgbInt(colorPalette.get(i));
+                double deltaE = MostUsedOkLabColor.calculateDeltaE(pixel, colorPalette.get(j));
 
                 // This articel has a table that makes it easy to understand the values of delta E: 
                 // http://zschuessler.github.io/DeltaE/learn/ 

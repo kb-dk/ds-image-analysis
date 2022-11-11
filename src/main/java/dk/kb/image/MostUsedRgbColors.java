@@ -21,27 +21,22 @@ public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
         return buckets;
     }
 
-    /**
-     * Method to update bucketCounter in countBucketsForImg().
-     * @param pixel The current pixels RGB value as integer.
-     * @param buckets Integer array of color buckets.
-     * @param bucketCounter Integer array to store count of buckets.
-     */
     @Override
-    void updateBucketCounter(int pixel, List<Integer> buckets, int[] bucketCounter) {
-        // Values for checking max
-        int bestColor = 0;
-        int minDistance = 2147483647;
-        for (int i = 0; i < buckets.size(); i ++){
-            int totalDistance = getEuclidianColorDistance(pixel, buckets.get(i));
-            // Evaluates total distance against minimum distance for given bucket
-            if (totalDistance < minDistance) {
-                minDistance = totalDistance;
-                bestColor = i;
-            }
-        }
-        // Add 1 to the bucket closest to pixel color
-        bucketCounter[bestColor] ++;
+    double calculateDistance(int pixel, Integer bucket) {
+            // Divide pixel1 and pixel2 RGB into Red, Green and Blue integers
+            int bucketRed = (pixel >> 16) & 0xFF;
+            int bucketGreen = (pixel >> 8 ) & 0xFF;
+            int bucketBlue = (pixel) & 0xFF;
+            int pixelRed = (bucket >> 16) & 0xFF;
+            int pixelGreen = (bucket >> 8 ) & 0xFF;
+            int pixelBlue = (bucket) & 0xFF;
+            // Calculate the difference between current pixels Red, Green and Blue values and current bucket colors values
+            int distanceRed = (pixelRed - bucketRed)*(pixelRed - bucketRed);
+            int distanceGreen = (pixelGreen - bucketGreen)*(pixelGreen - bucketGreen);
+            int distanceBlue = (pixelBlue - bucketBlue)*(pixelBlue - bucketBlue);
+            // Add distances together to a total distance as RGB distance
+            int totalDistance = (distanceRed + distanceGreen + distanceBlue);
+            return totalDistance;
     }
 
     /**
