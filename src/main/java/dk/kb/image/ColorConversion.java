@@ -1,10 +1,11 @@
 package dk.kb.image;
 
 import java.awt.Color;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
+import java.io.*;
+import java.nio.ByteBuffer;
+import java.util.*;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 
 public class ColorConversion {
@@ -94,5 +95,40 @@ public class ColorConversion {
         float oklabFloat = ColorTools.fromRGBA(RGBfloatArray[0],RGBfloatArray[1],RGBfloatArray[2],RGBfloatArray[3]);
         return oklabFloat;
     }
-    
+
+    /**
+     * Calculates which color from the chosen palette each color from the RGB color space is closest to.
+     * Saves the calculated entries as raw bytes.
+     */
+    public static void rgbColorsToBuckets() throws IOException {
+        MostUsedOkLabColor myColor = new MostUsedOkLabColor();
+        Color x;
+        List<Float> buckets = PalettePicker.smkOkLabBuckets();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        for (int r = 0; r < 256; r++) {
+            for (int g = 0; g < 256; g++) {
+                for (int b = 0; b < 256; b++) {
+                    x = new Color(r, g, b);
+
+                    int colorInt = x.getRGB();
+                    int bestColor = 0;
+                    double minDistance = Double.MAX_VALUE;
+                    for (int i = 0; i < buckets.size(); i++) {
+                        double totalDistance = myColor.calculateDistance(colorInt, buckets.get(i));
+                        // Evaluates total distance against minimum distance for given bucket
+                        if (totalDistance < minDistance) {
+                            minDistance = totalDistance;
+                            bestColor = i;
+                        }
+                    }
+                    byte bucketByte = (byte) bestColor;
+                    out.write(bucketByte);
+                }
+            }
+        }
+        try (OutputStream outputStream = new FileOutputStream("/home/victor/Documents/OklabBucketEntriesForAllRgbColors")) {
+            out.writeTo(outputStream);
+        }
+    }
 }
