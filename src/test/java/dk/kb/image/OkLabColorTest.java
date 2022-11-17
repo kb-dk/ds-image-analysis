@@ -51,9 +51,31 @@ public class OkLabColorTest {
         float oklabFloat2 = ColorConversion.convertRGBtoOKlab(pixelRGB2);
         log.info("Testing with colors red and green from java.awt.Color");
         
-        double result = myColor.calculateDistance(pixelRGB1, oklabFloat2);
+        double result = ColorConversion.calculateCiede2000Distance(pixelRGB1, oklabFloat2);
         assertTrue(result <= 1 & result >= 0);
         log.info("DeltaE gets calculated and returns value between 0 and 1.");
+    }
+
+    @Test
+    public void testSpeed() throws IOException{
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
+        long height = img.getHeight();
+        long width = img.getWidth();
+        long numberOfPixels = width*height;
+
+        long startTime = System.nanoTime();
+        Facade.getMostUsedOKLabColors(img, 10);
+        long elapsedTime = System.nanoTime() - startTime;
+
+        long elapsedTimeMillis = elapsedTime/1000000;
+
+        System.out.println("Height: " + height);
+        System.out.println("Width: " + width);
+        System.out.println("Number of pixels in img: " + numberOfPixels);
+        System.out.println("Elapsed time in millis: " + elapsedTimeMillis);
+        System.out.println("Milliseconds per pixel: " + (float)elapsedTimeMillis/numberOfPixels);
+        System.out.println("Time to calculate 16 million colors: " + ((float)elapsedTimeMillis/numberOfPixels)*16000000);
     }
 
     @Test
