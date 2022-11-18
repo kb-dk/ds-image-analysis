@@ -174,6 +174,9 @@ public class OkLabColorTest {
 
         // Color red located at index 0 in testBytes
         assertEquals(testBytes[0],rgbBytes[redNoAlpha]);
+
+        // Emulate input - output stream
+        // Stream 1000 colors into bytes, load and compare
     }
 
     // Test to ensure alpha channel gets removed correctly
