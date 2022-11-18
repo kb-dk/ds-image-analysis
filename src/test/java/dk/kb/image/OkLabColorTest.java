@@ -179,6 +179,28 @@ public class OkLabColorTest {
         // Stream 1000 colors into bytes, load and compare
     }
 
+    @Test
+    public void testInputToOutputByteStreams() throws IOException {
+        Color red = new Color(204, 49, 49);
+        Color blue = new Color(47, 87, 187);
+        Color green = new Color(71, 180, 27);
+        int[] colors = new int[]{red.getRGB(), blue.getRGB(), green.getRGB()};
+
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        for (int i = 0; i < colors.length; i++){
+            out.write((byte) colors[i]);
+        }
+
+        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+        byte[] inArray = in.readAllBytes();
+
+        for (int i = 0; i < inArray.length; i++){
+            assertEquals((byte) colors[i], inArray[i]);
+        }
+        log.info("Input and output bytes from streams are alike.");
+    }
+
     // Test to ensure alpha channel gets removed correctly
     @Test
     public void testAlphaRemoval() throws IOException {
