@@ -1,18 +1,23 @@
 package dk.kb.image;
 
+import static com.google.common.base.Predicates.instanceOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.*;
+import dk.kb.image.model.v1.DominantColorDto;
+import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInput;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import javax.imageio.ImageIO;
@@ -53,13 +58,12 @@ public class OkLabColorTest {
         long elapsedTime = System.nanoTime() - startTime;
 
         long elapsedTimeMillis = elapsedTime/1000000;
-
-        System.out.println("Height: " + height);
-        System.out.println("Width: " + width);
-        System.out.println("Number of pixels in img: " + numberOfPixels);
-        System.out.println("Elapsed time in millis: " + elapsedTimeMillis);
-        System.out.println("Milliseconds per pixel: " + (float)elapsedTimeMillis/numberOfPixels);
-        System.out.println("Time to calculate 16 million colors: " + ((float)elapsedTimeMillis/numberOfPixels)*16000000);
+        log.info("Height: " + height);
+        log.info("Width: " + width);
+        log.info("Number of pixels in img: " + numberOfPixels);
+        log.info("Elapsed time in millis: " + elapsedTimeMillis);
+        log.info("Milliseconds per pixel: " + (float)elapsedTimeMillis/numberOfPixels);
+        log.info("Time to calculate 16 million colors: " + ((float)elapsedTimeMillis/numberOfPixels)*16000000);
     }
 
     @Test
@@ -69,6 +73,27 @@ public class OkLabColorTest {
         List<Entry<Float, Integer>> sortedList = myOkLabColor.sortList(testMap);
         assertEquals(testMap.get(1.2f), sortedList.get(0).getValue());
         log.info("Map gets sorted.");
+    }
+
+    @Test
+    public void testOkLabResponse() throws IOException {
+        MostUsedOkLabColor okLabAnalyser = new MostUsedOkLabColor();
+        ObjectMapper mapper = new ObjectMapper();
+        String[] trueColors = new String[]{
+          "#153923", "#0E1C0D", "#081B0C", "#203A21", "#F6E670"
+        };
+
+        BufferedImage img;
+        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
+
+        List<DominantColorDto> mostUsedColors = okLabAnalyser.getMostUsedColors(img, 5);
+        String jsonArray = mapper.writeValueAsString(mostUsedColors);
+        JsonNode root = mapper.readTree(jsonArray);
+
+        for (int i = 0; i< mostUsedColors.size(); i++){
+            String hexValue = root.path(i).get("hexRGB").textValue();
+            assertEquals(trueColors[i], hexValue);
+        }
     }
 
     /* Hvad skal testes?
