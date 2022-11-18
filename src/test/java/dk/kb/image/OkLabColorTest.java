@@ -14,9 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInput;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -96,39 +94,100 @@ public class OkLabColorTest {
         }
     }
 
-    /* Hvad skal testes?
-     * ColorConversion.rgbColorsToBuckets() - laver fil med bytes.
-     * MostUsedOkLabColor.getBucketCount - Her skal der være fokus på om den loader entriesForAllRgbColors korrekt.
-     * MostUsedOkLabColor.updateBucketCounter - Sørg for at konverteringen mellem int og byte sker korrekt.
-     *
-     */
+    // Create file containing byte for colors entry in buckets for OKlab method.
     @Test
-    public void testCreateByteFile(){
-        Color red = new Color(210, 27, 27);
-        Color blue = new Color(35, 99, 196);
+    public void createTestByteFile(){
+        Color red = new Color(204, 49, 49);
+        Color blue = new Color(47, 87, 187);
         Color green = new Color(71, 180, 27);
 
         List<Float> buckets = PalettePicker.smkOkLabBuckets();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        int redInt = red.getRGB();
-        int blueInt = blue.getRGB();
-        int greenInt = green.getRGB();
+        int[] colors = new int[]{red.getRGB(),blue.getRGB(),green.getRGB()};
 
-
-        int bestColor = 0;
-        double minDistance = Double.MAX_VALUE;
-        for (int i = 0; i < buckets.size(); i++) {
-            double totalDistance = ColorConversion.calculateCiede2000Distance(redInt, buckets.get(i));
-            // Evaluates total distance against minimum distance for given bucket
-            if (totalDistance < minDistance) {
-                minDistance = totalDistance;
-                bestColor = i;
+        int bestColor;
+        double minDistance;
+        for (int color : colors) {
+            bestColor = 0;
+            minDistance = Double.MAX_VALUE;
+            for (int i = 0; i < buckets.size(); i++) {
+                double totalDistance = ColorConversion.calculateCiede2000Distance(color, buckets.get(i));
+                if (totalDistance < minDistance) {
+                    minDistance = totalDistance;
+                    bestColor = i;
+                }
             }
+            byte bucketByte = (byte) bestColor;
+            // Maybe this unsigning has to happen here already and not when the file gets loaded.
+            // System.out.println(Byte.toUnsignedInt(bucketByte));
+            out.write(bucketByte);
         }
-        byte bucketByte = (byte) bestColor;
-        System.out.println(bucketByte);
-        out.write(bucketByte);
+
+        // The three test colors map to the buckets at indexes 143,133 and 153. With the following hex values: #C6353D, #415E9E and #3FAA5C respectively.
+        try (OutputStream outputStream = new FileOutputStream("src/test/resources/testBytes")) {
+            out.writeTo(outputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        File f = new File("src/test/resources/testBytes");
+        assertTrue(f.isFile() && !f.isDirectory());
+        log.info("testBytes file successfully created.");
+    }
+
+    /* Hvad skal testes?
+     * MostUsedOkLabColor.getBucketCount - Her skal der være fokus på om den loader entriesForAllRgbColors korrekt.
+     * MostUsedOkLabColor.updateBucketCounter - Sørg for at konverteringen mellem int og byte sker korrekt.
+     *
+     */
+    // Tests that bytes are loaded correctly from file and correctly converted to unsigned ints.
+    @Test
+    public void testLoadBytesFile() throws IOException {
+        byte[] correctValues = new byte[]{-113, -123, -103};
+        byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("testBytes").openStream().readAllBytes();
+        for (int i = 0; i < testBytes.length; i++){
+            assertEquals(correctValues[i], testBytes[i]);
+            assertEquals(Byte.toUnsignedInt(correctValues[i]), Byte.toUnsignedInt(testBytes[i]));
+        }
+        log.info("Bytes are loaded as expected");
+    }
+
+    @Test
+    public void testEntries() throws IOException {
+        byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("testBytes").openStream().readAllBytes();
+        byte[] rgbBytes = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
+        log.info("Testing that small testBytes file has same entries as big rgb color entries");
+        // Color red located at index 0 in testBytes
+        Color red = new Color(204, 49, 49);
+        int redIndex = red.getRGB();
+        int redNoAlpha = redIndex & 0xFFFFFF;
+
+        // This finds the real error - clearly there is a difference between the byte files.
+        // Does the rgbBytes[redNoAlpha] equal #631C23? YES IT DOES
+
+        byte result = rgbBytes[redNoAlpha];
+        System.out.println(Byte.toUnsignedInt(result));
+
+        MostUsedOkLabColor myColors = new MostUsedOkLabColor();
+        List<Float> buckets = myColors.defineBuckets();
+
+        System.out.println(ColorConversion.convertOKlabToHex(buckets.get(191)));
+        System.out.println(ColorConversion.convertOKlabToHex(buckets.get(143)));
+
+        //assertEquals(testBytes[0],rgbBytes[redNoAlpha]);
+    }
+
+    // Test to ensure alpha channel gets removed correctly
+    @Test
+    public void testAlphaRemoval() throws IOException {
+        byte[] correctValues = new byte[]{-113, -123, -103};
+        byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("testBytes").openStream().readAllBytes();
+
+        for (int i = 0; i < testBytes.length; i++){
+            int pixelNoAlpha = testBytes[i] & 0xFFFFFF;
+            System.out.println(testBytes[i] + " : " + pixelNoAlpha + " : " + correctValues[i]);
+            //assertEquals(correctValues[i], pixelNoAlpha);
+        }
 
     }
 

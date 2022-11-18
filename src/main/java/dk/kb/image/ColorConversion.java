@@ -100,8 +100,7 @@ public class ColorConversion {
      * Calculates which color from the chosen palette each color from the RGB color space is closest to.
      * Saves the calculated entries as raw bytes.
      */
-    public static void rgbColorsToBuckets() throws IOException {
-        MostUsedOkLabColor myColor = new MostUsedOkLabColor();
+    public static void allRgbColorsToOkLabBuckets() throws IOException {
         Color x;
         List<Float> buckets = PalettePicker.smkOkLabBuckets();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
