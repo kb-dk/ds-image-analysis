@@ -157,7 +157,7 @@ public class OkLabColorTest {
         byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("testBytes").openStream().readAllBytes();
         byte[] rgbBytes = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
         log.info("Testing that small testBytes file has same entries as big rgb color entries");
-        // Color red located at index 0 in testBytes
+
         Color red = new Color(204, 49, 49);
         int redIndex = red.getRGB();
         int redNoAlpha = redIndex & 0xFFFFFF;
@@ -166,15 +166,14 @@ public class OkLabColorTest {
         // Does the rgbBytes[redNoAlpha] equal #631C23? YES IT DOES
 
         byte result = rgbBytes[redNoAlpha];
-        System.out.println(Byte.toUnsignedInt(result));
 
         MostUsedOkLabColor myColors = new MostUsedOkLabColor();
         List<Float> buckets = myColors.defineBuckets();
 
-        System.out.println(ColorConversion.convertOKlabToHex(buckets.get(191)));
-        System.out.println(ColorConversion.convertOKlabToHex(buckets.get(143)));
+        System.out.println(ColorConversion.convertOKlabToHex(buckets.get(Byte.toUnsignedInt(result))));
 
-        //assertEquals(testBytes[0],rgbBytes[redNoAlpha]);
+        // Color red located at index 0 in testBytes
+        assertEquals(testBytes[0],rgbBytes[redNoAlpha]);
     }
 
     // Test to ensure alpha channel gets removed correctly
