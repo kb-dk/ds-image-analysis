@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -25,23 +26,6 @@ import dk.kb.util.Resolver;
 
 public class OkLabColorTest {
     private Logger log = LoggerFactory.getLogger(this.toString());
-
-    @Test
-    public void testCountBucketsForImg() throws IOException{
-        BufferedImage img;
-        MostUsedOkLabColor myOkLabColor = new MostUsedOkLabColor();
-        List<Float> buckets = new ArrayList<>();
-        buckets.add(1.1709022E-38f);
-        buckets.add(-8.4903297E37f);
-
-        img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        int width = img.getWidth();
-        int height = img.getHeight();
-
-        int[] result = myOkLabColor.getBucketCount(img, buckets);
-        assertTrue(result[0]<result[1]);
-        log.info("Bucket counter divides pixels to correct buckets.");
-    }
 
     @Test 
     public void testDeltaE() throws IOException{
@@ -87,6 +71,42 @@ public class OkLabColorTest {
         log.info("Map gets sorted.");
     }
 
+    /* Hvad skal testes?
+     * ColorConversion.rgbColorsToBuckets() - laver fil med bytes.
+     * MostUsedOkLabColor.getBucketCount - Her skal der være fokus på om den loader entriesForAllRgbColors korrekt.
+     * MostUsedOkLabColor.updateBucketCounter - Sørg for at konverteringen mellem int og byte sker korrekt.
+     *
+     */
+    @Test
+    public void testCreateByteFile(){
+        Color red = new Color(210, 27, 27);
+        Color blue = new Color(35, 99, 196);
+        Color green = new Color(71, 180, 27);
+
+        List<Float> buckets = PalettePicker.smkOkLabBuckets();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        int redInt = red.getRGB();
+        int blueInt = blue.getRGB();
+        int greenInt = green.getRGB();
+
+
+        int bestColor = 0;
+        double minDistance = Double.MAX_VALUE;
+        for (int i = 0; i < buckets.size(); i++) {
+            double totalDistance = ColorConversion.calculateCiede2000Distance(redInt, buckets.get(i));
+            // Evaluates total distance against minimum distance for given bucket
+            if (totalDistance < minDistance) {
+                minDistance = totalDistance;
+                bestColor = i;
+            }
+        }
+        byte bucketByte = (byte) bestColor;
+        System.out.println(bucketByte);
+        out.write(bucketByte);
+
+    }
+
     public static Map<Float, Integer> createTestMap(){
         Map<Float, Integer> testMap = new LinkedHashMap<>();
         testMap.put(1.1f, 23);
@@ -95,4 +115,5 @@ public class OkLabColorTest {
 
         return testMap;
     }
+
 }

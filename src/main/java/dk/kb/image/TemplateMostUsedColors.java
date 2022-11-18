@@ -3,6 +3,7 @@ package dk.kb.image;
 import dk.kb.image.model.v1.DominantColorDto;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -21,7 +22,7 @@ abstract class TemplateMostUsedColors<C> {
      * @param x defines how many results that gets returned.
      * @return top x colors and their percentage of all pixels.
      */
-    List<DominantColorDto> getMostUsedColors(BufferedImage img, int x){
+    List<DominantColorDto> getMostUsedColors(BufferedImage img, int x) throws IOException {
         // Define buckets
         List<C> buckets = defineBuckets();
         // Create bucket counter
@@ -45,9 +46,10 @@ abstract class TemplateMostUsedColors<C> {
      * @param buckets list of bucket colors, type is defined by subclass.
      * @return the integer array bucketCounter, which contains the count for each bucket for the input image,
      */
-    int[] getBucketCount(BufferedImage img, List<C> buckets){
+    int[] getBucketCount(BufferedImage img, List<C> buckets) throws IOException {
         // Create bucket counter array
         int[] bucketCounter = new int[buckets.size()];
+        byte[] entriesForAllRgbColors = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
         // Loop over all pixels in image and get RGB color
         int height = img.getHeight();
         int width = img.getWidth();
@@ -56,7 +58,7 @@ abstract class TemplateMostUsedColors<C> {
                 // Get RGB for each pixel
                 pixelCount ++;
                 int pixelRGB = img.getRGB(x, y);
-                updateBucketCounter(pixelRGB, buckets, bucketCounter);
+                updateBucketCounter(pixelRGB, buckets, bucketCounter, entriesForAllRgbColors);
             }
         }
         return bucketCounter;
@@ -68,21 +70,7 @@ abstract class TemplateMostUsedColors<C> {
      * @param buckets List of color buckets of used type in the implementation.
      * @param bucketCounter Integer array to store count of buckets.
      */
-    void updateBucketCounter(int pixel, List<C> buckets, int[] bucketCounter) {
-        // Values for checking max
-        int bestColor = 0;
-        double minDistance = Double.MAX_VALUE;
-        for (int i = 0; i < buckets.size(); i ++){
-            double totalDistance = calculateDistance(pixel, buckets.get(i));
-            // Evaluates total distance against minimum distance for given bucket
-            if (totalDistance < minDistance) {
-                minDistance = totalDistance;
-                bestColor = i;
-            }
-        }
-        // Add 1 to the bucket closest to pixel color
-        bucketCounter[bestColor] ++;
-    }
+    abstract void updateBucketCounter(int pixel, List<C> buckets, int[] bucketCounter, byte[] entriesForAllRgbColors ) throws IOException;
 
     /**
      * Calculate distance between two colors. When implementing this method it is possible to calculate colors in different ways.
@@ -93,7 +81,7 @@ abstract class TemplateMostUsedColors<C> {
      * @param color in the implemented colorspace that we compare the input rgbPixel to.
      * @return the calculated color distance between the inputted rgbPixel and color.
      */
-    abstract double calculateDistance(int rgbPixel, C color);
+    abstract double calculateDistance(int rgbPixel, C color) throws IOException;
 
     /**
      * Combine list of color-buckets and bucketCount int[] into a map. The list holds the values of the palette colors and the int[] specifies how many times the given color has been used in the input image.

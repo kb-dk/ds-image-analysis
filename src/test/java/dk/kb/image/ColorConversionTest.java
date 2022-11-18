@@ -17,8 +17,10 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public class ColorConversionTest {
     private Logger log = LoggerFactory.getLogger(this.toString());
@@ -82,15 +84,17 @@ public class ColorConversionTest {
     }
 
     @Test
-    public void testTripleLoop(){
-        Color x;
-        for (int r = 0; r < 100; r++) {
-            for (int g = 0; g < 100; g++) {
-                for (int b = 0; b < 100; b++) {
-                    x = new Color(r, g, b);
-                    System.out.println(x);
-                }
-            }
-        }
+    public void testTripleLoop() throws IOException {
+        Color in = new Color(240,12,140);
+        byte[] entriesForAllRgbColors = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
+
+        int i = in.getRGB() & 0xFFFFFF;
+
+        int out = Byte.toUnsignedInt(entriesForAllRgbColors[i]);
+        System.out.println(out);
+
+        // How do I convert RGB values list of numbers
+        // RGB -> index i liste
+        // 001 = 0, 002 = 1, 0 1 0 = 256
     }
 }
