@@ -201,6 +201,55 @@ public class OkLabColorTest {
         log.info("Input and output bytes from streams are alike.");
     }
 
+    @Test
+    public void testStream1024Colors() throws IOException {
+        // Map 1024 colors to entries
+        Color x;
+        List<Float> buckets = PalettePicker.smkOkLabBuckets();
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        for (int r = 0; r < 0; r++) {
+            for (int g = 0; g < 4; g++) {
+                for (int b = 0; b < 256; b++) {
+                    x = new Color(r, g, b);
+
+                    int colorInt = x.getRGB();
+                    int bestColor = 0;
+                    double minDistance = Double.MAX_VALUE;
+                    for (int i = 0; i < buckets.size(); i++) {
+                        double totalDistance = ColorConversion.calculateCiede2000Distance(colorInt, buckets.get(i));
+                        // Evaluates total distance against minimum distance for given bucket
+                        if (totalDistance < minDistance) {
+                            minDistance = totalDistance;
+                            bestColor = i;
+                        }
+                    }
+                    // Convert entry ints to bytes
+                    byte bucketByte = (byte) bestColor;
+                    out.write(bucketByte);
+                }
+            }
+        }
+        // Stream entry bytes to file of bytes
+        try (OutputStream outputStream = new FileOutputStream("src/test/resources/thousandBytes")) {
+            out.writeTo(outputStream);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        // Load entries from bytes
+        byte[] originalBytes = out.toByteArray();
+        byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("thousandBytes").openStream().readAllBytes();
+
+        // Compare that bytes are loaded correctly
+        for (int i = 0; i < out.size(); i++){
+            assertEquals(originalBytes[i], testBytes[i]);
+        }
+
+
+        // TODO: Convert bytes to unsigned ints
+        // TODO: Compare origianl ints to converted ints
+    }
+
     // Test to ensure alpha channel gets removed correctly
     @Test
     public void testAlphaRemoval() throws IOException {
