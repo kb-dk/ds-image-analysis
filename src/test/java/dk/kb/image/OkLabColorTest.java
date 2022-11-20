@@ -73,10 +73,13 @@ public class OkLabColorTest {
         log.info("Map gets sorted.");
     }
 
+
     @Test
     public void testOkLabResponse() throws IOException {
+        // TODO: This test fails - goal of other tests are to find the flaw
         MostUsedOkLabColor okLabAnalyser = new MostUsedOkLabColor();
         ObjectMapper mapper = new ObjectMapper();
+        // These colors are the results from the old OKLab calculation - currently running in master branch
         String[] trueColors = new String[]{
           "#153923", "#0E1C0D", "#081B0C", "#203A21", "#F6E670"
         };
@@ -93,6 +96,7 @@ public class OkLabColorTest {
             assertEquals(trueColors[i], hexValue);
         }
     }
+
 
     // Create file containing byte for colors entry in buckets for OKlab method.
     @Test
@@ -152,6 +156,7 @@ public class OkLabColorTest {
         log.info("Bytes are loaded as expected");
     }
 
+
     @Test
     public void testEntries() throws IOException {
         byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("testBytes").openStream().readAllBytes();
@@ -163,7 +168,6 @@ public class OkLabColorTest {
         int redNoAlpha = redIndex & 0xFFFFFF;
 
         // This finds the real error - clearly there is a difference between the byte files.
-        // Does the rgbBytes[redNoAlpha] equal #631C23? YES IT DOES
 
         byte result = rgbBytes[redNoAlpha];
 
@@ -171,12 +175,15 @@ public class OkLabColorTest {
         List<Float> buckets = myColors.defineBuckets();
 
         System.out.println(ColorConversion.convertOKlabToHex(buckets.get(Byte.toUnsignedInt(result))));
+        System.out.println(result);
 
-        // Color red located at index 0 in testBytes
+        // Same red color located at index 0 in testBytes
         assertEquals(testBytes[0],rgbBytes[redNoAlpha]);
-
-        // Emulate input - output stream
-        // Stream 1000 colors into bytes, load and compare
+        // FIXME: This test fails as of now. This is the error that makes the program run wrongly.
+        // TODO: Figure out how to make it run
+        // FIXME: The error seems to come when we are converting redIndex to redNoAlpha.
+        // Eventhough testAlphaRemoval() runs there might be something with the alpha removal?
+        // It seems like the thing that makes it fail is the mapping of bytes in the OklabBucketEntriesForAllRgbColors file - maybe something went wrong?
     }
 
     @Test
@@ -208,6 +215,7 @@ public class OkLabColorTest {
         List<Float> buckets = PalettePicker.smkOkLabBuckets();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         int[] entryInts = new int[1024];
+        int index = 0;
 
         for (int r = 0; r < 1; r++) {
             for (int g = 0; g < 4; g++) {
@@ -225,13 +233,20 @@ public class OkLabColorTest {
                             bestColor = i;
                         }
                     }
+                    // Convert the best entry to byte
                     byte bucketByte = (byte) bestColor;
+                    // Write the best byte to output stream
                     out.write(bucketByte);
+
+                    // Create int representation of the best entry for colors
+                    entryInts[index] = bestColor;
+                    index++;
                 }
             }
         }
         // Stream entry bytes to file of bytes
         try (OutputStream outputStream = new FileOutputStream("src/test/resources/thousandBytes")) {
+            // Writes the byte output stream to file
             out.writeTo(outputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -240,29 +255,31 @@ public class OkLabColorTest {
         byte[] originalBytes = out.toByteArray();
         byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("thousandBytes").openStream().readAllBytes();
 
-        // Compare that bytes are loaded correctly
+        // Compare that bytes are loaded correctly and are equal to the original bytes
         for (int i = 0; i < out.size(); i++){
             assertEquals(originalBytes[i], testBytes[i]);
         }
 
+        // Compares loaded bytes to original ints after converting bytes to unsigned ints
+        for (int i = 0; i < entryInts.length; i++ ){
+            assertEquals(Byte.toUnsignedInt(testBytes[i]), entryInts[i]);
+        }
         // TODO: Divide this method into multiple smaller tests
-        // TODO: Create int representation of best entry for colors
-        // TODO: Convert loaded bytes to unsigned ints
-        // TODO: Compare original ints to converted ints
+
     }
 
     // Test to ensure alpha channel gets removed correctly
     @Test
     public void testAlphaRemoval() throws IOException {
+        // Create array of the byte values from the three test colors
         byte[] correctValues = new byte[]{-113, -123, -103};
         byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("testBytes").openStream().readAllBytes();
 
         for (int i = 0; i < testBytes.length; i++){
             int pixelNoAlpha = testBytes[i] & 0xFFFFFF;
-            System.out.println(testBytes[i] + " : " + pixelNoAlpha + " : " + correctValues[i]);
-            //assertEquals(correctValues[i], pixelNoAlpha);
+            log.info(testBytes[i] + " : " + pixelNoAlpha + " : " + correctValues[i]);
+            assertEquals(correctValues[i], testBytes[i]);
         }
-
     }
 
     public static Map<Float, Integer> createTestMap(){
