@@ -246,8 +246,8 @@ public class OkLabColorTest {
         }
 
 
-        // TODO: Convert bytes to unsigned ints
-        // TODO: Compare origianl ints to converted ints
+        // TODO: Convert loaded bytes to unsigned ints
+        // TODO: Compare original ints to converted ints
     }
 
     // Test to ensure alpha channel gets removed correctly
