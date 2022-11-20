@@ -207,8 +207,9 @@ public class OkLabColorTest {
         Color x;
         List<Float> buckets = PalettePicker.smkOkLabBuckets();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+        int[] entryInts = new int[1024];
 
-        for (int r = 0; r < 0; r++) {
+        for (int r = 0; r < 1; r++) {
             for (int g = 0; g < 4; g++) {
                 for (int b = 0; b < 256; b++) {
                     x = new Color(r, g, b);
@@ -224,7 +225,6 @@ public class OkLabColorTest {
                             bestColor = i;
                         }
                     }
-                    // Convert entry ints to bytes
                     byte bucketByte = (byte) bestColor;
                     out.write(bucketByte);
                 }
@@ -245,7 +245,8 @@ public class OkLabColorTest {
             assertEquals(originalBytes[i], testBytes[i]);
         }
 
-
+        // TODO: Divide this method into multiple smaller tests
+        // TODO: Create int representation of best entry for colors
         // TODO: Convert loaded bytes to unsigned ints
         // TODO: Compare original ints to converted ints
     }
