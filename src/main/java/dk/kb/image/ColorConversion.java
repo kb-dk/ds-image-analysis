@@ -12,6 +12,10 @@ public class ColorConversion {
     private static Logger log = LoggerFactory.getLogger(ColorConversion.class);
 
 
+    /**
+     * Main method generates OKLab bucket entries for all RGB colors.
+     * The method is used to generate the resource: OklabBucketEntriesForAllRgbColors
+     */
     public static void main(String[] args) throws IOException {
         ColorConversion.allRgbColorsToOkLabBuckets();
     }
