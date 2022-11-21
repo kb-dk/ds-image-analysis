@@ -3,6 +3,9 @@ package dk.kb.image;
 import java.awt.Color;
 import java.io.*;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 import com.github.tommyettinger.colorful.oklab.ColorTools;
 import org.slf4j.Logger;
