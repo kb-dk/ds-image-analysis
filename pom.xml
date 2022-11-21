@@ -329,7 +329,14 @@
             <!-- Needed as specifying <resources> overrides all previous definitions -->
             <resource>
                 <directory>src/main/resources</directory>
+                <filtering>false</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+                <includes>
+                    <include>build.properties</include>
+                </includes>
             </resource>
         </resources>
         <plugins>
@@ -476,6 +483,10 @@
                     <!--Enable maven filtering for the web.xml-->
                     <filteringDeploymentDescriptors>true</filteringDeploymentDescriptors>
                     <webResources>
+                        <webResource> <!-- Store application name, version and build time -->
+                          <directory>${basedir}/src/main/resources/</directory>
+                          <filtering>false</filtering>
+                        </webResource>
                         <webResource> <!-- Store application name, version and build time -->
                           <directory>${basedir}/src/main/resources/</directory>
                           <includes>
