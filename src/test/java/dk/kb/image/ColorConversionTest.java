@@ -3,24 +3,13 @@ package dk.kb.image;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import javassist.bytecode.ByteArray;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.awt.*;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.net.URL;
-import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 public class ColorConversionTest {
     private Logger log = LoggerFactory.getLogger(this.toString());
@@ -76,7 +65,7 @@ public class ColorConversionTest {
 
     @Test
     public void testByteFile() throws IOException {
-        // Load OklabBucketEntriesForAllRgbColors
+        // Load OldOklabBucketEntriesForAllRgbColors
         // The first color has RGB value 0,0,0. Then followed by 0,0,1.
         byte[] test = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
         //System.out.println(Arrays.toString(test));

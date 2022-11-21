@@ -2,13 +2,14 @@ package dk.kb.image;
 
 import java.awt.Color;
 import java.io.*;
-import java.nio.ByteBuffer;
 import java.util.*;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.tommyettinger.colorful.oklab.ColorTools;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ColorConversion {
+    private static Logger log = LoggerFactory.getLogger(ColorConversion.class);
 
     /**
      * Convert a String[] of hex colors into a float[] of OKlab colors.
@@ -109,26 +110,32 @@ public class ColorConversion {
             for (int g = 0; g < 256; g++) {
                 for (int b = 0; b < 256; b++) {
                     x = new Color(r, g, b);
-
-                    int colorInt = x.getRGB();
-                    int bestColor = 0;
-                    double minDistance = Double.MAX_VALUE;
-                    for (int i = 0; i < buckets.size(); i++) {
-                        double totalDistance = ColorConversion.calculateCiede2000Distance(colorInt, buckets.get(i));
-                        // Evaluates total distance against minimum distance for given bucket
-                        if (totalDistance < minDistance) {
-                            minDistance = totalDistance;
-                            bestColor = i;
-                        }
-                    }
-                    byte bucketByte = (byte) bestColor;
-                    out.write(bucketByte);
+                    writeEntryByteForColorToOutputStream(x, buckets, out);
                 }
             }
         }
-        try (OutputStream outputStream = new FileOutputStream("/home/victor/Documents/OklabBucketEntriesForAllRgbColors")) {
+        log.info("Writing outputstream size: " + out.size() + " bytes." );
+        try (OutputStream outputStream = new FileOutputStream("/home/victor/Projs/ds-image-analysis/src/main/resources/TestOklabBucketEntriesForAllRgbColors2.dat")) {
             out.writeTo(outputStream);
         }
+    }
+
+    static void writeEntryByteForColorToOutputStream(Color x, List<Float> buckets, ByteArrayOutputStream out) {
+        int colorInt = x.getRGB();
+        int bestColor = 0;
+        double minDistance = Double.MAX_VALUE;
+        for (int i = 0; i < buckets.size(); i++) {
+            double totalDistance = ColorConversion.calculateCiede2000Distance(colorInt, buckets.get(i));
+            // Evaluates total distance against minimum distance for given bucket
+            if (totalDistance < minDistance) {
+                minDistance = totalDistance;
+                bestColor = i;
+            }
+        }
+        byte bucketByte = (byte) bestColor;
+
+        out.write(bucketByte);
+
     }
 
     /**
