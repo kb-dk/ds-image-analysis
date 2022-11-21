@@ -72,10 +72,9 @@ public class OkLabColorTest {
 
     @Test
     public void testOkLabResponse() throws IOException {
-        // TODO: This test fails - goal of other tests are to find the flaw
         MostUsedOkLabColor okLabAnalyser = new MostUsedOkLabColor();
         ObjectMapper mapper = new ObjectMapper();
-        // These colors are the results from the old OKLab calculation - currently running in master branch
+        // These colors are the results from the OkLab calculation
         String[] trueColors = new String[]{
           "#153923", "#0E1C0D", "#081B0C", "#203A21", "#F6E670"
         };
@@ -119,8 +118,6 @@ public class OkLabColorTest {
                 }
             }
             byte bucketByte = (byte) bestColor;
-            // Maybe this unsigning has to happen here already and not when the file gets loaded.
-            // System.out.println(Byte.toUnsignedInt(bucketByte));
             out.write(bucketByte);
         }
 
@@ -158,21 +155,14 @@ public class OkLabColorTest {
         int redInt = red.getRGB();
         int redNoAlpha = redInt & 0xFFFFFF;
 
-        System.out.println(redInt + " : " + redNoAlpha);
         byte result = rgbBytes[redNoAlpha];
 
-        System.out.println("Result: byte: " + result);
-        System.out.println("Byte value from testBytes: " + testBytes[0]);
-        System.out.println("Byte to unsigned int of result: " + Byte.toUnsignedInt(result));
-        System.out.println("Byte to unsigned int of testBytes: " + Byte.toUnsignedInt(testBytes[0]));
-
-        // This finds the real error - clearly there is a difference between the byte files.
+        log.info("Result: byte: " + result);
+        log.info("Byte value from testBytes: " + testBytes[0]);
+        log.info("Byte to unsigned int of result: " + Byte.toUnsignedInt(result));
+        log.info("Byte to unsigned int of testBytes: " + Byte.toUnsignedInt(testBytes[0]));
         // Same red color located at index 0 in testBytes
         assertEquals(testBytes[0],rgbBytes[redNoAlpha]);
-        // FIXME: This test fails as of now. This is the error that makes the program run wrongly.
-        // TODO: Figure out how to make it run
-        // FIXME: The error seems to come when we are converting redIndex to redNoAlpha.
-        // It seems like the thing that makes it fail is the mapping of bytes in the OldOklabBucketEntriesForAllRgbColors file - maybe something went wrong?
     }
 
     @Test
@@ -252,6 +242,7 @@ public class OkLabColorTest {
     }
 
     /*
+    // Create file of bytes. When mapping RGB colorspace it takes 24 minutes to run
     @Test
     public void createOKlabEntries() throws IOException {
         ColorConversion.allRgbColorsToOkLabBuckets();
