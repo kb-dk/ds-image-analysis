@@ -11,6 +11,10 @@ import org.slf4j.LoggerFactory;
 public class ColorConversion {
     private static Logger log = LoggerFactory.getLogger(ColorConversion.class);
 
+
+    public static void main(String[] args) {
+
+    }
     /**
      * Convert a String[] of hex colors into a float[] of OKlab colors.
      * @param inputPalette is a String[] of hex colors to be converted.
