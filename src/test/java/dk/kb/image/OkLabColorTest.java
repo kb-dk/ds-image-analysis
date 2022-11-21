@@ -1,20 +1,16 @@
 package dk.kb.image;
 
-import static com.google.common.base.Predicates.instanceOf;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import dk.kb.image.model.v1.DominantColorDto;
-import org.json.JSONObject;
 import org.junit.jupiter.api.Test;
 
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -139,11 +135,6 @@ public class OkLabColorTest {
         log.info("testBytes file successfully created.");
     }
 
-    /* Hvad skal testes?
-     * MostUsedOkLabColor.getBucketCount - Her skal der være fokus på om den loader entriesForAllRgbColors korrekt.
-     * MostUsedOkLabColor.updateBucketCounter - Sørg for at konverteringen mellem int og byte sker korrekt.
-     *
-     */
     // Tests that bytes are loaded correctly from file and correctly converted to unsigned ints.
     @Test
     public void testLoadBytesFile() throws IOException {
@@ -164,48 +155,46 @@ public class OkLabColorTest {
         log.info("Testing that small testBytes file has same entries as big rgb color entries");
 
         Color red = new Color(204, 49, 49);
-        int redIndex = red.getRGB();
-        int redNoAlpha = redIndex & 0xFFFFFF;
+        int redInt = red.getRGB();
+        int redNoAlpha = redInt & 0xFFFFFF;
 
-        // This finds the real error - clearly there is a difference between the byte files.
-
+        System.out.println(redInt + " : " + redNoAlpha);
         byte result = rgbBytes[redNoAlpha];
 
-        MostUsedOkLabColor myColors = new MostUsedOkLabColor();
-        List<Float> buckets = myColors.defineBuckets();
+        System.out.println("Result: byte: " + result);
+        System.out.println("Byte value from testBytes: " + testBytes[0]);
+        System.out.println("Byte to unsigned int of result: " + Byte.toUnsignedInt(result));
+        System.out.println("Byte to unsigned int of testBytes: " + Byte.toUnsignedInt(testBytes[0]));
 
-        System.out.println(ColorConversion.convertOKlabToHex(buckets.get(Byte.toUnsignedInt(result))));
-        System.out.println(result);
-
+        // This finds the real error - clearly there is a difference between the byte files.
         // Same red color located at index 0 in testBytes
         assertEquals(testBytes[0],rgbBytes[redNoAlpha]);
         // FIXME: This test fails as of now. This is the error that makes the program run wrongly.
         // TODO: Figure out how to make it run
         // FIXME: The error seems to come when we are converting redIndex to redNoAlpha.
-        // Eventhough testAlphaRemoval() runs there might be something with the alpha removal?
-        // It seems like the thing that makes it fail is the mapping of bytes in the OklabBucketEntriesForAllRgbColors file - maybe something went wrong?
+        // It seems like the thing that makes it fail is the mapping of bytes in the OldOklabBucketEntriesForAllRgbColors file - maybe something went wrong?
     }
 
     @Test
-    public void testInputToOutputByteStreams() throws IOException {
-        Color red = new Color(204, 49, 49);
-        Color blue = new Color(47, 87, 187);
-        Color green = new Color(71, 180, 27);
-        int[] colors = new int[]{red.getRGB(), blue.getRGB(), green.getRGB()};
+    public void testOutputToInputByteStreams(){
+        int[] testInts = new int[]{200,220,117,2};
+        byte[] testBytes = new byte[]{-56, -36, 117, 2};
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        for (int i = 0; i < colors.length; i++){
-            out.write((byte) colors[i]);
+        for (int i = 0; i < testInts.length; i++){
+            out.write((byte) testInts[i]);
         }
 
-        ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+        ByteArrayInputStream in = new ByteArrayInputStream(testBytes);
         byte[] inArray = in.readAllBytes();
 
-        for (int i = 0; i < inArray.length; i++){
-            assertEquals((byte) colors[i], inArray[i]);
+        // Tests converting int to byte and byte to int
+        for (int i = 0; i < inArray.length; i++) {
+            assertEquals((byte) testInts[i], inArray[i]);
+            assertEquals(testInts[i], Byte.toUnsignedInt(inArray[i]));
         }
-        log.info("Input and output bytes from streams are alike.");
+        log.info("Input and output byte from streams are alike.");
     }
 
     @Test
@@ -214,39 +203,20 @@ public class OkLabColorTest {
         Color x;
         List<Float> buckets = PalettePicker.smkOkLabBuckets();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        int[] entryInts = new int[1024];
-        int index = 0;
 
+        // Loop to create 1024 colors and find their entry in the list of buckets
         for (int r = 0; r < 1; r++) {
             for (int g = 0; g < 4; g++) {
                 for (int b = 0; b < 256; b++) {
+                    // Create color x
                     x = new Color(r, g, b);
-
-                    int colorInt = x.getRGB();
-                    int bestColor = 0;
-                    double minDistance = Double.MAX_VALUE;
-                    for (int i = 0; i < buckets.size(); i++) {
-                        double totalDistance = ColorConversion.calculateCiede2000Distance(colorInt, buckets.get(i));
-                        // Evaluates total distance against minimum distance for given bucket
-                        if (totalDistance < minDistance) {
-                            minDistance = totalDistance;
-                            bestColor = i;
-                        }
-                    }
-                    // Convert the best entry to byte
-                    byte bucketByte = (byte) bestColor;
-                    // Write the best byte to output stream
-                    out.write(bucketByte);
-
-                    // Create int representation of the best entry for colors
-                    entryInts[index] = bestColor;
-                    index++;
+                    ColorConversion.writeEntryByteForColorToOutputStream(x, buckets, out);
                 }
             }
         }
         // Stream entry bytes to file of bytes
         try (OutputStream outputStream = new FileOutputStream("src/test/resources/thousandBytes")) {
-            // Writes the byte output stream to file
+            // Write the byte output stream to file
             out.writeTo(outputStream);
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -254,18 +224,17 @@ public class OkLabColorTest {
         // Load entries from bytes
         byte[] originalBytes = out.toByteArray();
         byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("thousandBytes").openStream().readAllBytes();
-
+        URL OK = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors");
+        log.info("Loading OKLabs mapping from '{}'", OK);
+        byte[] bigFile = OK.openStream().readAllBytes();
         // Compare that bytes are loaded correctly and are equal to the original bytes
         for (int i = 0; i < out.size(); i++){
             assertEquals(originalBytes[i], testBytes[i]);
         }
-
-        // Compares loaded bytes to original ints after converting bytes to unsigned ints
-        for (int i = 0; i < entryInts.length; i++ ){
-            assertEquals(Byte.toUnsignedInt(testBytes[i]), entryInts[i]);
+        // Test that first thousand bytes of bigFile is equal to testBytes
+        for (int i = 0; i < testBytes.length; i++){
+            assertEquals(testBytes[i], bigFile[i]);
         }
-        // TODO: Divide this method into multiple smaller tests
-
     }
 
     // Test to ensure alpha channel gets removed correctly
@@ -282,6 +251,12 @@ public class OkLabColorTest {
         }
     }
 
+    /*
+    @Test
+    public void createOKlabEntries() throws IOException {
+        ColorConversion.allRgbColorsToOkLabBuckets();
+    }
+     */
     public static Map<Float, Integer> createTestMap(){
         Map<Float, Integer> testMap = new LinkedHashMap<>();
         testMap.put(1.1f, 23);
