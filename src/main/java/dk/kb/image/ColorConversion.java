@@ -12,8 +12,8 @@ public class ColorConversion {
     private static Logger log = LoggerFactory.getLogger(ColorConversion.class);
 
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws IOException {
+        ColorConversion.allRgbColorsToOkLabBuckets();
     }
     /**
      * Convert a String[] of hex colors into a float[] of OKlab colors.
@@ -110,8 +110,8 @@ public class ColorConversion {
         List<Float> buckets = PalettePicker.smkOkLabBuckets();
         ByteArrayOutputStream out = new ByteArrayOutputStream();
 
-        for (int r = 0; r < 256; r++) {
-            for (int g = 0; g < 256; g++) {
+        for (int r = 0; r < 1; r++) {
+            for (int g = 0; g < 1; g++) {
                 for (int b = 0; b < 256; b++) {
                     x = new Color(r, g, b);
                     writeEntryByteForColorToOutputStream(x, buckets, out);
@@ -119,7 +119,7 @@ public class ColorConversion {
             }
         }
         log.info("Writing outputstream size: " + out.size() + " bytes." );
-        try (OutputStream outputStream = new FileOutputStream("/home/victor/Projs/ds-image-analysis/src/main/resources/TestOklabBucketEntriesForAllRgbColors2.dat")) {
+        try (OutputStream outputStream = new FileOutputStream("src/main/resources/BucketEntriesForAllRgbColors")) {
             out.writeTo(outputStream);
         }
     }
