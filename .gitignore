@@ -12,3 +12,7 @@ README_OLD.md
 .openapi-generator/
 conf/ds-image-analysis-environment.yaml
 conf/ds-image-analysis-local.yaml
+
+# Ignore files created by tests
+src/test/resources/testBytes
+src/test/resources/thousandBytes
