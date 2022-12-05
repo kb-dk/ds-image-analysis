@@ -28,7 +28,6 @@ public class OkLabColorTest {
 
     @Test 
     public void testDeltaE() throws IOException{
-        MostUsedOkLabColor myColor = new MostUsedOkLabColor();
         int pixelRGB1 = Color.red.getRGB();
         int pixelRGB2 = Color.green.getRGB();
         float oklabFloat2 = ColorConversion.convertRGBtoOKlab(pixelRGB2);
@@ -89,80 +88,6 @@ public class OkLabColorTest {
         for (int i = 0; i< mostUsedColors.size(); i++){
             String hexValue = root.path(i).get("hexRGB").textValue();
             assertEquals(trueColors[i], hexValue);
-        }
-    }
-
-    @Test
-    public void testEntries() throws IOException {
-        byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("testBytes").openStream().readAllBytes();
-        byte[] rgbBytes = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
-        log.info("Testing that small testBytes file has same entries as big rgb color entries");
-
-        Color red = new Color(204, 49, 49);
-        int redInt = red.getRGB();
-        int redNoAlpha = redInt & 0xFFFFFF;
-
-        byte result = rgbBytes[redNoAlpha];
-
-        log.info("Result: byte: " + result);
-        log.info("Byte value from testBytes: " + testBytes[0]);
-        log.info("Byte to unsigned int of result: " + Byte.toUnsignedInt(result));
-        log.info("Byte to unsigned int of testBytes: " + Byte.toUnsignedInt(testBytes[0]));
-        // Same red color located at index 0 in testBytes
-        assertEquals(testBytes[0],rgbBytes[redNoAlpha]);
-    }
-
-    @Test
-    public void testStream1024Colors() throws IOException {
-        // Map 1024 colors to entries
-        Color x;
-        List<Float> buckets = PalettePicker.smkOkLabBuckets();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-        // Loop to create 1024 colors and find their entry in the list of buckets
-        for (int r = 0; r < 1; r++) {
-            for (int g = 0; g < 4; g++) {
-                for (int b = 0; b < 256; b++) {
-                    // Create color x
-                    x = new Color(r, g, b);
-                    ColorConversion.writeEntryByteForColorToOutputStream(x, buckets, out);
-                }
-            }
-        }
-        // Stream entry bytes to file of bytes
-        try (OutputStream outputStream = new FileOutputStream("src/test/resources/thousandBytes")) {
-            // Write the byte output stream to file
-            out.writeTo(outputStream);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        // Load entries from bytes
-        byte[] originalBytes = out.toByteArray();
-        byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("thousandBytes").openStream().readAllBytes();
-        URL OK = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors");
-        log.info("Loading OKLabs mapping from '{}'", OK);
-        byte[] bigFile = OK.openStream().readAllBytes();
-        // Compare that bytes are loaded correctly and are equal to the original bytes
-        for (int i = 0; i < out.size(); i++){
-            assertEquals(originalBytes[i], testBytes[i]);
-        }
-        // Test that first thousand bytes of bigFile is equal to testBytes
-        for (int i = 0; i < testBytes.length; i++){
-            assertEquals(testBytes[i], bigFile[i]);
-        }
-    }
-
-    // Test to ensure alpha channel gets removed correctly
-    @Test
-    public void testAlphaRemoval() throws IOException {
-        // Create array of the byte values from the three test colors
-        byte[] correctValues = new byte[]{-113, -123, -103};
-        byte[] testBytes = Thread.currentThread().getContextClassLoader().getResource("testBytes").openStream().readAllBytes();
-
-        for (int i = 0; i < testBytes.length; i++){
-            int pixelNoAlpha = testBytes[i] & 0xFFFFFF;
-            log.info(testBytes[i] + " : " + pixelNoAlpha + " : " + correctValues[i]);
-            assertEquals(correctValues[i], testBytes[i]);
         }
     }
 

@@ -2,6 +2,7 @@ package dk.kb.image;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -12,7 +13,7 @@ public class AnalyseDeltaEOfPaletteTest {
     private Logger log = LoggerFactory.getLogger(this.toString());
 
     @Test
-    public void testAnalyseHexPaletteDeltaE(){
+    public void testAnalyseHexPaletteDeltaE() throws IOException {
         String[] testPalette = {"#ff1234", "#4321ff"};
         List<String> result = AnalyseDeltaEOfPalette.AnalyseHexPaletteDeltaE(testPalette);
         assertTrue(result.get(0) != null);
