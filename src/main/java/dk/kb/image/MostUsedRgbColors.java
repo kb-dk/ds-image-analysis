@@ -22,7 +22,7 @@ public class MostUsedRgbColors extends TemplateMostUsedColors<Integer> {
     }
 
     @Override
-    void updateBucketCounter(int pixel, List<Integer> buckets, int[] bucketCounter, byte[] entriesForAllRgbColors) {
+    void updateBucketCounter(int pixel, List<Integer> buckets, int[] bucketCounter) {
         int bestColor = 0;
         double minDistance = Double.MAX_VALUE;
         // Values for checking max

@@ -49,7 +49,6 @@ abstract class TemplateMostUsedColors<C> {
     int[] getBucketCount(BufferedImage img, List<C> buckets) throws IOException {
         // Create bucket counter array
         int[] bucketCounter = new int[buckets.size()];
-        byte[] entriesForAllRgbColors = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
         // Loop over all pixels in image and get RGB color
         int height = img.getHeight();
         int width = img.getWidth();
@@ -58,7 +57,7 @@ abstract class TemplateMostUsedColors<C> {
                 // Get RGB for each pixel
                 pixelCount ++;
                 int pixelRGB = img.getRGB(x, y);
-                updateBucketCounter(pixelRGB, buckets, bucketCounter, entriesForAllRgbColors);
+                updateBucketCounter(pixelRGB, buckets, bucketCounter);
             }
         }
         return bucketCounter;
@@ -70,7 +69,7 @@ abstract class TemplateMostUsedColors<C> {
      * @param buckets List of color buckets of used type in the implementation.
      * @param bucketCounter Integer array to store count of buckets.
      */
-    abstract void updateBucketCounter(int pixel, List<C> buckets, int[] bucketCounter, byte[] entriesForAllRgbColors ) throws IOException;
+    abstract void updateBucketCounter(int pixel, List<C> buckets, int[] bucketCounter) throws IOException;
 
     /**
      * Calculate distance between two colors. When implementing this method it is possible to calculate colors in different ways.

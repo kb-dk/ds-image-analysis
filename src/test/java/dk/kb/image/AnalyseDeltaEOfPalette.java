@@ -1,5 +1,6 @@
 package dk.kb.image;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class AnalyseDeltaEOfPalette {
      * @param hexPalette the input string[] of hex colors to analyse.
      * @return a string[] with information on colors that perceptually looks the same.
      */
-    public static List<String> AnalyseHexPaletteDeltaE(String[] hexPalette){
+    public static List<String> AnalyseHexPaletteDeltaE(String[] hexPalette) throws IOException {
         List<Float> colorPalette = ColorConversion.convertHexArrayToOKlabArray(hexPalette);
         String[] deltaEArray = new String[hexPalette.length];
         MostUsedOkLabColor myColors = new MostUsedOkLabColor();

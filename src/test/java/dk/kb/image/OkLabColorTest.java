@@ -61,7 +61,7 @@ public class OkLabColorTest {
     }
 
     @Test
-    public void testSortMap(){
+    public void testSortMap() throws IOException {
         MostUsedOkLabColor myOkLabColor = new MostUsedOkLabColor();
         Map<Float, Integer>  testMap = OkLabColorTest.createTestMap();
         List<Entry<Float, Integer>> sortedList = myOkLabColor.sortList(testMap);

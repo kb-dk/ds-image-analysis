@@ -10,6 +10,11 @@ import java.util.*;
  * The OK Lab colorspace works with floats.
  */
 public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
+    byte[] entriesForAllRgbColors = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
+
+    public MostUsedOkLabColor() throws IOException {
+    }
+
     /**
      * Defines which color palette to use. This palette consists of 256 hex colors used by SMK (National Gallery of Denmark) converted to OKLab colorspace.
      * It is not clear how this palette has been constructed in the first place.
@@ -22,7 +27,7 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
     }
 
     @Override
-    void updateBucketCounter(int pixel, List<Float> buckets, int[] bucketCounter, byte[] entriesForAllRgbColors) throws IOException {
+    void updateBucketCounter(int pixel, List<Float> buckets, int[] bucketCounter) throws IOException {
 
         int pixelNoAlpha = pixel & 0xFFFFFF;
 
