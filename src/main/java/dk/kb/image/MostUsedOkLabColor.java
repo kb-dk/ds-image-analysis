@@ -1,6 +1,8 @@
 package dk.kb.image;
 
 import dk.kb.image.model.v1.DominantColorDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
@@ -10,7 +12,18 @@ import java.util.*;
  * The OK Lab colorspace works with floats.
  */
 public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
-    byte[] entriesForAllRgbColors = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
+    private static final Logger log = LoggerFactory.getLogger(MostUsedOkLabColor.class);
+
+    static final byte[] entriesForAllRgbColors;
+    static {
+        try {
+            entriesForAllRgbColors = Thread.currentThread().getContextClassLoader().
+                    getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
+        } catch (IOException e) {
+            log.error("Bucket entries for RGB colors are not loaded from file.");
+            throw new RuntimeException(e);
+        }
+    }
 
     public MostUsedOkLabColor() throws IOException {
     }
@@ -49,7 +62,6 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
      */
     @Override
     double calculateDistance(int pixel, Float bucket) throws IOException {
-        byte[] entriesForAllRgbColors = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
 
         int pixelNoAlpha = pixel & 0xFFFFFF;
 
