@@ -1,5 +1,6 @@
 package dk.kb.image;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public class AnalyseDeltaEOfPalette {
      * @param hexPalette the input string[] of hex colors to analyse.
      * @return a string[] with information on colors that perceptually looks the same.
      */
-    public static List<String> AnalyseHexPaletteDeltaE(String[] hexPalette){
+    public static List<String> AnalyseHexPaletteDeltaE(String[] hexPalette) throws IOException {
         List<Float> colorPalette = ColorConversion.convertHexArrayToOKlabArray(hexPalette);
         String[] deltaEArray = new String[hexPalette.length];
         MostUsedOkLabColor myColors = new MostUsedOkLabColor();
@@ -18,7 +19,7 @@ public class AnalyseDeltaEOfPalette {
         for (int i = 0; i < colorPalette.size(); i ++){
             for(int j = i+1; j < colorPalette.size(); j++){
                 int pixel = ColorConversion.convertOKlabToRgbInt(colorPalette.get(i));
-                double deltaE = myColors.calculateDistance(pixel, colorPalette.get(j));
+                double deltaE = ColorConversion.calculateCiede2000Distance(pixel, colorPalette.get(j));
 
                 // This articel has a table that makes it easy to understand the values of delta E: 
                 // http://zschuessler.github.io/DeltaE/learn/ 

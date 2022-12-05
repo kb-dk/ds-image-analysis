@@ -1,5 +1,6 @@
 package dk.kb.image;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
@@ -24,10 +25,8 @@ public class MostUsedRgbColorsTest {
         MostUsedRgbColors myRgbColors = new MostUsedRgbColors();
 
         img = ImageIO.read(Resolver.resolveStream("flower.jpg"));
-        int width = img.getWidth();
-        int height = img.getHeight();
         int[] result = myRgbColors.getBucketCount(img, buckets);
-        assertTrue(result[3] == 22089);
+        assertEquals(22089, result[3]);
         log.info("Bucket counter divides pixels to correct buckets.");
     }
 

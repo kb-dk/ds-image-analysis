@@ -7,6 +7,10 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.awt.*;
+import java.io.IOException;
+import java.util.List;
+
 import java.util.List;
 
 public class ColorConversionTest {
@@ -59,5 +63,29 @@ public class ColorConversionTest {
         float resultOkLab = ColorConversion.convertRGBtoOKlab(testRgb);
         assertEquals(1.1709022E-38f, resultOkLab);
         log.info("RGB int converts to OKlab float.");
+    }
+
+    @Test
+    public void testByteFile() throws IOException {
+        // Load OldOklabBucketEntriesForAllRgbColors
+        // The first color has RGB value 0,0,0. Then followed by 0,0,1.
+        byte[] test = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
+        //System.out.println(Arrays.toString(test));
+        System.out.println(test.length);
+    }
+
+    @Test
+    public void testTripleLoop() throws IOException {
+        Color in = new Color(240,12,140);
+        byte[] entriesForAllRgbColors = Thread.currentThread().getContextClassLoader().getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
+
+        int i = in.getRGB() & 0xFFFFFF;
+
+        int out = Byte.toUnsignedInt(entriesForAllRgbColors[i]);
+        System.out.println(out);
+
+        // How do I convert RGB values list of numbers
+        // RGB -> index i liste
+        // 001 = 0, 002 = 1, 0 1 0 = 256
     }
 }

@@ -82,7 +82,7 @@ public class Facade {
      * </p>
      * @return the dominant RGB colors from input image as HEX value.
      */
-    public static List<DominantColorDto> getMostUsedRGBColors(BufferedImage img, int x) {
+    public static List<DominantColorDto> getMostUsedRGBColors(BufferedImage img, int x) throws IOException {
         MostUsedRgbColors findMostUsedRgbColors = new MostUsedRgbColors();
         return findMostUsedRgbColors.getMostUsedColors(img, x);
     }
@@ -99,7 +99,7 @@ public class Facade {
      * @param img
      * @return a JSON array of top X colors RGB hex value and percentage of pixels in given color.
      */
-    public static List<DominantColorDto> getMostUsedOKLabColors(BufferedImage img, int x){
+    public static List<DominantColorDto> getMostUsedOKLabColors(BufferedImage img, int x) throws IOException {
         MostUsedOkLabColor findMostUsedOkLabColors = new MostUsedOkLabColor();
         return findMostUsedOkLabColors.getMostUsedColors(img, x);
     }
