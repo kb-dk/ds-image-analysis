@@ -25,9 +25,6 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
         }
     }
 
-    public MostUsedOkLabColor() throws IOException {
-    }
-
     /**
      * Defines which color palette to use. This palette consists of 256 hex colors used by SMK (National Gallery of Denmark) converted to OKLab colorspace.
      * It is not clear how this palette has been constructed in the first place.
