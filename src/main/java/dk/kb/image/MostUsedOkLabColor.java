@@ -20,7 +20,7 @@ public class MostUsedOkLabColor extends TemplateMostUsedColors<Float> {
             entriesForAllRgbColors = Thread.currentThread().getContextClassLoader().
                     getResource("OklabBucketEntriesForAllRgbColors").openStream().readAllBytes();
         } catch (IOException e) {
-            log.error("Bucket entries for RGB colors are not loaded from file.");
+            log.error("Bucket entries for RGB colors are not loaded from src/main/resources/OklabBucketEntriesForAllRgbColors.");
             throw new RuntimeException(e);
         }
     }
