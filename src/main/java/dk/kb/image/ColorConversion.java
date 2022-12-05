@@ -16,14 +16,14 @@ public class ColorConversion {
 
 
     /**
-     * Main method generates OKLab bucket entries for all RGB colors.
+     * Main method generates OKLab bucket entries for all hex RGB colors.
      * The method is used to generate the resource: OklabBucketEntriesForAllRgbColors
      */
     public static void main(String[] args) throws IOException {
         ColorConversion.allRgbColorsToOkLabBuckets();
     }
     /**
-     * Convert a String[] of hex colors into a float[] of OKlab colors.
+     * Convert a String[] of hex RGB colors into a float[] of OKlab colors.
      * @param inputPalette is a String[] of hex colors to be converted.
      * @return a float[] of colors defined in the OKlab colorspace.
      */
@@ -109,8 +109,9 @@ public class ColorConversion {
     }
 
     /**
-     * Calculates which color from the chosen palette each color from the RGB color space is closest to.
-     * Saves the calculated entries as raw bytes.
+     * Create a file of bytes, that contains entries in OK Lab colorspace buckets for every color in the RGB color space.
+     * This method is used to create the resource BucketEntriesForAllRgbColors and can be used to recreate the file if lost.
+     * The method calculates which color from the chosen palette each color from the RGB color space is closest to and saves the calculated entries as raw bytes.
      */
     public static void allRgbColorsToOkLabBuckets() throws IOException {
         Color x;
