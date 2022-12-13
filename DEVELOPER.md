@@ -21,11 +21,11 @@ Start a Jetty web server with the application:
 mvn jetty:run
 ```
 
-The default port is 8080 and the default Hello World service can be accessed at
-<http://localhost:8080/ds-image-analysis/v1/hello>
+The default port is 9075 and the default Hello World service can be accessed at
+<http://localhost:9075/ds-image-analysis/v1/hello>
 where "ds-image-analysis" is your artifactID from above.
 
-The Swagger UI is available at <http://localhost:8080/ds-image-analysis/api/>, providing access to the `v1` version of the GUI. 
+The Swagger UI is available at <http://localhost:9075/ds-image-analysis/api/>, providing access to the `v1` version of the GUI. 
 
 ## java webapp template config
 
