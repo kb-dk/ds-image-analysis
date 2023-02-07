@@ -49,6 +49,7 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
     public Integer getColorCount( Attachment imageDetail) throws ServiceException {
         // read image
         try {
+            log.debug("getColorCount(...) called with call details: {}", getCallDetails());
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
             int result = Facade.getColorCount(img);
@@ -75,6 +76,7 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
     public List<DominantColorDto> getMainOkLabColors(@Multipart(value = "image" ) Attachment imageDetail, @Multipart(value = "top-colors")  Integer topColors){
     // read image
         try {
+            log.debug("getMainOkLabColors(..., topColors={}) called with call details: {}", topColors, getCallDetails());
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
             List<DominantColorDto> response = Facade.getMostUsedOKLabColors(img, topColors);
@@ -90,6 +92,7 @@ public class ColorAnalysisApiServiceImpl extends ImplBase implements ColorAnalys
     public List<DominantColorDto> getMainRgbColors(Attachment imageDetail, Integer topColors) {
         // read image
         try {
+            log.debug("getMainRgbColors(..., topColors={}) called with call details: {}", topColors, getCallDetails());
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
             List<DominantColorDto> response = Facade.getMostUsedRGBColors(img, topColors);
