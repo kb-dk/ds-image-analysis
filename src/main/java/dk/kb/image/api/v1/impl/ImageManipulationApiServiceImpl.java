@@ -73,6 +73,7 @@ public class ImageManipulationApiServiceImpl extends ImplBase implements ImageMa
     public javax.ws.rs.core.StreamingOutput getGreyscale( Attachment imageDetail) throws ServiceException {
         // read image
         try {
+            log.debug("getGreyscale(...) called with call details: {}", getCallDetails());
             in = imageDetail.getDataHandler().getInputStream();;
             img = ImageIO.read(in);
             // Show download link in Swagger UI, inline when opened directly in browser
