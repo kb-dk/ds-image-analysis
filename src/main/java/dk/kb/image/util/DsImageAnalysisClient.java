@@ -32,12 +32,14 @@ import java.net.URI;
  * The client is Thread safe and handles parallel requests independently.
  * It is recommended to persist the client and to re-use it between calls.
  * <p/>
- * Note that this client handles {@link #analysis} as well as {@link #manipulation} of images.
+ * Note that this client also handles {@link #manipulation} of images.
  */
-public class DsImageAnalysisClient {
+public class DsImageAnalysisClient extends ColorAnalysisApi {
     private static final Logger log = LoggerFactory.getLogger(DsImageAnalysisClient.class);
 
-    public final ColorAnalysisApi analysis;
+    /**
+     * Sub-client handling manipulation requests.
+     */
     public final ImageManipulationApi manipulation;
 
     /**
@@ -45,8 +47,8 @@ public class DsImageAnalysisClient {
      * @param serviceURI the URI for the service, e.g. {@code https://example.com/ds-ImageAnalysis/v1}.
      */
     public DsImageAnalysisClient(String serviceURI) {
+        super(createClient(serviceURI));
         ApiClient client = createClient(serviceURI);
-        analysis = new ColorAnalysisApi(client);
         manipulation = new ImageManipulationApi(client);
         log.info("Created OpenAPI client for '" + serviceURI + "'");
     }
